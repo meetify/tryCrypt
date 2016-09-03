@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TryCrypt</string>
+    <string name="username">user</string>
+    <string name="password">pass</string>
+    <string name="login">Login</string>
+    <string name="not_registered">Not registered?</string>
+</resources>
