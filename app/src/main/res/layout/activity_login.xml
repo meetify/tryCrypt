@@ -17,9 +17,9 @@
         android:labelFor="@+id/editTextUsername"
         android:ems="10"
         android:id="@+id/editTextUsername"
+        android:layout_marginTop="122dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="163dp" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         android:text="@string/login"
         android:id="@+id/buttonLogin"
         android:layout_below="@+id/editTextPassword"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/editTextPassword" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,5 +49,13 @@
         android:id="@+id/textView"
         android:layout_below="@+id/buttonLogin"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_with_vk"
+        android:id="@+id/buttonLoginVK"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_alignEnd="@+id/editTextPassword" />
 
 </RelativeLayout>

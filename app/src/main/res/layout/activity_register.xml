@@ -9,4 +9,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.krev.trycrypt.activity.RegisterActivity">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="@string/username"
+        android:labelFor="@+id/editTextMailRegister"
+        android:ems="10"
+        android:id="@+id/editTextMailRegister"
+        android:layout_marginTop="122dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:text="@string/password"
+        android:labelFor="@+id/editTextPasswordRegister"
+        android:ems="10"
+        android:id="@+id/editTextPasswordRegister"
+        android:layout_below="@+id/editTextMailRegister"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:id="@+id/buttonRegister"
+        android:layout_below="@+id/editTextPasswordRegister"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

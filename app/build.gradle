@@ -12,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,21 +22,27 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://jitpack.io/"
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.github.meetify:server:kr3v-master-SNAPSHOT'
+    compile 'com.github.meetify:serverModule:b1d68eae6a'
     compile 'com.lambdaworks:scrypt:1.4.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.vk:androidsdk:1.6.5'
-}
-repositories {
-    mavenCentral()
-
-    maven {
-        url "https://jitpack.io"
-    }
 }
