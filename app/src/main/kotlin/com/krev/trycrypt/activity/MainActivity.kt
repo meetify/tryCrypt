@@ -1,18 +1,19 @@
-package com.krev.trycrypt
+package com.krev.trycrypt.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.vk.sdk.VKAccessToken
-import com.vk.sdk.VKCallback
+import android.widget.Toast
+import com.krev.trycrypt.R
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
 
 class MainActivity : AppCompatActivity() {
+
+    val TAG = javaClass.canonicalName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,23 +30,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonLogin.setOnClickListener {
-//            Thread(ServerConnect(editTextUsername, editTextPassword)).start()
+            Log.d(TAG, "Logging in")
             if (!VKSdk.isLoggedIn())
                 VKSdk.login(this, "friends")
             val request = VKApi.friends().getOnline(
                     VKParameters.from(VKApiConst.OWNER_ID))
-
+            Log.d(TAG, "Executing request")
             request.executeWithListener(object : VKRequest.VKRequestListener() {
                 override fun onComplete(response: VKResponse) {
-                    Log.d(Log.DEBUG.toString(), "${response.responseString}")
+                    Log.d(TAG, "${response.responseString}")
                 }
 
                 override fun onError(error: VKError) {
-                    Log.d(Log.ERROR.toString(), "${error.errorMessage}")
+                    if (error.errorMessage.equals("Unable to resolve host \"api.vk.com\": No address associated with hostname")) {
+                        Toast.makeText(applicationContext, "Check your network connection", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun attemptFailed(request: VKRequest, attemptNumber: Int, totalAttempts: Int) {
-                    Log.d(Log.ERROR.toString(), "${request.toString()}")
+                    Log.e(TAG, "${request.toString()}")
                 }
             })
         }

@@ -1,4 +1,4 @@
-package com.krev.trycrypt
+package com.krev.trycrypt.application
 
 import android.app.Application
 import com.vk.sdk.VKSdk
