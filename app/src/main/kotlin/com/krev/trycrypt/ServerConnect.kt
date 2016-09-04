@@ -10,7 +10,7 @@ import java.nio.charset.Charset
 import java.security.MessageDigest
 
 /**
- * Created by Dima on 03.09.2016.
+ * Created by kr3v on 03.09.2016.
  */
 class ServerConnect(var editTextUsername: EditText,
                     var editTextPassword: EditText) : Runnable {

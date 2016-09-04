@@ -4,4 +4,5 @@
     <string name="password">pass</string>
     <string name="login">Login</string>
     <string name="not_registered">Not registered?</string>
+    <integer name="com_vk_sdk_AppId">5616216</integer>
 </resources>
