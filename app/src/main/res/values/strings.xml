@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TryCrypt</string>
+    <string name="username">mail</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="not_registered">Not registered?</string>
+    <string name="register">Register</string>
+    <string name="login_with_vk">Login with VK</string>
+    <integer name="com_vk_sdk_AppId">5616216</integer>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="accessToken">sk.eyJ1Ijoia3IzdiIsImEiOiJjaXIyOTg2ZmEwMDFienZrcW04dmxwa2FrIn0.oZ1hJ8ApK5hbQaBkvcgiZQ</string>
+    <string name="street_style">mapbox://styles/kr3v/cir4v9b120014cgnb9z0yyjay</string>
+    <string name="image_of_place">Image of place</string>
+    <string name="example_name_of_place">Example name of place</string>
+    <string name="address">Address</string>
+    <string name="types">Types</string>
+</resources>
