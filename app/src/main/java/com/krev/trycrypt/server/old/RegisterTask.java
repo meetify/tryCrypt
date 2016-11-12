@@ -1,4 +1,4 @@
-package com.krev.trycrypt.server;
+package com.krev.trycrypt.server.old;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,15 +12,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.krev.trycrypt.server.Constants.address;
-import static com.krev.trycrypt.server.Constants.JSON;
-import static com.krev.trycrypt.server.Constants.client;
-import static com.krev.trycrypt.server.Constants.mapper;
+import static com.krev.trycrypt.server.old.Constants.JSON;
+import static com.krev.trycrypt.server.old.Constants.address;
+import static com.krev.trycrypt.server.old.Constants.client;
+import static com.krev.trycrypt.server.old.Constants.mapper;
 
 /**
  * Created by Dima on 07.11.2016.
  */
-
+@Deprecated
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class RegisterTask extends AsyncTask<Void, Void, Void> {
     private static final String TAG = RegisterTask.class.getName();
     private Consumer<Boolean> consumer;

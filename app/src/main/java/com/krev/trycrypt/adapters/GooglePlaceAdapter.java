@@ -53,8 +53,8 @@ public class GooglePlaceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View contentView, ViewGroup viewGroup) {
         ViewHolder holder = new ViewHolder();
-        if (contentView != null) {
-            layoutInflater.inflate(R.layout.place, viewGroup, false);
+        if (contentView == null) {
+            contentView = layoutInflater.inflate(R.layout.place, viewGroup, false);
         }
         holder.icon = (ImageView) contentView.findViewById(R.id.place_icon);
         holder.name = (TextView) contentView.findViewById(R.id.place_name);

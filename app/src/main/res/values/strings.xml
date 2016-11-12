@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TryCrypt</string>
+    <string name="app_name">Meetify</string>
     <string name="username">mail</string>
     <string name="password">password</string>
     <string name="login">Login</string>
@@ -14,4 +14,5 @@
     <string name="example_name_of_place">Example name of place</string>
     <string name="address">Address</string>
     <string name="types">Types</string>
+    <string name="button">Button</string>
 </resources>

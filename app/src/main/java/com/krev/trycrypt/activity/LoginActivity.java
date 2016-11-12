@@ -16,8 +16,7 @@ import com.krev.trycrypt.asynctasks.DownloadImageTask;
 import com.krev.trycrypt.model.Id;
 import com.krev.trycrypt.model.entity.Location;
 import com.krev.trycrypt.model.entity.User;
-import com.krev.trycrypt.server.LoginTask;
-import com.krev.trycrypt.server.RegisterTask;
+import com.krev.trycrypt.server.LoginController;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -32,6 +31,7 @@ import org.json.JSONException;
 import java.util.HashSet;
 
 /**
+ * try
  * Created by Dima on 15.10.2016.
  */
 public class LoginActivity extends AppCompatActivity {
@@ -71,26 +71,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        new LoginTask(loginConsumer, address, VKAccessToken.currentToken()).execute();
+        LoginController.INSTANCE.login(loginConsumer, address, VKAccessToken.currentToken());
     }
 
     private void register() {
         VKRequest.VKRequestListener listener = new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
+                HashSet<Id> friends = new HashSet<>();
                 try {
-                    User user = new User(
-                            new Id(Long.parseLong(token.userId)),
-                            new Location(),
-                            parseFriends(response.json
-                                    .getJSONObject("response")
-                                    .getJSONArray("items").toString()),
-                            new HashSet<Id>(),
-                            new HashSet<Id>()
-                    );
-                    new RegisterTask(registerConsumer, user).execute();
-                } catch (JSONException ignored) {
+                    friends = parseFriends(response.json
+                            .getJSONObject("response")
+                            .getJSONArray("items").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                User user = new User(
+                        new Id(Long.parseLong(token.userId)),
+                        new Location(), friends, new HashSet<Id>(), new HashSet<Id>()
+                );
+                LoginController.INSTANCE.register(registerConsumer, user);
             }
         };
         new VKApiFriends().get(new VKParameters()).executeWithListener(listener);

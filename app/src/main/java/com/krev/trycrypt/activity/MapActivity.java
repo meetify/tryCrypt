@@ -9,7 +9,8 @@ import com.krev.trycrypt.R;
 import com.krev.trycrypt.adapters.GooglePlaceAdapter;
 import com.krev.trycrypt.asynctasks.Consumer;
 import com.krev.trycrypt.model.GooglePlace;
-import com.krev.trycrypt.server.GooglePlaceTask;
+import com.krev.trycrypt.model.entity.Location;
+import com.krev.trycrypt.server.PlaceController;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -32,7 +33,6 @@ public class MapActivity extends AppCompatActivity {
 
         mapView = (MapView) findViewById(R.id.mapView);
         listView = (ListView) findViewById(R.id.listView);
-
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
@@ -40,7 +40,7 @@ public class MapActivity extends AppCompatActivity {
                 mapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng point) {
-                        new GooglePlaceTask(new Consumer<GooglePlace>() {
+                        PlaceController.INSTANCE.nearby(new Consumer<GooglePlace>() {
                             @Override
                             public void accept(final GooglePlace googlePlace) {
                                 googlePlaceAdapter = new GooglePlaceAdapter(googlePlace, MapActivity.this);
@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                        }, point).execute();
+                        }, new Location(point.getLatitude(), point.getLongitude()));
                     }
                 });
 

@@ -1,4 +1,4 @@
-package com.krev.trycrypt.server;
+package com.krev.trycrypt.server.old;
 
 import android.os.AsyncTask;
 
@@ -11,13 +11,16 @@ import java.io.IOException;
 
 import okhttp3.Request;
 
-import static com.krev.trycrypt.server.Constants.address;
-import static com.krev.trycrypt.server.Constants.client;
-import static com.krev.trycrypt.server.Constants.mapper;
+import static com.krev.trycrypt.server.old.Constants.address;
+import static com.krev.trycrypt.server.old.Constants.client;
+import static com.krev.trycrypt.server.old.Constants.mapper;
+
 
 /**
  * Created by Dima on 28.10.2016.
  */
+@Deprecated
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class GooglePlaceTask extends AsyncTask<Void, Void, Void> {
     private Consumer<GooglePlace> consumer;
     private Location location;
@@ -30,10 +33,11 @@ public class GooglePlaceTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            consumer.accept(mapper.readValue(client
+
+            consumer.accept(GooglePlace.Companion.getMapper().readValue(client
                     .newCall(new Request
                             .Builder()
-                            .url(address + "/place/nearby?" + mapper.writeValueAsString(location))
+                            .url(address + "/place/nearby?location=" + mapper.writeValueAsString(location))
                             .get().build())
                     .execute().body().string(), GooglePlace.class));
         } catch (IOException e) {
