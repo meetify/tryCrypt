@@ -9,9 +9,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.krev.trycrypt.activity.PlacesActivity">
+
     <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:minHeight="800dp"
-        android:layout_height="800dp" />
+        android:id="@+id/listViewPlaces"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 </RelativeLayout>

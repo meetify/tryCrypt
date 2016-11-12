@@ -1,8 +1,12 @@
 package com.krev.trycrypt.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.krev.trycrypt.R;
@@ -17,22 +21,38 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mingle.sweetpick.CustomDelegate;
+import com.mingle.sweetpick.SweetSheet;
 
 public class MapActivity extends AppCompatActivity {
 
     private static final String TAG = MapActivity.class.toString();
+    public static GooglePlace googlePlace;
     private MapView mapView;
-    private ListView listView;
-    private GooglePlaceAdapter googlePlaceAdapter;
+    private GooglePlaceAdapter adapter;
+    private SweetSheet sweetSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MapboxAccountManager.start(this, getString(R.string.accessToken));
-        setContentView(R.layout.activity_map);
+        /**         SweetSheet begin     **/
+        @SuppressLint("InflateParams")
+        ViewGroup group = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_map, null);
+        sweetSheet = new SweetSheet(group);
+
+        final CustomDelegate customDelegate = new CustomDelegate(true,
+                CustomDelegate.AnimationType.DuangAnimation);
+        final View view = LayoutInflater.from(this).inflate(R.layout.activity_places, group, false);
+        customDelegate.setCustomView(view);
+        sweetSheet.setDelegate(customDelegate);
+        setContentView(group);
+        /**         SweetSheet end      **/
+
+//        setContentView(R.layout.activity_map);
 
         mapView = (MapView) findViewById(R.id.mapView);
-        listView = (ListView) findViewById(R.id.listView);
+//        listView = (ListView) findViewById(R.id.listView);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
@@ -43,12 +63,19 @@ public class MapActivity extends AppCompatActivity {
                         PlaceController.INSTANCE.nearby(new Consumer<GooglePlace>() {
                             @Override
                             public void accept(final GooglePlace googlePlace) {
-                                googlePlaceAdapter = new GooglePlaceAdapter(googlePlace, MapActivity.this);
+                                MapActivity.googlePlace = googlePlace;
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        listView.setAdapter(googlePlaceAdapter);
-                                        registerForContextMenu(listView);
+                                        if (sweetSheet.isShow()) {
+                                            sweetSheet.dismiss();
+                                        }
+                                        ((ListView) view.findViewById(R.id.listViewPlaces))
+                                                .setAdapter(new GooglePlaceAdapter(googlePlace, MapActivity.this));
+                                        customDelegate.setCustomView(view);
+//                                        sweetSheet.setDelegate(customDelegate);
+                                        sweetSheet.show();
                                     }
                                 });
                             }
