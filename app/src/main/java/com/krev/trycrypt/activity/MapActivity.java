@@ -27,32 +27,29 @@ import com.mingle.sweetpick.SweetSheet;
 public class MapActivity extends AppCompatActivity {
 
     private static final String TAG = MapActivity.class.toString();
-    public static GooglePlace googlePlace;
     private MapView mapView;
-    private GooglePlaceAdapter adapter;
     private SweetSheet sweetSheet;
+    private CustomDelegate customDelegate;
+    private View view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MapboxAccountManager.start(this, getString(R.string.accessToken));
-        /**         SweetSheet begin     **/
+
         @SuppressLint("InflateParams")
         ViewGroup group = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_map, null);
         sweetSheet = new SweetSheet(group);
 
-        final CustomDelegate customDelegate = new CustomDelegate(true,
+        customDelegate = new CustomDelegate(true,
                 CustomDelegate.AnimationType.DuangAnimation);
-        final View view = LayoutInflater.from(this).inflate(R.layout.activity_places, group, false);
+        view = LayoutInflater.from(this).inflate(R.layout.activity_places, group, false);
         customDelegate.setCustomView(view);
         sweetSheet.setDelegate(customDelegate);
         setContentView(group);
-        /**         SweetSheet end      **/
-
-//        setContentView(R.layout.activity_map);
 
         mapView = (MapView) findViewById(R.id.mapView);
-//        listView = (ListView) findViewById(R.id.listView);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
@@ -60,26 +57,7 @@ public class MapActivity extends AppCompatActivity {
                 mapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng point) {
-                        PlaceController.INSTANCE.nearby(new Consumer<GooglePlace>() {
-                            @Override
-                            public void accept(final GooglePlace googlePlace) {
-                                MapActivity.googlePlace = googlePlace;
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (sweetSheet.isShow()) {
-                                            sweetSheet.dismiss();
-                                        }
-                                        ((ListView) view.findViewById(R.id.listViewPlaces))
-                                                .setAdapter(new GooglePlaceAdapter(googlePlace, MapActivity.this));
-                                        customDelegate.setCustomView(view);
-//                                        sweetSheet.setDelegate(customDelegate);
-                                        sweetSheet.show();
-                                    }
-                                });
-                            }
-                        }, new Location(point.getLatitude(), point.getLongitude()));
+                        MapActivity.this.onMapClick(point);
                     }
                 });
 
@@ -130,5 +108,25 @@ public class MapActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+    public void onMapClick(LatLng point) {
+        PlaceController.INSTANCE.nearby(new Consumer<GooglePlace>() {
+            @Override
+            public void accept(final GooglePlace googlePlace) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (sweetSheet.isShow()) {
+                            sweetSheet.dismiss();
+                        }
+                        ((ListView) view.findViewById(R.id.listViewPlaces))
+                                .setAdapter(new GooglePlaceAdapter(googlePlace, MapActivity.this));
+                        customDelegate.setCustomView(view);
+                        sweetSheet.show();
+                    }
+                });
+            }
+        }, new Location(point.getLatitude(), point.getLongitude()));
     }
 }
