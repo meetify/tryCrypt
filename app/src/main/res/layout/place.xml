@@ -20,7 +20,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="45dp"
         android:text="@string/example_name_of_place"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/vk_black" />
 
     <TextView
         android:id="@+id/place_address"
@@ -29,7 +30,8 @@
         android:layout_alignEnd="@+id/place_name"
         android:layout_below="@+id/place_name"
         android:text="@string/address"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/vk_black" />
 
     <TextView
         android:id="@+id/place_types"
@@ -38,6 +40,7 @@
         android:layout_alignEnd="@+id/place_address"
         android:layout_below="@+id/place_address"
         android:text="@string/types"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/vk_black" />
 
 </RelativeLayout>
