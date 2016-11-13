@@ -66,9 +66,9 @@ public class GooglePlaceAdapter extends BaseAdapter {
             imageViews.set(position, holder.icon);
             try {
                 new DownloadImageTask(imageViews.get(position),
-                        new Consumer<Object>() {
+                        new Consumer<ImageView>() {
                             @Override
-                            public void accept(Object o) {
+                            public void accept(ImageView o) {
                                 notifyDataSetChanged();
                             }
                         }).execute(place.getPhotos().get(0).getPhotoReference());

@@ -1,6 +1,5 @@
 package com.krev.trycrypt.server
 
-import android.os.AsyncTask
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.krev.trycrypt.asynctasks.Consumer
 import com.krev.trycrypt.asynctasks.Supplier
@@ -67,13 +66,6 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
     internal fun asString(a: Any): String = mapper.writeValueAsString(a)
 
     internal fun createBody(a: Any): RequestBody = RequestBody.create(JSON, asString(a))
-
-    internal class Task<V>(private var supplier: Supplier<V>,
-                           private var consumer: Consumer<V>?) : AsyncTask<Void?, Void?, Void?>() {
-        override fun doInBackground(vararg p0: Void?): Nothing? {
-            return consumer?.accept(supplier.accept()).let { null }
-        }
-    }
 
 }
 

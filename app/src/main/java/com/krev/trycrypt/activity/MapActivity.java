@@ -41,6 +41,7 @@ import com.mingle.sweetpick.SweetSheet;
 public class MapActivity extends AppCompatActivity {
 
     private static final String TAG = MapActivity.class.toString();
+    public static ProfileDrawerItem profile;
     private MapView mapView;
     private SweetSheet sweetSheet;
     private CustomDelegate customDelegate;
@@ -95,12 +96,15 @@ public class MapActivity extends AppCompatActivity {
         });
         mapView.onCreate(savedInstanceState);
 
+//        ProfileDrawerItem profile = new ProfileDrawerItem()
+//                .withName("Egor Zagny")
+//                .withEmail("panEgorka@gmail.com")
+//                .withIcon(getResources().getDrawable(R.drawable.compass));
+
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(getResources().getDrawable(R.drawable.attribution_logo))
-                .addProfiles(
-                        new ProfileDrawerItem().withName("Egor Zagny").withEmail("panEgorka@gmail.com").withIcon(getResources().getDrawable(R.drawable.compass))
-                )
+                .withHeaderBackground(getResources().getDrawable(R.mipmap.back))
+                .addProfiles(profile)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
