@@ -37,21 +37,21 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
     open fun post(t: T) {
         Task(Supplier<Any> {
             client.newCall(Request.Builder()
-                    .post(RequestBody.create(JSON, asString(t))).url(url()).build()).execute()
+                    .post(createBody(t)).url(url()).build()).execute()
         }, null).execute()
     }
 
     open fun put(t: T) {
         Task(Supplier<Any> {
             client.newCall(Request.Builder()
-                    .put(RequestBody.create(JSON, asString(t))).url(url()).build()).execute()
+                    .put(createBody(t)).url(url()).build()).execute()
         }, null).execute()
     }
 
     open fun delete(t: T) {
         Task(Supplier<Any> {
             client.newCall(Request.Builder()
-                    .delete(RequestBody.create(JSON, asString(t))).url(url()).build()).execute()
+                    .delete(createBody(t)).url(url()).build()).execute()
         }, null).execute()
     }
 
@@ -62,8 +62,11 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
         var mapper = ObjectMapper()
         var device = ""
 
-        fun asString(a: Any): String = mapper.writeValueAsString(a)
     }
+
+    internal fun asString(a: Any): String = mapper.writeValueAsString(a)
+
+    internal fun createBody(a: Any): RequestBody = RequestBody.create(JSON, asString(a))
 
     internal class Task<V>(private var supplier: Supplier<V>,
                            private var consumer: Consumer<V>?) : AsyncTask<Void?, Void?, Void?>() {
@@ -71,4 +74,6 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
             return consumer?.accept(supplier.accept()).let { null }
         }
     }
+
 }
+

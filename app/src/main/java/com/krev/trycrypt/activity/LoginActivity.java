@@ -61,6 +61,21 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     };
+    private Consumer<Boolean> checkConsumer = new Consumer<Boolean>() {
+        @Override
+        public void accept(Boolean result) {
+            if (result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(LoginActivity.this, MapActivity.class));
+                    }
+                });
+            } else {
+                login();
+            }
+        }
+    };
 
     private HashSet<Id> parseFriends(String friends) {
         HashSet<Id> parsed = new HashSet<>();
@@ -68,6 +83,10 @@ public class LoginActivity extends AppCompatActivity {
             parsed.add(new Id(Long.parseLong(friend)));
         }
         return parsed;
+    }
+
+    private void check() {
+        LoginController.INSTANCE.check(checkConsumer, address, VKAccessToken.currentToken());
     }
 
     private void login() {
@@ -106,15 +125,18 @@ public class LoginActivity extends AppCompatActivity {
                     .getConnectionInfo()
                     .getMacAddress();
         }
+        if (VKSdk.isLoggedIn()) {
+            check();
+        }
         findViewById(R.id.buttonLoginVK).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "login initiated");
                 if (!VKSdk.isLoggedIn()) {
-                    VKSdk.login(LoginActivity.this, "friends");
+                    VKSdk.login(LoginActivity.this, "friends", "photos");
                 } else {
                     token = VKAccessToken.currentToken();
-                    login();
+                    check();
                 }
             }
         });
@@ -134,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResult(VKAccessToken res) {
                 Log.d(TAG, "everything is fine, going to talk with server");
-                login();
+                check();
             }
 
             @Override
