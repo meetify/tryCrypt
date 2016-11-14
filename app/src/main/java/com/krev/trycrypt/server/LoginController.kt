@@ -1,6 +1,6 @@
 package com.krev.trycrypt.server
 
-import android.os.AsyncTask
+import android.util.Log
 import com.krev.trycrypt.asynctasks.Consumer
 import com.krev.trycrypt.asynctasks.Supplier
 import com.krev.trycrypt.model.Id
@@ -30,19 +30,21 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
             val login = Login(Id(token.userId.toLong()), "", mac)
             val response = client.newCall(Request.Builder()
                     .url("$address/login?v=${asString(login)}")
-                    .get().build()).execute().body().string().trim()
-            response.toBoolean()
+                    .get().build()).execute()
+            response.code() == 200 && response.body().string().trim().toBoolean()
         }, consumer).execute()
     }
 
     fun register(consumer: Consumer<Boolean>, user: User) {
-        object : AsyncTask<Void?, Void?, Void?>() {
-            override fun doInBackground(vararg p0: Void?): Void? {
-                val response = client.newCall(Request.Builder().url("$address/user")
-                        .post(createBody(user)).build()).execute()
-                consumer.accept(response.code() == 200)
-                return null
-            }
-        }.execute()
+        Log.d(TAG, "REGISTERING THIS SHIT")
+        UserController.post(user, Consumer {
+            Log.d(TAG, "accepting something ${it.code()} ${it.headers()}")
+            Log.d(TAG, "accepting something ${it.code()} ${it.request().url()}")
+            consumer.accept(it.code() == 200)
+        })
+//        Task(Supplier {
+//            client.newCall(Request.Builder().url("$address/user?device=$device")
+//                    .post(createBody(user)).build()).execute().code() == 200
+//        }, consumer).execute()
     }
 }
