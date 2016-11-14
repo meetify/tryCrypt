@@ -1,11 +1,11 @@
 package com.krev.trycrypt.server
 
 import android.util.Log
-import com.krev.trycrypt.asynctasks.Consumer
-import com.krev.trycrypt.asynctasks.Supplier
-import com.krev.trycrypt.model.Id
-import com.krev.trycrypt.model.entity.Login
-import com.krev.trycrypt.model.entity.User
+import com.krev.trycrypt.server.model.Id
+import com.krev.trycrypt.server.model.entity.Login
+import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import com.vk.sdk.VKAccessToken
 import okhttp3.Request
 
@@ -36,7 +36,7 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
     }
 
     fun register(consumer: Consumer<Boolean>, user: User) {
-        Log.d(TAG, "REGISTERING THIS SHIT")
+        BaseController.user = user
         UserController.post(user, Consumer {
             Log.d(TAG, "accepting something ${it.code()} ${it.headers()}")
             Log.d(TAG, "accepting something ${it.code()} ${it.request().url()}")

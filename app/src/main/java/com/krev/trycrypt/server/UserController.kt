@@ -1,23 +1,28 @@
 package com.krev.trycrypt.server
 
-import com.krev.trycrypt.asynctasks.Consumer
-import com.krev.trycrypt.asynctasks.Supplier
-import com.krev.trycrypt.model.entity.User
+import android.util.Log
+import com.krev.trycrypt.server.model.entity.Place
+import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import okhttp3.Request
 
-/**
- * This class represents controller over users. It holds mapping '/user'.
- * @version 0.0.1
- * @since   0.0.1
- * @property   userRepository  users repository, which is provided by Spring & Hibernate.
- * @constructor             Autowired by Spring.
- */
 object UserController : BaseController<User>(Array(1, { User() })) {
     fun friends(consumer: Consumer<List<User>>) {
         Task(Supplier {
+            val url = url("/friends")
+            Log.d("UserController", url)
             mapper.readValue(client.newCall(Request.Builder()
-                    .url(url() + "/friends")
+                    .url(url)
                     .get().build()).execute().body().string(), array.javaClass).asList()
         }, consumer).execute()
+    }
+
+    fun allowed(consumer: Consumer<List<Place>>) {
+        PlaceController.get(user.allowed, consumer)
+    }
+
+    fun created(consumer: Consumer<List<Place>>) {
+        PlaceController.get(user.created, consumer)
     }
 }

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_places"
+    android:id="@+id/activity_friends"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.krev.trycrypt.activity.PlacesActivity">
-
-    <ListView
-        android:id="@+id/listViewPlaces"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/toolbar" />
+    tools:context="com.krev.trycrypt.activity.FriendsActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -20,4 +14,10 @@
         android:minHeight="?attr/actionBarSize"
         android:title="@string/meetify"
         android:transitionName="actionBar" />
+
+    <ListView
+        android:id="@+id/listViewFriends"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/toolbar" />
 </RelativeLayout>

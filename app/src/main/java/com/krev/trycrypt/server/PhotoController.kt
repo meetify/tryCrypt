@@ -1,6 +1,6 @@
 package com.krev.trycrypt.server
 
-import com.krev.trycrypt.model.entity.Photo
+import com.krev.trycrypt.server.model.entity.Photo
 
 /**
  * This class represents controller over photos. It holds mapping '/photo'.

@@ -3,31 +3,28 @@ package com.krev.trycrypt.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.krev.trycrypt.R
-import com.krev.trycrypt.asynctasks.Consumer
-import com.krev.trycrypt.asynctasks.Supplier
-import com.krev.trycrypt.model.Id
-import com.krev.trycrypt.model.entity.Location
-import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.server.BaseController
 import com.krev.trycrypt.server.LoginController
 import com.krev.trycrypt.server.Task
+import com.krev.trycrypt.server.UserController
+import com.krev.trycrypt.server.model.Id
+import com.krev.trycrypt.server.model.entity.Location
+import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.DrawerUtils
+import com.krev.trycrypt.utils.Supplier
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
-import com.vk.sdk.api.VKParameters
 import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKResponse
-import com.vk.sdk.api.methods.VKApiFriends
-import com.vk.sdk.api.methods.VKApiUsers
-import java.net.URL
 import java.util.*
 
 /**
@@ -36,6 +33,8 @@ import java.util.*
  */
 class LoginActivity : AppCompatActivity() {
     private val finishConsumer = Consumer<ProfileDrawerItem> {
+        UserController.get(ArrayList<Id>().apply { add(Id(token!!.userId.toLong())) },
+                Consumer { BaseController.user = it[0] })
         MapActivity.profile = it
         startActivity(Intent(this@LoginActivity, MapActivity::class.java))
     }
@@ -74,42 +73,57 @@ class LoginActivity : AppCompatActivity() {
         LoginController.login(loginConsumer, mac!!, token!!)
     }
 
+    /*
+    response: {
+        id: 47037728,
+        first_name: 'Дима',
+        last_name: 'Байнак',
+        photo_50: 'https://pp.vk.me/...85e/TVHoxiqp_ms.jpg',
+        count: 55,
+        items: [2666493, 5477031, 7402554, 10880153, 12922289, 14471820, 23833498, 38177050, 41415436, 42703367, 48162715, 57384823, 66813732, 68833942, 72712948, 76076720, 76839855, 83272977, 94256959, 96066995, 101570448, 112824810, 113511416, 113590335, 116200671, 117243842, 125170987, 132230295, 133326490, 136730287, 137921526, 139500215, 140189057, 143630754, 143720193, 152046019, 154809449, 155473053, 156353629, 160856763, 161108695, 169021245, 185906221, 189372394, 190939457, 199655851, 202219694, 210623362, 229244624, 246360058, 296109559, 313682851, 338196115, 369748331, 385609764]
+    }
+     */
     private fun register() {
         Log.d(TAG, "register")
         val listener = object : VKRequest.VKRequestListener() {
             override fun onComplete(response: VKResponse?) {
-                val friends = parseFriends(response!!.json
-                        .getJSONObject("response").getJSONArray("items").toString())
-                val user = User(
-                        Id(token!!.userId.toLong()),
-                        Location(), friends, HashSet<Id>(), HashSet<Id>())
-                Log.d(TAG, "REGISTERING THIS SHIT")
+                val json = response!!.json.getJSONObject("response")
+                val friends = parseFriends(json.getJSONArray("items").toString())
+                val user = User(Id(json.getLong("id")),
+                        Location(), friends, HashSet<Id>(), HashSet<Id>(),
+                        "${json.getString("first_name")} ${json.getString("last_name")}",
+                        json.getString("photo_50"))
+
                 LoginController.register(registerConsumer, user)
             }
         }
-        VKApiFriends().get(VKParameters()).executeWithListener(listener)
+        VKRequest("execute.info").executeWithListener(listener)
+//        VKApiFriends().get(VKParameters()).executeWithListener(listener)
     }
 
     private fun loginFinished() {
         Log.d(TAG, "loginFinished")
         val listener = object : VKRequest.VKRequestListener() {
             override fun onComplete(response: VKResponse?) {
-                val obj = response!!.json.getJSONArray("response").getJSONObject(0)
-                Log.d(TAG, "onComplete: " + obj.toString())
-
-                val name = "${obj.getString("first_name")} ${obj.getString("last_name")}"
-                val photo = obj.getString("photo_50")
-
+                val json = response!!.json.getJSONObject("response")
+                val friends = parseFriends(json.getJSONArray("items").toString())
+                val user = User(Id(json.getLong("id")),
+                        Location(), friends, HashSet<Id>(), HashSet<Id>(),
+                        "${json.getString("first_name")} ${json.getString("last_name")}",
+                        json.getString("photo_50"))
+                BaseController.user = user
                 Task(Supplier<ProfileDrawerItem> {
-                    ProfileDrawerItem()
-                            .withName(name)
-                            .withIcon(BitmapFactory.decodeStream(URL(photo).openStream()))
+                    DrawerUtils.getProfile()
                 }, finishConsumer).execute()
             }
         }
-        val parameters = VKParameters()
-        parameters.put("fields", "photo_50")
-        VKApiUsers().get(parameters).executeWithListener(listener)
+        if (BaseController.user.id == Id(0)) {
+            VKRequest("execute.info").executeWithListener(listener)
+        } else {
+            Task(Supplier<ProfileDrawerItem> {
+                DrawerUtils.getProfile()
+            }, finishConsumer).execute()
+        }
     }
 
     @SuppressLint("HardwareIds")

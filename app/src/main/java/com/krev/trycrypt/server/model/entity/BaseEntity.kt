@@ -1,6 +1,6 @@
-package com.krev.trycrypt.model.entity
+package com.krev.trycrypt.server.model.entity
 
-import com.krev.trycrypt.model.Id
+import com.krev.trycrypt.server.model.Id
 
 /**
  * This class is used to be extended by classes, which has Id and can be accessed by this Id.

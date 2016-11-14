@@ -12,7 +12,16 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:title="@string/meetify"
-        android:transitionName="actionBar" />
+        android:transitionName="actionBar">
+
+        <TextView
+            android:id="@+id/myEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="30dp"
+            android:text="@string/app_name"
+            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
+    </android.support.v7.widget.Toolbar>
 
     <EditText
         android:id="@+id/editTextUsername"

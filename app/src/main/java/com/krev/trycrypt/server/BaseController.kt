@@ -1,12 +1,12 @@
 package com.krev.trycrypt.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.krev.trycrypt.asynctasks.Consumer
-import com.krev.trycrypt.asynctasks.Supplier
-import com.krev.trycrypt.model.Id
-import com.krev.trycrypt.model.entity.BaseEntity
+import com.krev.trycrypt.server.model.Id
+import com.krev.trycrypt.server.model.entity.BaseEntity
+import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import okhttp3.*
-import java.util.*
 
 /**
  * This class represents some base controller. It has pre-implemented methods get, post, put, delete.
@@ -20,7 +20,7 @@ import java.util.*
 @Suppress("unused")
 abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
 
-    open fun get(ids: ArrayList<Id>, consumer: Consumer<List<T>>) {
+    open fun get(ids: Collection<Id>, consumer: Consumer<List<T>>) {
         Task(Supplier<List<T>> {
             mapper.readValue(client.newCall(Request.Builder()
                     .url(url() + "&ids=${asString(ids)}")
@@ -28,7 +28,7 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
         }, consumer).execute()
     }
 
-    internal fun url() = "$address/${array[0].javaClass.simpleName.toLowerCase()}?device=$device"
+    internal fun url(path: String = "") = "$address/${array[0].javaClass.simpleName.toLowerCase()}$path?device=$device"
 
     open fun post(t: T, consumer: Consumer<Response> = Consumer {}) {
         Task(Supplier<Response> {
@@ -57,7 +57,7 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
         val JSON = MediaType.parse("application/json; charset=utf-8")!!
         val mapper = ObjectMapper()
         var device = ""
-
+        var user = User()
     }
 
     internal fun asString(a: Any): String = mapper.writeValueAsString(a)

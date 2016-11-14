@@ -1,10 +1,10 @@
 package com.krev.trycrypt.server
 
-import com.krev.trycrypt.asynctasks.Consumer
-import com.krev.trycrypt.asynctasks.Supplier
-import com.krev.trycrypt.model.GooglePlace
-import com.krev.trycrypt.model.entity.Location
-import com.krev.trycrypt.model.entity.Place
+import com.krev.trycrypt.server.model.GooglePlace
+import com.krev.trycrypt.server.model.entity.Location
+import com.krev.trycrypt.server.model.entity.Place
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import okhttp3.Request
 
 object PlaceController : BaseController<Place>(Array(1, { Place() })) {

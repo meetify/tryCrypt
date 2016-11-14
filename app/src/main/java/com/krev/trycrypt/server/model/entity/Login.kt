@@ -1,7 +1,6 @@
-package com.krev.trycrypt.model.entity
+package com.krev.trycrypt.server.model.entity
 
-import com.krev.trycrypt.model.Id
-import com.krev.trycrypt.model.entity.BaseEntity
+import com.krev.trycrypt.server.model.Id
 import java.io.Serializable
 
 /**

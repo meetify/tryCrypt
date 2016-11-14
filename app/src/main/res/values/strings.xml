@@ -12,6 +12,7 @@
     <string name="street_style">mapbox://styles/kr3v/cir4v9b120014cgnb9z0yyjay</string>
     <string name="image_of_place">Image of place</string>
     <string name="example_name_of_place">Example name of place</string>
+    <string name="example_name_of_user">Example name of user</string>
     <string name="mac">Address</string>
     <string name="types">Types</string>
     <string name="button">Button</string>
