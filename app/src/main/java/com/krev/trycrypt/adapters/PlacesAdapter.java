@@ -1,8 +1,8 @@
 package com.krev.trycrypt.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +12,9 @@ import android.widget.TextView;
 
 import com.krev.trycrypt.R;
 import com.krev.trycrypt.server.model.entity.Place;
-import com.krev.trycrypt.utils.Consumer;
-import com.krev.trycrypt.utils.DownloadImageTask;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,13 +23,15 @@ import java.util.List;
 
 public class PlacesAdapter extends BaseAdapter {
     private final LayoutInflater layoutInflater;
-    private List<Place> places;
-    private List<ImageView> imageViews;
+    private final List<Place> places;
+    private final List<ImageView> imageViews;
+    private final AppCompatActivity activity;
 
-    public PlacesAdapter(List<Place> places, Activity activity) {
+    public PlacesAdapter(List<Place> places, AppCompatActivity activity) {
         this.places = places;
         this.imageViews = Arrays.asList(new ImageView[this.places.size()]);
         this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.activity = activity;
     }
 
     @Override
@@ -41,6 +42,23 @@ public class PlacesAdapter extends BaseAdapter {
     @Override
     public Object getItem(int i) {
         return places.get(i);
+    }
+
+    public void addAll(Collection<Place> places) {
+        this.places.addAll(places);
+        update();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void update() {
+        while (imageViews.size() < places.size()) {
+            imageViews.add(null);
+        }
     }
 
     @Override
@@ -59,16 +77,16 @@ public class PlacesAdapter extends BaseAdapter {
         Place place = places.get(position);
         if (imageViews.get(position) == null) {
             imageViews.set(position, holder.icon);
-            try {
-                new DownloadImageTask(imageViews.get(position),
-                        new Consumer<ImageView>() {
-                            @Override
-                            public void accept(ImageView o) {
-                                notifyDataSetChanged();
-                            }
-                        }).execute(place.getPhoto());
-            } catch (NullPointerException ignored) {
-            }
+//            try {
+//                new DownloadImageTask(
+//                        new Consumer<ImageView>() {
+//                            @Override
+//                            public void accept(ImageView o) {
+//                                notifyDataSetChanged();
+//                            }
+//                        }).execute(place.getPhoto());
+//            } catch (NullPointerException ignored) {
+//            }
         } else {
             holder.icon.setImageBitmap(((BitmapDrawable) imageViews.get(position).getDrawable()).getBitmap());
         }

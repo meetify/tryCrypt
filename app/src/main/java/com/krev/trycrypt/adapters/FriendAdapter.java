@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.krev.trycrypt.R;
 import com.krev.trycrypt.server.model.entity.User;
-import com.krev.trycrypt.utils.Consumer;
-import com.krev.trycrypt.utils.DownloadImageTask;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,13 +22,13 @@ import java.util.List;
  * Created by Dima on 14.11.2016.
  */
 
-public class FriendsAdapter extends BaseAdapter {
+public class FriendAdapter extends BaseAdapter {
     private final LayoutInflater layoutInflater;
     private List<User> users;
     private List<ImageView> imageViews;
     private AppCompatActivity activity;
 
-    public FriendsAdapter(List<User> users, AppCompatActivity activity) {
+    public FriendAdapter(List<User> users, AppCompatActivity activity) {
         this.users = users;
         this.imageViews = new ArrayList<>();
         this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -80,23 +78,23 @@ public class FriendsAdapter extends BaseAdapter {
         holder.name = (TextView) contentView.findViewById(R.id.user_name);
         User user = users.get(position);
         if (position >= imageViews.size()) {
-            Log.d("FriendsAdapter", imageViews.size() + " " + users.size());
+            Log.d("FriendAdapter", imageViews.size() + " " + users.size());
             holder.name.setText(user.getName());
             contentView.setTag(holder);
             return contentView;
         }
         if (imageViews.get(position) == null) {
             imageViews.set(position, holder.icon);
-            try {
-                new DownloadImageTask(imageViews.get(position),
-                        new Consumer<ImageView>() {
-                            @Override
-                            public void accept(ImageView o) {
-                                notifyDataSetChanged();
-                            }
-                        }).execute(user.getPhoto());
-            } catch (NullPointerException ignored) {
-            }
+//            try {
+//                new DownloadImageTask(
+//                        new Consumer<ImageView>() {
+//                            @Override
+//                            public void accept(ImageView o) {
+//                                notifyDataSetChanged();
+//                            }
+//                        }).execute(user.getPhoto());
+//            } catch (NullPointerException ignored) {
+//            }
         } else {
             holder.icon.setImageBitmap(((BitmapDrawable) imageViews.get(position).getDrawable()).getBitmap());
         }

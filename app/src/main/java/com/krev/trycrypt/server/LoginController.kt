@@ -28,6 +28,7 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
     fun check(consumer: Consumer<Boolean>, mac: String, token: VKAccessToken) {
         Task(Supplier {
             val login = Login(Id(token.userId.toLong()), "", mac)
+            Log.d("LoginController", "$address/login?v=${asString(login)}");
             val response = client.newCall(Request.Builder()
                     .url("$address/login?v=${asString(login)}")
                     .get().build()).execute()
