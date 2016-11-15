@@ -52,7 +52,7 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
     }
 
     companion object {
-        val address = "http://192.168.42.123:8080"
+        val address = "http://192.168.1.40:8080"
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")!!
         val mapper = ObjectMapper()

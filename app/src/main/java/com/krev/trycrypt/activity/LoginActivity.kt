@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.krev.trycrypt.R
+import com.krev.trycrypt.cache.PhotoCache
 import com.krev.trycrypt.server.BaseController
 import com.krev.trycrypt.server.LoginController
 import com.krev.trycrypt.server.Task
@@ -120,6 +121,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        PhotoCache.activity = this
         mac = (getSystemService(Context.WIFI_SERVICE) as WifiManager).connectionInfo.macAddress
         BaseController.device = mac!!
         when {

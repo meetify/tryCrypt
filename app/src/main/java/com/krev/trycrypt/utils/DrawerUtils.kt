@@ -9,6 +9,7 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.FriendsActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.activity.PlacesActivity
+import com.krev.trycrypt.cache.PhotoCache
 import com.krev.trycrypt.server.BaseController
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -51,11 +52,6 @@ object DrawerUtils {
                     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                     }
                 }).withOnDrawerItemClickListener { view, position, drawerItem ->
-            when (position) {
-                1 -> activity.startActivity(Intent(activity, MapActivity::class.java))
-                2 -> activity.startActivity(Intent(activity, MapActivity::class.java))
-                3 -> activity.startActivity(Intent(activity, MapActivity::class.java))
-            }
             activity.startActivity(Intent(activity,
                     when (position) {
                         1 -> MapActivity::class.java
@@ -70,6 +66,7 @@ object DrawerUtils {
     fun getProfile(): ProfileDrawerItem = ProfileDrawerItem()
             .withName(BaseController.user.name)
             .withIcon(BitmapFactory.decodeStream(URL(BaseController.user.photo).openStream())).apply {
+        PhotoCache.create("user_${BaseController.user.id.id}", icon.bitmap)
         MapActivity.profile = this
     }
 }
