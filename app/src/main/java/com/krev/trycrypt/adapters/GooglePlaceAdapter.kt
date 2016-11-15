@@ -3,7 +3,6 @@ package com.krev.trycrypt.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,9 @@ import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.model.GooglePlace
-import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.server.model.GooglePlace.Result
 import com.krev.trycrypt.utils.DownloadImageTask
+import com.krev.trycrypt.utils.functional.Consumer
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -22,35 +22,32 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class GooglePlaceAdapter private constructor(
         private val googlePlace: GooglePlace,
-        activity: Activity,
+        private val activity: Activity,
         private val layoutInflater: LayoutInflater = activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater,
-        private val places: ConcurrentHashMap<GooglePlace.Result, Bitmap> = run {
-            ConcurrentHashMap<GooglePlace.Result, Bitmap>()
-        },
-        private val indices: List<GooglePlace.Result> = googlePlace.results) : BaseAdapter() {
+        private val places: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>(),
+        private val indices: List<Result> = googlePlace.results) : BaseAdapter() {
 
     constructor(activity: Activity, googlePlace: GooglePlace) : this(googlePlace, activity) {
         places.apply {
             googlePlace.results.forEach {
                 put(it, MapActivity.bitmap!!)
-                DownloadImageTask(Consumer { bitmap ->
+                DownloadImageTask(Consumer({ bitmap ->
                     put(it, bitmap)
                     notifyDataSetChanged()
-                }).execute(it.photos[0].photoReference)
+                }), "place_${it.id}").execute(it.photos[0].photoReference)
             }
         }
     }
 
     override fun getCount(): Int = places.size
 
-    override fun getItem(i: Int): GooglePlace.Result = indices[i]
+    override fun getItem(i: Int): Result = indices[i]
 
     override fun getItemId(i: Int): Long = 0
 
     override fun getView(position: Int, contentView: View?, viewGroup: ViewGroup) = (contentView ?:
             layoutInflater.inflate(R.layout.google_place, viewGroup, false)).apply {
-        Log.d(TAG, "getView: " + position)
         val place = indices[position]
         tag = ViewHolder(
                 (findViewById(R.id.place_icon) as ImageView)
@@ -68,8 +65,4 @@ class GooglePlaceAdapter private constructor(
             internal var name: TextView? = null,
             internal var address: TextView? = null,
             internal var types: TextView? = null)
-
-    companion object {
-        private val TAG = GooglePlaceAdapter::class.java.toString()
-    }
 }

@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ListView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.adapters.FriendAdapter
+import com.krev.trycrypt.adapters.FriendsAdapter
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.DrawerUtils
-import java.util.*
+import com.krev.trycrypt.utils.functional.Consumer
 
 class FriendsActivity : AppCompatActivity() {
 
@@ -17,8 +15,8 @@ class FriendsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
         DrawerUtils.getDrawer(this)
-        val friends = FriendAdapter(ArrayList<User>(), this)
-        UserController.friends(Consumer { friends.addAll(it) })
+        val friends = FriendsAdapter(this)
+        UserController.friends(Consumer { friends.add(it) })
         (findViewById(R.id.listViewFriends) as ListView).adapter = friends
     }
 }

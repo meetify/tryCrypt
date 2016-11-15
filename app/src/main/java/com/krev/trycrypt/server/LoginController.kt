@@ -4,8 +4,8 @@ import android.util.Log
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.Login
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.Supplier
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.functional.Supplier
 import com.vk.sdk.VKAccessToken
 import okhttp3.Request
 
@@ -20,7 +20,7 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
         Task(Supplier {
             val login = Login(Id(token.userId.toLong()), token.accessToken, mac)
             val response = client.newCall(Request.Builder().url("$address/login")
-                    .post(createBody(login)).build()).execute()
+                    .post(body(login)).build()).execute()
             response.code() == 200
         }, consumer).execute()
     }
@@ -28,9 +28,9 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
     fun check(consumer: Consumer<Boolean>, mac: String, token: VKAccessToken) {
         Task(Supplier {
             val login = Login(Id(token.userId.toLong()), "", mac)
-            Log.d("LoginController", "$address/login?v=${asString(login)}");
+            Log.d("LoginController", "$address/login?v=${json(login)}");
             val response = client.newCall(Request.Builder()
-                    .url("$address/login?v=${asString(login)}")
+                    .url("$address/login?v=${json(login)}")
                     .get().build()).execute()
             response.code() == 200 && response.body().string().trim().toBoolean()
         }, consumer).execute()

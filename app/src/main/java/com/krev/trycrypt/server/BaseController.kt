@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.BaseEntity
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.Supplier
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.functional.Supplier
 import okhttp3.*
 
 /**
@@ -22,37 +22,31 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
 
     open fun get(ids: Collection<Id>, consumer: Consumer<List<T>>) {
         Task(Supplier<List<T>> {
-            mapper.readValue(client.newCall(Request.Builder()
-                    .url(url() + "&ids=${asString(ids)}")
-                    .get().build()).execute().body().string(), array.javaClass).asList()
+            mapper.readValue(request(Method.GET, url() + "&ids=" + json(ids))
+                    .body().string(), array.javaClass).asList()
         }, consumer).execute()
     }
 
-    internal fun url(path: String = "") = "$address/${array[0].javaClass.simpleName.toLowerCase()}$path?device=$device"
-
     open fun post(t: T, consumer: Consumer<Response> = Consumer {}) {
         Task(Supplier<Response> {
-            client.newCall(Request.Builder()
-                    .post(createBody(t)).url(url()).build()).execute()
+            request(Method.POST, url(), body(t))
         }, consumer).execute()
     }
 
     open fun put(t: T, consumer: Consumer<Response> = Consumer {}) {
         Task(Supplier<Response> {
-            client.newCall(Request.Builder()
-                    .put(createBody(t)).url(url()).build()).execute()
+            request(Method.PUT, url(), body(t))
         }, consumer).execute()
     }
 
     open fun delete(t: T, consumer: Consumer<Response> = Consumer {}) {
         Task(Supplier<Response> {
-            client.newCall(Request.Builder()
-                    .delete(createBody(t)).url(url()).build()).execute()
+            request(Method.DELETE, url(), body(t))
         }, consumer).execute()
     }
 
     companion object {
-        val address = "http://192.168.42.123:8080"
+        val address = "http://192.168.1.40:8080"
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")!!
         val mapper = ObjectMapper()
@@ -60,9 +54,22 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
         var user = User()
     }
 
-    internal fun asString(a: Any): String = mapper.writeValueAsString(a)
+    internal enum class Method {
+        GET, POST, PUT, DELETE
+    }
 
-    internal fun createBody(a: Any): RequestBody = RequestBody.create(JSON, asString(a))
+    internal fun json(a: Any): String = mapper.writeValueAsString(a)
 
+    internal fun body(a: Any): RequestBody = RequestBody.create(JSON, json(a))
+
+    internal fun url(path: String = "") = "$address/${array[0].javaClass.simpleName.toLowerCase()}$path?device=$device"
+
+    internal fun request(method: Method, url: String,
+                         body: RequestBody = body("")) = client.newCall(when (method) {
+        Method.GET -> Request.Builder().get()
+        Method.POST -> Request.Builder().post(body)
+        Method.PUT -> Request.Builder().put(body)
+        Method.DELETE -> Request.Builder().delete(body)
+    }.url(url).build()).execute()
 }
 

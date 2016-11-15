@@ -7,8 +7,8 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.PlacesAdapter
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.DrawerUtils
+import com.krev.trycrypt.utils.functional.Consumer
 import java.util.*
 
 class PlacesActivity : AppCompatActivity() {

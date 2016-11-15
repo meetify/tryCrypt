@@ -1,8 +1,8 @@
 package com.krev.trycrypt.server
 
 import android.os.AsyncTask
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.Supplier
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.functional.Supplier
 
 /**
  * Created by Dima on 14.11.2016.
