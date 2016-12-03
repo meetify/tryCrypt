@@ -8,20 +8,26 @@ import com.krev.trycrypt.utils.functional.Consumer
 import java.net.URL
 
 class DownloadImageTask(private val consumer: Consumer<Bitmap>?,
-                        private val name: String) : AsyncTask<String, Void, Bitmap>() {
+                        private val name: String,
+                        private val update: Boolean = false) : AsyncTask<String, Void, Bitmap>() {
+
+    private var check = false
 
     override fun doInBackground(vararg urls: String): Bitmap {
-        return if (PhotoCache.check(name.decode())) PhotoCache.getChecked(name.decode()) else BitmapFactory
-                .decodeStream(URL(urls[0]).openStream())
+        check = PhotoCache.check(name.decode())
+        return when (check && !update) {
+            true -> PhotoCache.getChecked(name.decode())
+            else -> BitmapFactory.decodeStream(URL(urls[0]).openStream())
+        }
     }
 
     override fun onPostExecute(result: Bitmap) {
-        PhotoCache.create(name, result)
+        if (!check || update) PhotoCache.create(name, result)
         consumer?.accept(result)
     }
 
     private fun String.decode(): String = when (this) {
-        "" -> "___"
+        "" -> "____"
         else -> this
     }
 

@@ -11,4 +11,4 @@ import java.io.Serializable
  * @property    lon  longitude
  * @constructor takes 2 doubles.
  */
-data class Location(var lat: Double = 0.0, var lon: Double = 0.0) : Serializable
+data class MeetifyLocation(var lat: Double = 0.0, var lon: Double = 0.0) : Serializable

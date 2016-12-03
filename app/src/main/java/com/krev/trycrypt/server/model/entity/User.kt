@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.util.*
 
 class User(override var id: Id = Id(0),
-           var location: Location = Location(),
+           var location: MeetifyLocation = MeetifyLocation(),
            var friends: Set<Id> = HashSet(),
            var created: Set<Id> = HashSet(),
            var allowed: Set<Id> = HashSet(),

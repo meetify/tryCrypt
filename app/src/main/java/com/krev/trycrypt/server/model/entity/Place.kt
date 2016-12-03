@@ -25,4 +25,4 @@ class Place(var name: String = "",
             val photo: String = "",
             override var id: Id = Id(-1),
             var allowed: Set<Id> = HashSet<Id>(),
-            var location: Location = Location()) : BaseEntity(id), Serializable
+            var location: MeetifyLocation = MeetifyLocation()) : BaseEntity(id), Serializable

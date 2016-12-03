@@ -14,7 +14,7 @@ import com.krev.trycrypt.server.LoginController
 import com.krev.trycrypt.server.Task
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.Id
-import com.krev.trycrypt.server.model.entity.Location
+import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.utils.functional.Consumer
@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                 val json = response!!.json.getJSONObject("response")
                 val friends = parseFriends(json.getJSONArray("items").toString())
                 val user = User(Id(json.getLong("id")),
-                        Location(), friends, HashSet<Id>(), HashSet<Id>(),
+                        MeetifyLocation(), friends, HashSet<Id>(), HashSet<Id>(),
                         "${json.getString("first_name")} ${json.getString("last_name")}",
                         json.getString("photo_50"))
 
@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                 val json = response!!.json.getJSONObject("response")
                 val friends = parseFriends(json.getJSONArray("items").toString())
                 val user = User(Id(json.getLong("id")),
-                        Location(), friends, HashSet<Id>(), HashSet<Id>(),
+                        MeetifyLocation(), friends, HashSet<Id>(), HashSet<Id>(),
                         "${json.getString("first_name")} ${json.getString("last_name")}",
                         json.getString("photo_50"))
                 BaseController.user = user
