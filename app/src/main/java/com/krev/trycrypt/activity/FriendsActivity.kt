@@ -7,7 +7,7 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.FriendsAdapter
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.async.Consumer
 
 class FriendsActivity : AppCompatActivity() {
 

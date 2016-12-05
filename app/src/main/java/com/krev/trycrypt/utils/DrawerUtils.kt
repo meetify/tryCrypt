@@ -1,22 +1,21 @@
 package com.krev.trycrypt.utils
 
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.FriendsActivity
+import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.activity.PlacesActivity
-import com.krev.trycrypt.cache.PhotoCache
-import com.krev.trycrypt.server.BaseController
+import com.krev.trycrypt.application.Config
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
-import java.net.URL
 
 /**
  * Created by Dima on 14.11.2016.
@@ -25,8 +24,8 @@ object DrawerUtils {
     fun getDrawer(activity: AppCompatActivity): Drawer {
         val headerResult = AccountHeaderBuilder()
                 .withActivity(activity)
-                .withHeaderBackground(activity.resources.getDrawable(R.mipmap.back))
-                .addProfiles(MapActivity.profile)
+                .withHeaderBackground(R.mipmap.back)
+                .addProfiles(profile)
                 .withOnAccountHeaderListener({ view, profile, currentProfile -> false }).build()
 
         val map = PrimaryDrawerItem().withName("Map").withIdentifier(1)
@@ -63,10 +62,17 @@ object DrawerUtils {
         }.build()
     }
 
-    fun getProfile(): ProfileDrawerItem = ProfileDrawerItem()
-            .withName(BaseController.user.name)
-            .withIcon(BitmapFactory.decodeStream(URL(BaseController.user.photo).openStream())).apply {
-        PhotoCache.create("user_${BaseController.user.id.id}", icon.bitmap)
-        MapActivity.profile = this
+    val profile: ProfileDrawerItem by lazy { profile() }
+    val icon: Bitmap by lazy { LoginActivity.icon!! }
+
+    //todo: async? or something like this to solve network on main thread exception
+    fun profile(): ProfileDrawerItem = ProfileDrawerItem()
+            .withName(Config.user.name)
+//            .withIcon(BitmapFactory.decodeStream(URL(Config.user.photo).openStream())).apply {
+            .withIcon(icon
+//                    run { val task = ImageTask(Consumer {}, "user_${Config.user.id.id}").execute(Config.user.photo) }
+            ).apply {
+//            .withIcon(MapActivity.bitmap).apply {
+        PhotoCache.create("user_${Config.user.id.id}", icon.bitmap)
     }
 }

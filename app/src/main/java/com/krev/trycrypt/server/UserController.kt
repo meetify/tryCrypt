@@ -1,10 +1,14 @@
 package com.krev.trycrypt.server
 
 import android.util.Log
+import com.krev.trycrypt.application.Config.client
+import com.krev.trycrypt.application.Config.mapper
+import com.krev.trycrypt.application.Config.user
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.functional.Consumer
-import com.krev.trycrypt.utils.functional.Supplier
+import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.async.Supplier
+import com.krev.trycrypt.utils.async.Task
 import okhttp3.Request
 
 object UserController : BaseController<User>(Array(1, { User() })) {

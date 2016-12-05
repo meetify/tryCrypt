@@ -1,12 +1,18 @@
 package com.krev.trycrypt.server
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.krev.trycrypt.application.Config.JSON
+import com.krev.trycrypt.application.Config.address
+import com.krev.trycrypt.application.Config.client
+import com.krev.trycrypt.application.Config.device
+import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.BaseEntity
-import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.functional.Consumer
-import com.krev.trycrypt.utils.functional.Supplier
-import okhttp3.*
+import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.async.Supplier
+import com.krev.trycrypt.utils.async.Task
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 
 /**
  * This class represents some base controller. It has pre-implemented methods get, post, put, delete.
@@ -43,15 +49,6 @@ abstract class BaseController<T : BaseEntity>(internal val array: Array<T>) {
         Task(Supplier<Response> {
             request(Method.DELETE, url(), body(t))
         }, consumer).execute()
-    }
-
-    companion object {
-        val address = "http://192.168.1.40:8080"
-        val client = OkHttpClient()
-        val JSON = MediaType.parse("application/json; charset=utf-8")!!
-        val mapper = ObjectMapper()
-        var device = ""
-        var user = User()
     }
 
     internal enum class Method {

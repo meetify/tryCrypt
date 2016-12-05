@@ -13,8 +13,8 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
-import com.krev.trycrypt.utils.DownloadImageTask
-import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.async.ImageTask
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -32,7 +32,7 @@ class GooglePlaceAdapter private constructor(
         places.apply {
             googlePlace.results.forEach {
                 put(it, MapActivity.bitmap!!)
-                DownloadImageTask(Consumer({ bitmap ->
+                ImageTask(Consumer({ bitmap ->
                     put(it, bitmap)
                     notifyDataSetChanged()
                 }), "place_${it.id}").execute(it.photos[0].photoReference)

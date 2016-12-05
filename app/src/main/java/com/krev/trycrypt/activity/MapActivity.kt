@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Parcel
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.utils.TypeMapper
-import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.async.Consumer
 import com.mapbox.mapboxsdk.MapboxAccountManager
 import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
 import com.mapbox.mapboxsdk.annotations.IconFactory
@@ -30,7 +31,6 @@ import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mingle.sweetpick.CustomDelegate
 import com.mingle.sweetpick.SweetSheet
 
@@ -66,9 +66,12 @@ class MapActivity : AppCompatActivity() {
                 PlaceController.nearby(Consumer<GooglePlace> {
 //                    if (it.results.size == 0) return@Consumer
 //                    Log.d("GooglePlace", jacksonObjectMapper().writeValueAsString(it))
+                    Log.d("GooglePlace", "consumer is starting")
                     val adapter = GooglePlaceAdapter(this@MapActivity, it)
                     val markers = it.results.map(::CustomMarkerOptions)
+                    Log.d("GooglePlace", "consumer is on ui")
                     runOnUiThread {
+                        Log.d("GooglePlace", "consumer is on ui")
                         map.clear()
                         map.addMarkers(markers)
                         if (sweetSheet.isShow) {
@@ -78,6 +81,7 @@ class MapActivity : AppCompatActivity() {
                         customDelegate.setCustomView(view)
                         sweetSheet.show()
                         lock = false
+                        Log.d("GooglePlace", "consumer is well done")
                     }
                 }, MeetifyLocation(it.latitude, it.longitude))
             }
@@ -93,7 +97,9 @@ class MapActivity : AppCompatActivity() {
         mapView!!.onCreate(savedInstanceState)
         DrawerUtils.getDrawer(this)
         locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, object : LocationListener {
+        Log.d("MapActivity", locationManager!!.allProviders.toString())
+        //30000 milliseconds and 50 meters
+        locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
             override fun onProviderDisabled(p0: String?) {
             }
 
@@ -138,6 +144,7 @@ class MapActivity : AppCompatActivity() {
         mapView!!.onLowMemory()
     }
 
+    //todo: creator
     private class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOptions>() {
         constructor(place: GooglePlace.Result) : this() {//, resources:Resources) : this() {
             position = convert(place.geometry.location)
@@ -183,7 +190,6 @@ class MapActivity : AppCompatActivity() {
     }
 
     companion object {
-        var profile: ProfileDrawerItem? = null
         var bitmap: Bitmap? = null
         var activity: AppCompatActivity? = null
 

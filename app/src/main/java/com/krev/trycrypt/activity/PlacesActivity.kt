@@ -6,10 +6,8 @@ import android.widget.ListView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.PlacesAdapter
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.functional.Consumer
-import java.util.*
+import com.krev.trycrypt.utils.async.Consumer
 
 class PlacesActivity : AppCompatActivity() {
 
@@ -17,9 +15,9 @@ class PlacesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_places)
         DrawerUtils.getDrawer(this)
-        val places = PlacesAdapter(ArrayList<Place>(), this)
-        UserController.created(Consumer { places.addAll(it) })
-        UserController.allowed(Consumer { places.addAll(it) })
+        val places = PlacesAdapter(this)
+        UserController.created(Consumer { places.add(it) })
+        UserController.allowed(Consumer { places.add(it) })
         (findViewById(R.id.listViewPlaces) as ListView).adapter = places
     }
 }

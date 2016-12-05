@@ -2,7 +2,6 @@ package com.krev.trycrypt.server.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.Serializable
 import java.util.*
 
@@ -183,8 +182,4 @@ data class GooglePlace(
     data class Viewport(
             var northeast: GoogleLocation = GoogleLocation(),
             var southwest: GoogleLocation = GoogleLocation()) : Serializable
-
-    companion object {
-        val mapper = jacksonObjectMapper()
-    }
 }
