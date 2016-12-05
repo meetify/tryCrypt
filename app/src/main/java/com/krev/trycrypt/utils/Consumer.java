@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils.async;
+package com.krev.trycrypt.utils;
 
 /**
  * Created by Dima on 28.10.2016.

@@ -5,12 +5,13 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.address
 import com.krev.trycrypt.application.Config.client
 import com.krev.trycrypt.application.Config.device
+import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.application.Config.token
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.Login
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.async.Consumer
-import com.krev.trycrypt.utils.async.Supplier
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import com.krev.trycrypt.utils.async.Task
 import okhttp3.Request
 
@@ -19,7 +20,7 @@ import okhttp3.Request
  */
 object LoginController : BaseController<Login>(Array(1, { Login() })) {
 
-    private val TAG = Login::class.java.name
+    private val TAG = LoginController::class.java.name
 
     fun login(consumer: Consumer<Boolean>) {
         Task(Supplier {
@@ -30,14 +31,16 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
         }, consumer).execute()
     }
 
-    fun check(consumer: Consumer<Boolean>) {
+    fun check(consumer: Consumer<User>) {
         Task(Supplier {
             val login = Login(Id(token.userId.toLong()), "", device)
             Log.d("LoginController", "$address/login?v=${json(login)}")
             val response = client.newCall(Request.Builder()
                     .url("$address/login?v=${json(login)}")
                     .get().build()).execute()
-            response.code() == 200 && response.body().string().trim().toBoolean()
+            val u = mapper.readValue(response.body().string(), User::class.java)
+            Log.d("LoginController", "got user ${mapper.writeValueAsString(u)}")
+            u
         }, consumer).execute()
     }
 

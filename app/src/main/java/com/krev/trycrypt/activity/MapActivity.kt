@@ -21,9 +21,9 @@ import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
+import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.utils.TypeMapper
-import com.krev.trycrypt.utils.async.Consumer
 import com.mapbox.mapboxsdk.MapboxAccountManager
 import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
 import com.mapbox.mapboxsdk.annotations.IconFactory

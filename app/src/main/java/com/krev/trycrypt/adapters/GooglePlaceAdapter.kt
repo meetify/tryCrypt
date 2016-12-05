@@ -13,7 +13,7 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
-import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.async.ImageTask
 import java.util.concurrent.ConcurrentHashMap
 

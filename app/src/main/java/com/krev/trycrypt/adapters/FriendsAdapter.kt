@@ -12,7 +12,7 @@ import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.async.ImageTask
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

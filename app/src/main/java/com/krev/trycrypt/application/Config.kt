@@ -6,7 +6,7 @@ import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.async.Consumer
+import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.async.ImageTask
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
@@ -27,9 +27,15 @@ object Config {
     val settings: SharedPreferences by lazy { context.getSharedPreferences("MeetifyProps", 0) }
     val user: User by lazy {
         settings.getString("user", "").let {
-            if (it == "") User()
-            else mapper.readValue(it, User::class.java).apply {
-                ImageTask(Consumer { LoginActivity.icon = it }, "user_${id.id}").execute(photo)
+            User().apply {
+                if (it != "") {
+                    modify(mapper.readValue(it, User::class.java))
+                }
+                Log.d("Config", "User $it")
+                if (photo.trim() != "" && LoginActivity.icon == null) {
+                    Log.d("Config", "getting photo")
+                    ImageTask(Consumer { LoginActivity.icon = it }, "user_${id.id}").execute(photo)
+                }
             }
         }
     }
@@ -40,6 +46,7 @@ object Config {
     }
 
     fun modify(user: User) {
+        Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
         if (user.photo != "" && LoginActivity.icon == null) {
             ImageTask(Consumer { LoginActivity.icon = it }, "user_${user.id.id}").execute(user.photo)
         }

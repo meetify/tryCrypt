@@ -7,8 +7,8 @@ import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.utils.async.Consumer
-import com.krev.trycrypt.utils.async.Supplier
+import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.Supplier
 import com.krev.trycrypt.utils.async.Task
 import okhttp3.Request
 
