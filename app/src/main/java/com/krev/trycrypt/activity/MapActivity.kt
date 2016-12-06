@@ -5,8 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -36,7 +34,6 @@ class MapActivity : AppCompatActivity() {
 
     private var mapView: MapView? = null
     private var lock = false
-    private var locationManager: LocationManager? = null
     var camera = Config.camera
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,35 +82,10 @@ class MapActivity : AppCompatActivity() {
             map.cameraPosition = camera
 
             map.setOnCameraChangeListener { camera = it }
-
-            map.setOnMyLocationChangeListener { }
-
-//            map.setOnMapLongClickListener { }
-//            map.setOnMarkerClickListener {
-//                val marker = it as CustomMarker
-//                true
-//            }
         }
         mapView!!.onCreate(savedInstanceState)
         DrawerUtils.getDrawer(this)
-        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        Log.d("MapActivity", locationManager!!.allProviders.toString())
-        //30000 milliseconds and 50 meters
-        locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
-            override fun onProviderDisabled(p0: String?) {
-            }
 
-            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-            }
-
-            override fun onProviderEnabled(p0: String?) {
-            }
-
-            override fun onLocationChanged(location: Location) {
-
-            }
-
-        })
     }
 
     public override fun onResume() {
@@ -151,5 +123,7 @@ class MapActivity : AppCompatActivity() {
         var activity: AppCompatActivity? = null
 
         fun convert(location: GoogleLocation) = LatLng(location.lat, location.lng)
+
+        fun convert(location: Location) = MeetifyLocation(location.latitude, location.longitude)
     }
 }

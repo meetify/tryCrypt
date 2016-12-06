@@ -2,16 +2,22 @@ package com.krev.trycrypt.application
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
+import com.krev.trycrypt.activity.MapActivity
+import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.JsonAlias.Companion.json
 import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.mapbox.CameraPositionJson
 import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.geometry.LatLng
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -63,16 +69,24 @@ object Config {
         settings.edit().putString("user", uString).apply()
     }
 
-    private class CameraPositionJson(val bearing: Double = 0.0,
-                                     val target: TargetJson = TargetJson(),
-                                     val tilt: Double = 0.0,
-                                     val zoom: Double = 15.0) {
-        fun map() = CameraPosition.Builder()
-                .bearing(bearing).tilt(tilt).zoom(zoom)
-                .target(LatLng(target.latitude, target.longitude, target.altitude)).build()
-    }
+    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
-    private class TargetJson(val altitude: Double = 0.0,
-                             val latitude: Double = 0.0,
-                             val longitude: Double = 0.0)
+    fun locationService() {
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
+            override fun onProviderDisabled(p0: String?) {
+            }
+
+            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+            }
+
+            override fun onProviderEnabled(p0: String?) {
+            }
+
+            override fun onLocationChanged(location: Location) {
+                Log.d("LocationManager", "Current location is ${location.latitude} ${location.longitude}")
+                UserController.update(MapActivity.convert(location))
+            }
+        })
+        Log.d("Config", "Location manager initialized")
+    }
 }

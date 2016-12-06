@@ -16,15 +16,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
-/**
- * This class represents some base controller. It has pre-implemented methods get, post, put, delete.
- * They are implemented in that way so they can be used without modifications on some usual tasks.
- * @version 0.0.1
- * @since   0.0.1
- * @property    repo    Some custom repository that represents connection with some database
- * @property    manager Entity manager used for queries.
- * @constructor         Autowired by Spring.
- */
 @Suppress("unused")
 abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
 

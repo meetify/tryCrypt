@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.krev.trycrypt.application.Config.settings
-
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKAccessTokenTracker
 import com.vk.sdk.VKSdk
@@ -25,8 +24,11 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         MainApplication.context = applicationContext
+        Config.locationService()
+
         vkAccessTokenTracker.startTracking()
         VKSdk.initialize(this)
+
         settings.all.forEach {
             Log.d("MainApplication", it.key + " | " + it.value)
         }

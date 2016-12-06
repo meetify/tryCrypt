@@ -31,7 +31,12 @@
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
         <activity android:name=".activity.FriendsActivity" />
-        <activity android:name=".activity.PlacesActivity"></activity>
+        <activity android:name=".activity.PlacesActivity" />
+
+        <service
+            android:name=".ServerService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -18,4 +18,5 @@
     <string name="button">Button</string>
     <string name="meetify">Meetify</string>
     <string name="cameraJson">{"bearing":26.8502140045166,"target":{"altitude":0.0,"latitude":48.468741627458066,"longitude":35.05147779416143},"tilt":0.0,"zoom":14.937994003295898}</string>
+    <string name="is_user_online_or_offline">Is user online or offline</string>
 </resources>

@@ -44,16 +44,22 @@ class FriendsAdapter(
 
     override fun getView(position: Int, contentView: View?, viewGroup: ViewGroup) = (contentView ?:
             layoutInflater.inflate(R.layout.user, viewGroup, false)).apply {
-//        Log.d(TAG, "getView: " + position)
         val user = users[position]
-        tag = ViewHolder(
-                (findViewById(R.id.user_icon) as ImageView)
-                        .apply { setImageBitmap(photos[user]) },
-                (findViewById(R.id.user_name) as TextView)
-                        .apply { text = user.name })
+        tag = ViewHolder().apply {
+            icon = (findViewById(R.id.user_icon) as ImageView).apply { setImageBitmap(photos[user]) }
+            name = (findViewById(R.id.user_name) as TextView).apply { text = user.name }
+            online = (findViewById(R.id.user_online) as ImageView).apply {
+                setImageResource(if (System.currentTimeMillis() - user.time <= 15 * 60 * 1000)
+                    R.drawable.ic_online
+                else
+                    R.drawable.ic_offline
+                )
+            }
+        }
     }!!
 
     private data class ViewHolder(
             internal var icon: ImageView? = null,
-            internal var name: TextView? = null)
+            internal var name: TextView? = null,
+            internal var online: ImageView? = null)
 }
