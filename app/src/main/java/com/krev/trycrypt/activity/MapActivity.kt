@@ -8,7 +8,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Parcel
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,18 +16,16 @@ import android.view.ViewGroup
 import android.widget.ListView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.GooglePlaceAdapter
+import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.TypeMapper
+import com.krev.trycrypt.utils.mapbox.CustomMarkerOptions
 import com.mapbox.mapboxsdk.MapboxAccountManager
-import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
-import com.mapbox.mapboxsdk.annotations.IconFactory
-import com.mapbox.mapboxsdk.annotations.Marker
-import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mingle.sweetpick.CustomDelegate
@@ -40,6 +37,7 @@ class MapActivity : AppCompatActivity() {
     private var mapView: MapView? = null
     private var lock = false
     private var locationManager: LocationManager? = null
+    var camera = Config.camera
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +62,6 @@ class MapActivity : AppCompatActivity() {
                     lock = true
                 })
                 PlaceController.nearby(Consumer<GooglePlace> {
-//                    if (it.results.size == 0) return@Consumer
-//                    Log.d("GooglePlace", jacksonObjectMapper().writeValueAsString(it))
                     Log.d("GooglePlace", "consumer is starting")
                     val adapter = GooglePlaceAdapter(this@MapActivity, it)
                     val markers = it.results.map(::CustomMarkerOptions)
@@ -86,7 +82,11 @@ class MapActivity : AppCompatActivity() {
                 }, MeetifyLocation(it.latitude, it.longitude))
             }
 
-            map.cameraPosition = CameraPosition.Builder().bearing(0.0).tilt(0.0).zoom(15.0).target(LatLng(48.514308545, 35.0879165)).build()
+            map.cameraPosition = camera
+
+            map.setOnCameraChangeListener { camera = it }
+
+            map.setOnMyLocationChangeListener { }
 
 //            map.setOnMapLongClickListener { }
 //            map.setOnMarkerClickListener {
@@ -137,6 +137,7 @@ class MapActivity : AppCompatActivity() {
     public override fun onDestroy() {
         super.onDestroy()
         mapView!!.onDestroy()
+        Config.settings.edit().putString("camera", mapper.writeValueAsString(camera)).apply()
     }
 
     override fun onLowMemory() {
@@ -144,50 +145,6 @@ class MapActivity : AppCompatActivity() {
         mapView!!.onLowMemory()
     }
 
-    //todo: creator
-    private class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOptions>() {
-        constructor(place: GooglePlace.Result) : this() {//, resources:Resources) : this() {
-            position = convert(place.geometry.location)
-            title = place.name
-            marker.place = place
-            icon = IconFactory.getInstance(activity!!.baseContext).fromDrawable(
-                    activity!!.getDrawable(TypeMapper.drawable(place.types)))
-//            var icon = BitmapFactory.decodeResource(resources, );
-        }
-
-        private var marker: CustomMarker = CustomMarker(this)
-
-        override fun getThis(): CustomMarkerOptions = this
-
-        override fun getMarker(): CustomMarker {
-            marker.position = position
-            marker.snippet = snippet
-            marker.title = title
-            marker.icon = icon
-            return marker
-        }
-
-        override fun describeContents(): Int {
-            return 0
-        }
-
-        override fun writeToParcel(out: Parcel, flags: Int) {
-            out.writeParcelable(position, flags)
-            out.writeString(snippet)
-            out.writeString(title)
-            val icon = icon
-            out.writeByte((if (icon != null) 1 else 0).toByte())
-            if (icon != null) {
-                out.writeString(icon.id)
-                out.writeParcelable(icon.bitmap, flags)
-            }
-        }
-
-    }
-
-    private class CustomMarker(options: CustomMarkerOptions) : Marker(options) {
-        var place = GooglePlace.Result()
-    }
 
     companion object {
         var bitmap: Bitmap? = null

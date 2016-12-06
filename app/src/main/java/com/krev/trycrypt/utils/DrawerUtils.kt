@@ -65,14 +65,7 @@ object DrawerUtils {
     val profile: ProfileDrawerItem by lazy { profile() }
     val icon: Bitmap by lazy { LoginActivity.icon!! }
 
-    //todo: async? or something like this to solve network on main thread exception
     fun profile(): ProfileDrawerItem = ProfileDrawerItem()
             .withName(Config.user.name)
-//            .withIcon(BitmapFactory.decodeStream(URL(Config.user.photo).openStream())).apply {
-            .withIcon(icon
-//                    run { val task = ImageTask(Consumer {}, "user_${Config.user.id.id}").execute(Config.user.photo) }
-            ).apply {
-//            .withIcon(MapActivity.bitmap).apply {
-        PhotoCache.create("user_${Config.user.id.id}", icon.bitmap)
-    }
+            .withIcon(icon).apply { PhotoCache.create("user_${Config.user.id.id}", icon.bitmap) }
 }

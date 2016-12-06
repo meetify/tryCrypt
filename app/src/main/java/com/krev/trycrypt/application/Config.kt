@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.Consumer
+import com.krev.trycrypt.utils.JsonAlias.Companion.json
 import com.krev.trycrypt.utils.async.ImageTask
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -44,6 +48,9 @@ object Config {
             settings.edit().putString("device", this).commit()
         }
     }
+    val camera: CameraPosition by lazy {
+        json(settings.getString("camera", context.getString(R.string.cameraJson)), CameraPositionJson::class.java).map()
+    }
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
@@ -55,4 +62,17 @@ object Config {
         Log.d("LoginActivity", uString)
         settings.edit().putString("user", uString).apply()
     }
+
+    private class CameraPositionJson(val bearing: Double = 0.0,
+                                     val target: TargetJson = TargetJson(),
+                                     val tilt: Double = 0.0,
+                                     val zoom: Double = 15.0) {
+        fun map() = CameraPosition.Builder()
+                .bearing(bearing).tilt(tilt).zoom(zoom)
+                .target(LatLng(target.latitude, target.longitude, target.altitude)).build()
+    }
+
+    private class TargetJson(val altitude: Double = 0.0,
+                             val latitude: Double = 0.0,
+                             val longitude: Double = 0.0)
 }
