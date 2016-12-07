@@ -45,10 +45,6 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
         }, consumer).execute()
     }
 
-    protected enum class Method {
-        GET, POST, PUT, DELETE
-    }
-
     protected fun body(a: Any): RequestBody = RequestBody.create(JSON, json(a))
 
     protected fun url(params: String = "", path: String = "") = "$address/${className()}$path?device=$device$params"
@@ -62,5 +58,9 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
     }.url(url).build()).execute()!!
 
     protected fun className() = array[0].javaClass.simpleName.toLowerCase()
+
+    protected enum class Method {
+        GET, POST, PUT, DELETE
+    }
 }
 

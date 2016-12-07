@@ -1,16 +1,14 @@
 package com.krev.trycrypt.adapters
 
-import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.activity.MapActivity
+import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.application.Config.layoutInflater
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
 import com.krev.trycrypt.utils.Consumer
@@ -21,17 +19,14 @@ import java.util.concurrent.ConcurrentHashMap
  * Created by Dima on 28.10.2016.
  */
 class GooglePlaceAdapter private constructor(
-        private val googlePlace: GooglePlace,
-        private val activity: Activity,
-        private val layoutInflater: LayoutInflater = activity
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater,
-        private val places: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>(),
-        private val indices: List<Result> = googlePlace.results) : BaseAdapter() {
+        private val indices: List<Result>,
+        private val places: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>())
+    : BaseAdapter() {
 
-    constructor(activity: Activity, googlePlace: GooglePlace) : this(googlePlace, activity) {
+    constructor(googlePlace: GooglePlace) : this(googlePlace.results) {
         places.apply {
             googlePlace.results.forEach {
-                put(it, MapActivity.bitmap!!)
+                put(it, Config.bitmap)
                 ImageTask(Consumer({ bitmap ->
                     put(it, bitmap)
                     notifyDataSetChanged()

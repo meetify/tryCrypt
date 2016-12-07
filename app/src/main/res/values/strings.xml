@@ -19,4 +19,9 @@
     <string name="meetify">Meetify</string>
     <string name="cameraJson">{"bearing":26.8502140045166,"target":{"altitude":0.0,"latitude":48.468741627458066,"longitude":35.05147779416143},"tilt":0.0,"zoom":14.937994003295898}</string>
     <string name="is_user_online_or_offline">Is user online or offline</string>
+    <string name="type_place_description">Type place description</string>
+    <string name="type_place_name">Type place name</string>
+    <string name="select_friends_you_want_to_see_in_this_place">Select friends you want to see in this place</string>
+    <string name="photo_of_your_place">Photo of your place</string>
+    <string name="add_place">Add place</string>
 </resources>

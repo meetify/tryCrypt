@@ -13,12 +13,7 @@ import com.krev.trycrypt.utils.async.Task
 object UserController : BaseController<User>(Array(1, { User() })) {
     fun friends(consumer: Consumer<List<User>>) {
         Task(Supplier {
-            val url = url("/friends")
-            Log.d("UserController", url)
             json(request(Method.GET, url("", "/friends")).body().string(), array.javaClass).asList()
-//            mapper.readValue(client.newCall(Request.Builder()
-//                    .url(url)
-//                    .get().build()).execute().body().string(), array.javaClass).asList()
         }, consumer).execute()
     }
 

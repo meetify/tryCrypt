@@ -36,7 +36,9 @@
         <service
             android:name=".ServerService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".activity.PlaceAddActivity"></activity>
     </application>
 
 </manifest>

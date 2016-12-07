@@ -56,14 +56,14 @@
         android:text="@string/login" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonLogin"
         android:layout_centerHorizontal="true"
         android:text="@string/not_registered"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="italic" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/buttonLoginVK"

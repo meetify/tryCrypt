@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 import com.krev.trycrypt.activity.MapActivity
+import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.utils.TypeMapper
 import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
@@ -18,8 +19,8 @@ class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOption
         position = MapActivity.convert(place.geometry.location)
         title = place.name
         marker.place = place
-        icon = IconFactory.getInstance(MapActivity.activity!!.baseContext).fromDrawable(
-                MapActivity.activity!!.getDrawable(TypeMapper.drawable(place.types)))
+        icon = IconFactory.getInstance(Config.context).fromDrawable(
+                Config.context.getDrawable(TypeMapper.drawable(place.types)))
     }
 
     constructor(input: Parcel) : this() {

@@ -15,7 +15,7 @@ class PlacesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_places)
         DrawerUtils.getDrawer(this)
-        val places = PlacesAdapter(this)
+        val places = PlacesAdapter()
         UserController.created(Consumer { places.add(it) })
         UserController.allowed(Consumer { places.add(it) })
         (findViewById(R.id.listViewPlaces) as ListView).adapter = places

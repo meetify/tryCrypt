@@ -2,11 +2,14 @@ package com.krev.trycrypt.application
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
@@ -54,9 +57,16 @@ object Config {
             settings.edit().putString("device", this).commit()
         }
     }
+    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     val camera: CameraPosition by lazy {
         json(settings.getString("camera", context.getString(R.string.cameraJson)), CameraPositionJson::class.java).map()
     }
+    val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
+    val layoutInflater: LayoutInflater by lazy {
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    }
+
+    var friends: Set<User> = HashSet()
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
@@ -68,8 +78,6 @@ object Config {
         Log.d("LoginActivity", uString)
         settings.edit().putString("user", uString).apply()
     }
-
-    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
     fun locationService() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
@@ -88,5 +96,9 @@ object Config {
             }
         })
         Log.d("Config", "Location manager initialized")
+    }
+
+    fun initFriends() {
+        UserController.friends(Consumer { friends += it })
     }
 }

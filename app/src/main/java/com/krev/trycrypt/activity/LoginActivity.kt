@@ -2,10 +2,10 @@ package com.krev.trycrypt.activity
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.mapper
@@ -33,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun check() {
         Log.d(TAG, "check")
+        //todo 6.12.2016: some better, than simple TextView
+        (findViewById(R.id.textViewRegister) as TextView).text = "You've already logged into vk, just wait."
         LoginController.check(Consumer<User> {
             Log.d(TAG, "checkingConsumer with $it")
             if (it.id.id != -1.toLong()) {
@@ -80,7 +82,6 @@ class LoginActivity : AppCompatActivity() {
 
         PhotoCache.filesDir = this.filesDir
         Log.d("FilesDir", this.filesDir.absolutePath)
-        MapActivity.bitmap = BitmapFactory.decodeResource(resources, R.mipmap.back)
         if (VKSdk.isLoggedIn()) check()
         else VKSdk.login(this, "friends", "photos")
     }
