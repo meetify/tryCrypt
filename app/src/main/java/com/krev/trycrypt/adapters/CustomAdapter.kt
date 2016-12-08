@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.entity.BaseEntity
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.functional.Consumer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

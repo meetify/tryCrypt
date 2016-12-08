@@ -6,10 +6,10 @@ import com.krev.trycrypt.application.Config.token
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.Login
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.JsonAlias.Companion.json
-import com.krev.trycrypt.utils.Supplier
+import com.krev.trycrypt.utils.JsonUtils.Companion.json
 import com.krev.trycrypt.utils.async.Task
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.functional.Supplier
 
 /**
  * Created by Dima on 12.11.2016.

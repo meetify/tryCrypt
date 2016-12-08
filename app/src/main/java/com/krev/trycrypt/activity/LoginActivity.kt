@@ -13,16 +13,14 @@ import com.krev.trycrypt.application.Config.user
 import com.krev.trycrypt.server.LoginController
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.Id
-import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.PhotoCache
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.vk.VKUser
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
-import com.vk.sdk.api.VKRequest
-import com.vk.sdk.api.VKResponse
 import java.util.*
 
 /**
@@ -34,14 +32,14 @@ class LoginActivity : AppCompatActivity() {
     private fun check() {
         Log.d(TAG, "check")
         //todo 6.12.2016: some better, than simple TextView
-        (findViewById(R.id.textViewRegister) as TextView).text = "You've already logged into vk, just wait."
+        (findViewById(R.id.textViewRegister) as TextView).text = getString(R.string.wait)
         LoginController.check(Consumer<User> {
             Log.d(TAG, "checkingConsumer with $it")
             if (it.id.id != -1.toLong()) {
                 loginFinished()
                 Config.modify(it)
             } else {
-                userFromVK(Consumer {
+                VKUser.get(Consumer {
                     Log.d("userFromVK", "in consumer")
                     Config.modify(it)
                     login()
@@ -73,15 +71,16 @@ class LoginActivity : AppCompatActivity() {
         UserController.get(ArrayList<Id>().apply { add(Id(Config.token.userId.toLong())) },
                 Consumer { user.modify(it[0]) })
         startActivity(Intent(this@LoginActivity, MapActivity::class.java))
+        finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        Log.d("LoginActivity", "onCreate" + mapper.writeValueAsString(user))
+        Log.d(TAG, "onCreate" + mapper.writeValueAsString(user))
 
         PhotoCache.filesDir = this.filesDir
-        Log.d("FilesDir", this.filesDir.absolutePath)
+        Log.d(TAG, this.filesDir.absolutePath)
         if (VKSdk.isLoggedIn()) check()
         else VKSdk.login(this, "friends", "photos")
     }
@@ -101,38 +100,11 @@ class LoginActivity : AppCompatActivity() {
 
     public override fun onDestroy() {
         super.onDestroy()
-        Log.d("LoginActivity", "onDestroy")
-        Config.apply {
-            val uString = mapper.writeValueAsString(user)
-            Log.d("LoginActivity", uString)
-            settings.edit().putString("user", uString).commit()
-        }
-    }
-
-    private fun userFromVK(consumer: Consumer<User>) {
-        val listener = object : VKRequest.VKRequestListener() {
-            override fun onComplete(response: VKResponse?) {
-                val json = response!!.json.getJSONObject("response")
-                val friends = parseFriends(json.getJSONArray("items").toString())
-                val user = User(Id(json.getLong("id")),
-                        MeetifyLocation(), friends, HashSet<Id>(), HashSet<Id>(),
-                        "${json.getString("first_name")} ${json.getString("last_name")}",
-                        json.getString("photo_50"))
-                Log.d("LoginActivity", "register done with ${mapper.writeValueAsString(user)}")
-                Config.modify(user)
-                consumer.accept(user)
-            }
-        }
-        VKRequest("execute.info").executeWithListener(listener)
+        Log.d(TAG, "onDestroy")
     }
 
     companion object {
         private val TAG = LoginActivity::class.java.toString()
         var icon: Bitmap? = null
-        private fun parseFriends(friends: String): HashSet<Id> = HashSet<Id>().apply {
-            friends.replace("[\\[\\]]".toRegex(), "")
-                    .split(",".toRegex())
-                    .forEach { add(Id(it.toLong())) }
-        }
     }
 }

@@ -16,14 +16,13 @@ import android.widget.Toast.LENGTH_SHORT
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.GooglePlaceAdapter
 import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.JsonAlias.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CustomMarkerOptions
 import com.mapbox.mapboxsdk.MapboxAccountManager
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -49,7 +48,7 @@ class MapActivity : AppCompatActivity() {
         customDelegate.setCustomView(view)
         sweetSheet!!.setDelegate(customDelegate)
         setContentView(group)
-        Config.initFriends()
+        Config.init()
 
         mapView = findViewById(R.id.mapView) as MapView
         mapView!!.getMapAsync { map ->
@@ -120,7 +119,9 @@ class MapActivity : AppCompatActivity() {
     public override fun onDestroy() {
         super.onDestroy()
         mapView!!.onDestroy()
-        Config.settings.edit().putString("camera", mapper.writeValueAsString(camera)).apply()
+        Config.settings.edit()
+                .putString("camera", json(camera))
+                .putString("user", json(Config.user)).commit()
     }
 
     override fun onLowMemory() {

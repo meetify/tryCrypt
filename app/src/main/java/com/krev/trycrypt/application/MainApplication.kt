@@ -24,7 +24,6 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         MainApplication.context = applicationContext
-        Config.locationService()
 
         vkAccessTokenTracker.startTracking()
         VKSdk.initialize(this)

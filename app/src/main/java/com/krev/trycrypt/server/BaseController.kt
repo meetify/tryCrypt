@@ -5,13 +5,12 @@ import com.krev.trycrypt.application.Config.JSON
 import com.krev.trycrypt.application.Config.address
 import com.krev.trycrypt.application.Config.client
 import com.krev.trycrypt.application.Config.device
-import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.BaseEntity
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.JsonAlias.Companion.json
-import com.krev.trycrypt.utils.Supplier
+import com.krev.trycrypt.utils.JsonUtils.Companion.json
 import com.krev.trycrypt.utils.async.Task
+import com.krev.trycrypt.utils.functional.Consumer
+import com.krev.trycrypt.utils.functional.Supplier
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -22,8 +21,9 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
     open fun get(ids: Collection<Id>, consumer: Consumer<List<T>>) {
         Task(Supplier<List<T>> {
             Log.d("BaseController", "$ids")
-            mapper.readValue(request(Method.GET, url() + "&ids=" + json(ids))
-                    .body().string(), array.javaClass).asList()
+            json(request(Method.GET, url("&ids=${json(ids)}")).body().string(), array.javaClass).asList()
+//            mapper.readValue(request(Method.GET, url() + "&ids=" + json(ids))
+//                    .body().string()) array.javaClass).asList()
         }, consumer).execute()
     }
 

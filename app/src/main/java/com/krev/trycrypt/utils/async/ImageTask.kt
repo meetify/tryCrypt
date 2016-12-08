@@ -4,8 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.PhotoCache
+import com.krev.trycrypt.utils.functional.Consumer
 import java.net.URL
 
 class ImageTask(private val consumer: Consumer<Bitmap>?,

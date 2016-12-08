@@ -16,22 +16,29 @@ import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.Consumer
-import com.krev.trycrypt.utils.JsonAlias.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.Companion.json
 import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CameraPositionJson
+import com.krev.trycrypt.vk.VKPhoto
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by Dima on 04.12.2016.
  */
 object Config {
     val address = "http://192.168.1.40:8080"
-    val client = OkHttpClient()
+    val client = OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()!!
     val JSON = MediaType.parse("application/json; charset=utf-8")!!
     val mapper = jacksonObjectMapper()
     val token: VKAccessToken by lazy { VKAccessToken.currentToken()!! }
@@ -67,19 +74,22 @@ object Config {
     }
 
     var friends: Set<User> = HashSet()
+    var album: Long = -1
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
         if (user.photo != "" && LoginActivity.icon == null) {
             ImageTask(Consumer { LoginActivity.icon = it }, "user_${user.id.id}").execute(user.photo)
         }
-        this.user.modify(user)
-        val uString = mapper.writeValueAsString(Config.user)
+        Config.user.modify(user)
+        val uString = json(Config.user)
         Log.d("LoginActivity", uString)
         settings.edit().putString("user", uString).apply()
     }
 
-    fun locationService() {
+    fun init() {
+        UserController.friends(Consumer { friends += it })
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
             override fun onProviderDisabled(p0: String?) {
             }
@@ -96,9 +106,7 @@ object Config {
             }
         })
         Log.d("Config", "Location manager initialized")
-    }
 
-    fun initFriends() {
-        UserController.friends(Consumer { friends += it })
+        VKPhoto.initAlbum()
     }
 }

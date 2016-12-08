@@ -11,8 +11,8 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.layoutInflater
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
-import com.krev.trycrypt.utils.Consumer
 import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.functional.Consumer
 import java.util.concurrent.ConcurrentHashMap
 
 /**

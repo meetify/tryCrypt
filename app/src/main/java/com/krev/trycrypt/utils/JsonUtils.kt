@@ -5,7 +5,7 @@ import com.krev.trycrypt.application.Config
 /**
  * Created by Dima on 06.12.2016.
  */
-abstract class JsonAlias {
+abstract class JsonUtils {
     companion object {
         fun json(a: Any): String = Config.mapper.writeValueAsString(a)
 
