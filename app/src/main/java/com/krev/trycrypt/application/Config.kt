@@ -15,12 +15,12 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.UserController
+import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.ImageTask
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CameraPositionJson
-import com.krev.trycrypt.vk.VKPhoto
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
@@ -33,7 +33,8 @@ import java.util.concurrent.TimeUnit
  * Created by Dima on 04.12.2016.
  */
 object Config {
-    val address = "http://192.168.1.40:8080"
+    //    val address = "http://192.168.1.40:8080"
+    val address = "http://159.224.206.172:49323"
     val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
@@ -45,6 +46,19 @@ object Config {
 
     val context: Context by lazy { MainApplication.context!! }
     val settings: SharedPreferences by lazy { context.getSharedPreferences("MeetifyProps", 0) }
+    val device: String by lazy {
+        settings.getString("device", UUID.randomUUID().toString()).apply {
+            settings.edit().putString("device", this).commit()
+        }
+    }
+    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    val camera: CameraPosition by lazy {
+        json(settings.getString("camera", context.getString(R.string.cameraJson)), CameraPositionJson::class.java).map()
+    }
+    val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
+    val layoutInflater: LayoutInflater by lazy {
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    }
     val user: User by lazy {
         settings.getString("user", "").let {
             User().apply {
@@ -59,22 +73,10 @@ object Config {
             }
         }
     }
-    val device: String by lazy {
-        settings.getString("device", UUID.randomUUID().toString()).apply {
-            settings.edit().putString("device", this).commit()
-        }
-    }
-    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    val camera: CameraPosition by lazy {
-        json(settings.getString("camera", context.getString(R.string.cameraJson)), CameraPositionJson::class.java).map()
-    }
-    val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
-    val layoutInflater: LayoutInflater by lazy {
-        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    }
 
     var friends: Set<User> = HashSet()
     var album: Long = -1
+    var places: Set<Place> = HashSet()
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
@@ -83,13 +85,12 @@ object Config {
         }
         Config.user.modify(user)
         val uString = json(Config.user)
-        Log.d("LoginActivity", uString)
         settings.edit().putString("user", uString).apply()
     }
 
     fun init() {
-        UserController.friends(Consumer { friends += it })
-
+//        UserController.friends(Consumer { friends += it })
+//        PlaceController.get(user.created + user.allowed, Consumer { places += it })
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
             override fun onProviderDisabled(p0: String?) {
             }
@@ -107,6 +108,6 @@ object Config {
         })
         Log.d("Config", "Location manager initialized")
 
-        VKPhoto.initAlbum()
+//        VKPhoto.initAlbum()
     }
 }

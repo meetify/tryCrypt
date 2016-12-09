@@ -11,7 +11,8 @@ class User(override var id: Id = Id(0),
            var allowed: Set<Id> = HashSet(),
            var name: String = "",
            var photo: String = "",
-           var time: Long = 0) : BaseEntity(id), Serializable {
+           var time: Long = 0,
+           var vkAlbum: Long = 0) : BaseEntity(id), Serializable {
     //maybe not be used
     fun modify(user: User) {
         this.id = user.id
@@ -22,5 +23,6 @@ class User(override var id: Id = Id(0),
         this.name = user.name
         this.photo = user.photo
         this.time = user.time
+        this.vkAlbum = user.vkAlbum
     }
 }

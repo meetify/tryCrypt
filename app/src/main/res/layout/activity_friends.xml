@@ -15,9 +15,16 @@
         android:title="@string/meetify"
         android:transitionName="actionBar" />
 
-    <ListView
-        android:id="@+id/listViewFriends"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/toolbar" />
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/friends_swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar">
+
+        <ListView
+            android:id="@+id/listViewFriends"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </com.baoyz.widget.PullRefreshLayout>
+
 </RelativeLayout>

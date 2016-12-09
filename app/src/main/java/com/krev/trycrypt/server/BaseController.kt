@@ -7,7 +7,7 @@ import com.krev.trycrypt.application.Config.client
 import com.krev.trycrypt.application.Config.device
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.BaseEntity
-import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.Task
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.functional.Supplier

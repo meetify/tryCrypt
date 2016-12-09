@@ -11,6 +11,7 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.layoutInflater
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
+import com.krev.trycrypt.utils.BitmapUtils
 import com.krev.trycrypt.utils.async.ImageTask
 import com.krev.trycrypt.utils.functional.Consumer
 import java.util.concurrent.ConcurrentHashMap
@@ -20,11 +21,11 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class GooglePlaceAdapter private constructor(
         private val indices: List<Result>,
-        private val places: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>())
+        private val photos: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>())
     : BaseAdapter() {
 
     constructor(googlePlace: GooglePlace) : this(googlePlace.results) {
-        places.apply {
+        photos.apply {
             googlePlace.results.forEach {
                 put(it, Config.bitmap)
                 ImageTask(Consumer({ bitmap ->
@@ -35,7 +36,7 @@ class GooglePlaceAdapter private constructor(
         }
     }
 
-    override fun getCount(): Int = places.size
+    override fun getCount(): Int = photos.size
 
     override fun getItem(i: Int): Result = indices[i]
 
@@ -46,7 +47,7 @@ class GooglePlaceAdapter private constructor(
         val place = indices[position]
         tag = ViewHolder(
                 (findViewById(R.id.place_icon) as ImageView)
-                        .apply { setImageBitmap(places[place]) },
+                        .apply { setImageDrawable(BitmapUtils.getRoundedDrawable(photos[place]!!)) },
                 (findViewById(R.id.place_name) as TextView)
                         .apply { text = place.name },
                 (findViewById(R.id.place_address) as TextView)

@@ -5,7 +5,7 @@ import com.krev.trycrypt.application.Config.user
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.Task
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.functional.Supplier

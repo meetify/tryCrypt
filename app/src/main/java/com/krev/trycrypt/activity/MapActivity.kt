@@ -21,7 +21,7 @@ import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CustomMarkerOptions
 import com.mapbox.mapboxsdk.MapboxAccountManager
@@ -29,12 +29,14 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mingle.sweetpick.CustomDelegate
 import com.mingle.sweetpick.SweetSheet
+import com.victor.loading.rotate.RotateLoading
 
 @SuppressLint("InflateParams")
 class MapActivity : AppCompatActivity() {
 
-    private var mapView: MapView? = null
+    private val mapView: MapView by lazy { findViewById(R.id.mapView) as MapView }
     private var lock = false
+    private val rotate: RotateLoading by lazy { findViewById(R.id.rotateloading) as RotateLoading }
     var camera = Config.camera
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +52,13 @@ class MapActivity : AppCompatActivity() {
         setContentView(group)
         Config.init()
 
-        mapView = findViewById(R.id.mapView) as MapView
-        mapView!!.getMapAsync { map ->
+        mapView.getMapAsync { map ->
             map.setOnMapClickListener {
                 synchronized(lock, {
                     if (lock) return@setOnMapClickListener
                     lock = true
                 })
+                rotate.start()
                 PlaceController.nearby(Consumer<GooglePlace> {
                     Log.d("GooglePlace", "consumer is starting")
                     if (it.results.isEmpty()) {
@@ -78,8 +80,10 @@ class MapActivity : AppCompatActivity() {
                         listView.adapter = adapter
                         customDelegate.setCustomView(view)
                         sweetSheet.show()
+                        rotate.stop()
                         lock = false
                         Log.d("GooglePlace", "consumer is well done")
+
                     }
                 }, MeetifyLocation(it.latitude, it.longitude))
             }
@@ -93,14 +97,14 @@ class MapActivity : AppCompatActivity() {
                         .putExtra("location", json(convert(it))))
             }
         }
-        mapView!!.onCreate(savedInstanceState)
+        mapView.onCreate(savedInstanceState)
         DrawerUtils.getDrawer(this)
 
     }
 
     public override fun onResume() {
         super.onResume()
-        mapView!!.onResume()
+        mapView.onResume()
     }
 
     public override fun onPause() {
@@ -108,17 +112,17 @@ class MapActivity : AppCompatActivity() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.apply()
-        mapView!!.onPause()
+        mapView.onPause()
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView!!.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-        mapView!!.onDestroy()
+        mapView.onDestroy()
         Config.settings.edit()
                 .putString("camera", json(camera))
                 .putString("user", json(Config.user)).commit()
@@ -126,7 +130,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView!!.onLowMemory()
+        mapView.onLowMemory()
     }
 
 

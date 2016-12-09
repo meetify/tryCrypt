@@ -17,7 +17,7 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.utils.JsonUtils.Companion.json
+import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.vk.VKPhoto
 
 

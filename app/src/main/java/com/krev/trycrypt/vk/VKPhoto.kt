@@ -13,6 +13,7 @@ import com.vk.sdk.api.photo.VKUploadImage
  * Created by Dima on 07.12.2016.
  */
 object VKPhoto {
+    @Deprecated("Use instead execute.userinfo")
     fun initAlbum(function: () -> Unit = {}) {
         val finish = { id: Long ->
             Config.album = id

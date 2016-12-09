@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.krev.trycrypt.activity.PlacesActivity">
 
-    <ListView
-        android:id="@+id/listViewPlaces"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/toolbar" />
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/places_swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar">
+
+        <ListView
+            android:id="@+id/listViewPlaces"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/toolbar" />
+    </com.baoyz.widget.PullRefreshLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

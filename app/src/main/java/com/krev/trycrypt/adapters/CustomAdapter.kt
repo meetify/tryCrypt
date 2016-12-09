@@ -29,8 +29,16 @@ abstract class CustomAdapter<T : BaseEntity>(
         ImageTask(Consumer { bitmap ->
             photos.put(it, bitmap)
             notifyDataSetChanged()
-        }, "user_${it.id.id}").execute(photo(it))
+        }, "${it.javaClass.simpleName.toLowerCase()}_${it.id.id}").execute(photo(it))
     }.let { this }
+
+    fun clear(list: Collection<T>) {
+        photos.clear()
+        items.clear()
+        add(list)
+        notifyDataSetChanged()
+
+    }
 
     override fun getItemId(i: Int): Long = 0
 
