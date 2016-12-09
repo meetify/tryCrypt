@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -15,6 +16,7 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.UserController
+import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.JsonUtils.json
@@ -80,6 +82,7 @@ object Config {
     var album: Long = -1
     var places: Set<Place> = HashSet()
     var markers: List<MarkerOptions> = makeMarkers()
+    var activity: AppCompatActivity? = null
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
@@ -127,4 +130,7 @@ object Config {
         places += place
         return this
     }
+
+    fun findUser(id: Id): User = if (user.id == id) user
+    else friends.filter { it.id == id }[0]
 }

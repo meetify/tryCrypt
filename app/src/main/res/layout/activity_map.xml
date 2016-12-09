@@ -4,7 +4,7 @@
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="800dp"
+    android:layout_height="match_parent"
     android:fadeScrollbars="true"
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -27,7 +27,9 @@
             android:layout_height="45dp"
             android:layout_above="@+id/mapView"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginEnd="340dp"
+            android:layout_marginRight="340dp"
             android:layoutDirection="rtl"
             app:loading_color="#ffffff"
             app:loading_width="5dp" />
@@ -37,13 +39,27 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@id/toolbar"
         mapbox:center_latitude="48.514308545"
         mapbox:center_longitude="35.0879165"
         mapbox:style_url="@string/style_mapbox_streets"
         mapbox:tilt="0"
         mapbox:zoom="13" />
+
+    <Button
+        android:id="@+id/button_location"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#FFF"
+        android:drawableLeft="@drawable/ic_place_custom"
+        android:drawableStart="@drawable/ic_place_custom" />
 
     <!--<ListView-->
     <!--android:id="@+id/listView"-->

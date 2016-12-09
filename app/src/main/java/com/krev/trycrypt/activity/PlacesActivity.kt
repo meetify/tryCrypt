@@ -14,6 +14,7 @@ import com.krev.trycrypt.utils.DrawerUtils
 class PlacesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_places)
         DrawerUtils.getDrawer(this)

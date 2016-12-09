@@ -12,6 +12,17 @@
         android:contentDescription="@string/image_of_place"
         android:src="@mipmap/ic_launcher" />
 
+    <ImageView
+        android:id="@+id/place_creator_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/image_of_place"
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/place_name"
@@ -23,4 +34,15 @@
         android:layout_marginBottom="60dp"
         android:text="@string/example_name_of_place"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/place_creator_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/place_creator_icon"
+        android:layout_marginBottom="7dp"
+        android:layout_toLeftOf="@+id/place_creator_icon"
+        android:layout_toStartOf="@+id/place_creator_icon"
+        android:text="@string/example_name_of_place"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 </RelativeLayout>

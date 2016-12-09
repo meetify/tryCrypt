@@ -14,6 +14,7 @@ import com.krev.trycrypt.utils.functional.Consumer
 class FriendsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
         DrawerUtils.getDrawer(this)

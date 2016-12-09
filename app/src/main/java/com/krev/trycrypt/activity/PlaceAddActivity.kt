@@ -34,6 +34,7 @@ class PlaceAddActivity : AppCompatActivity() {
     var bitmap: Bitmap = Config.bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_places_add)
         friends.adapter = FriendsCheckAdapter().add(Config.friends)

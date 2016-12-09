@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         progress.progress = 30

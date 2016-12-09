@@ -25,8 +25,11 @@ import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CustomMarkerOptions
 import com.mapbox.mapboxsdk.MapboxAccountManager
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mingle.sweetpick.CustomDelegate
 import com.mingle.sweetpick.SweetSheet
 import com.victor.loading.rotate.RotateLoading
@@ -38,9 +41,10 @@ class MapActivity : AppCompatActivity() {
     private var lock = false
     private val rotate: RotateLoading by lazy { findViewById(R.id.rotateloading) as RotateLoading }
     private val group: ViewGroup by lazy { layoutInflater.inflate(R.layout.activity_map, null) as ViewGroup }
-    var camera = Config.camera
+    private var mapbox: MapboxMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Config.activity = this
         super.onCreate(savedInstanceState)
         MapboxAccountManager.start(this, getString(R.string.accessToken))
 //        val group: ViewGroup = layoutInflater.inflate(R.layout.activity_map, null) as ViewGroup
@@ -53,10 +57,13 @@ class MapActivity : AppCompatActivity() {
         setContentView(group)
         Config.init()
 
-//        val mDialog = Dialog(this).
-
+        findViewById(R.id.button_location).setOnClickListener {
+            val posititon = CameraPosition.Builder().target(LatLng(48.4309955, 35.041687)).zoom(16.0).build()
+            mapbox!!.animateCamera(CameraUpdateFactory.newCameraPosition(posititon))
+        }
 
         mapView.getMapAsync { map ->
+            mapbox = map
             Config.markers = Config.makeMarkers()
             map.addMarkers(Config.markers)
             map.setOnMapClickListener {
@@ -146,5 +153,7 @@ class MapActivity : AppCompatActivity() {
         fun convert(location: Location) = MeetifyLocation(location.latitude, location.longitude)
 
         fun convert(location: MeetifyLocation): LatLng? = LatLng(location.lat, location.lon)
+
+        var camera = Config.camera
     }
 }
