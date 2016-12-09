@@ -20,11 +20,12 @@ import java.util.concurrent.ConcurrentHashMap
  * Created by Dima on 28.10.2016.
  */
 class GooglePlaceAdapter private constructor(
-        private val indices: List<Result>,
+        private var indices: List<Result>,
         private val photos: ConcurrentHashMap<Result, Bitmap> = ConcurrentHashMap<Result, Bitmap>())
     : BaseAdapter() {
 
     constructor(googlePlace: GooglePlace) : this(googlePlace.results) {
+        indices = googlePlace.results.sortedBy { -it.rating }
         photos.apply {
             googlePlace.results.forEach {
                 put(it, Config.bitmap)
@@ -51,9 +52,9 @@ class GooglePlaceAdapter private constructor(
                 (findViewById(R.id.place_name) as TextView)
                         .apply { text = place.name },
                 (findViewById(R.id.place_address) as TextView)
-                        .apply { text = place.formattedAddress },
+                        .apply { text = place.vicinity },
                 (findViewById(R.id.place_types) as TextView)
-                        .apply { text = place.types.toString() })
+                        .apply { text = if (place.rating > 1.0) place.rating.toString() else "" })
     }!!
 
     private data class ViewHolder(

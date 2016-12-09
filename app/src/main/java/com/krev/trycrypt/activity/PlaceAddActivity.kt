@@ -18,6 +18,7 @@ import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.JsonUtils.json
+import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.vk.VKPhoto
 
 
@@ -43,9 +44,10 @@ class PlaceAddActivity : AppCompatActivity() {
                         Config.user.id,
                         it,
                         location,
-                        (friends.adapter as FriendsCheckAdapter).checked))
+                        (friends.adapter as FriendsCheckAdapter).checked), Consumer {
+                    Config + json(it.body().string(), Place::class.java)
+                })
             }, bitmap)
-
             finish()
         }
         val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

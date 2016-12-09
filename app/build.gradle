@@ -60,5 +60,4 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.github.lzyzsd:CircleProgress:v1.2.0'
     compile 'com.victor:lib:1.0.4'
-
 }

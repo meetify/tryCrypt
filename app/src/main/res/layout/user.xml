@@ -29,7 +29,7 @@
 
         android:layout_alignTop="@+id/user_online"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="-9dp"
         android:layout_toStartOf="@+id/user_online"
         android:text="@string/example_name_of_user"
         android:textAppearance="?android:attr/textAppearanceLarge" />

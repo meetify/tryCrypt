@@ -55,9 +55,11 @@ data class GooglePlace(
      * @property day    a number from 0–6, corresponding to the days of the week, starting on Sunday. For example, 2 means Tuesday.
      * @property time   may contain a time of day in 24-hour hhmm format. Values are in the range 0000–2359. The time will be reported in the place’s time zone.
      */
-    data class DayTime(
+    class DayTime(
             var day: Int = 0,
-            var time: Int = 0) : Serializable
+            var time: Int = 0) : Serializable {
+        override fun toString() = "$day:$time"
+    }
 
     /**
      * @property location contains the geocoded latitude,longitude value for this place.

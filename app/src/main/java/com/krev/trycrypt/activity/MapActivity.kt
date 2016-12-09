@@ -53,6 +53,8 @@ class MapActivity : AppCompatActivity() {
         Config.init()
 
         mapView.getMapAsync { map ->
+            Config.markers = Config.makeMarkers()
+            map.addMarkers(Config.markers)
             map.setOnMapClickListener {
                 synchronized(lock, {
                     if (lock) return@setOnMapClickListener
@@ -73,7 +75,7 @@ class MapActivity : AppCompatActivity() {
                     runOnUiThread {
                         Log.d("GooglePlace", "consumer is on ui")
                         map.clear()
-                        map.addMarkers(markers)
+                        map.addMarkers(markers + Config.markers)
                         if (sweetSheet.isShow) {
                             sweetSheet.dismiss()
                         }
@@ -140,5 +142,7 @@ class MapActivity : AppCompatActivity() {
         fun convert(location: LatLng) = MeetifyLocation(location.latitude, location.longitude)
 
         fun convert(location: Location) = MeetifyLocation(location.latitude, location.longitude)
+
+        fun convert(location: MeetifyLocation): LatLng? = LatLng(location.lat, location.lon)
     }
 }

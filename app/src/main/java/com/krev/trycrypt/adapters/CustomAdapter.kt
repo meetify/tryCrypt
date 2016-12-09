@@ -37,7 +37,6 @@ abstract class CustomAdapter<T : BaseEntity>(
         items.clear()
         add(list)
         notifyDataSetChanged()
-
     }
 
     override fun getItemId(i: Int): Long = 0

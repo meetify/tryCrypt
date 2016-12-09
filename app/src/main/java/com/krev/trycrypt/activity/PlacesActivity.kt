@@ -8,8 +8,10 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.PlacesAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.UserController
+import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.utils.functional.Consumer
+import java.util.*
 
 class PlacesActivity : AppCompatActivity() {
 
@@ -23,27 +25,18 @@ class PlacesActivity : AppCompatActivity() {
         val layout = findViewById(R.id.places_swipeRefreshLayout) as PullRefreshLayout
 
         layout.setOnRefreshListener {
-            var count = 0
             UserController.allowed(Consumer {
-                synchronized(count, {
+                runOnUiThread { places.clear(it) }
+                UserController.created(Consumer {
                     runOnUiThread {
-                        if (count == 0) places.clear(it)
-                        else places.add(it)
-                        count++
-                        if (count == 2) layout.setRefreshing(false)
+                        places.add(it)
+                        Config.places = HashSet<Place>() + places.items
+
+                        layout.setRefreshing(false)
                     }
                 })
             })
-            UserController.allowed(Consumer {
-                synchronized(count, {
-                    runOnUiThread {
-                        if (count == 0) places.clear(it)
-                        else places.add(it)
-                        count++
-                        if (count == 2) layout.setRefreshing(false)
-                    }
-                })
-            })
+
 
         }
     }

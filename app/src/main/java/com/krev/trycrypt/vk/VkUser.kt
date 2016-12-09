@@ -25,6 +25,7 @@ object VKUser {
                 val album = json.getLong("album")
                 val user = parseUser(json.getJSONObject("user"), friends, album)
                 Config.modify(user)
+                Config.album = album
                 Log.d("VKUser", "consumer?")
                 consumer(user)
             }

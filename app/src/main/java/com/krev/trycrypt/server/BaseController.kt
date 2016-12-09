@@ -34,6 +34,7 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
     }
 
     open fun put(t: T, consumer: Consumer<Response> = Consumer {}) {
+        Log.d("BaseController", "going to put new place")
         Task(Supplier<Response> {
             request(Method.PUT, url(), body(t))
         }, consumer).execute()

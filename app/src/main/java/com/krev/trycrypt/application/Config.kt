@@ -21,6 +21,8 @@ import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.ImageTask
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CameraPositionJson
+import com.mapbox.mapboxsdk.annotations.IconFactory
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
@@ -77,6 +79,7 @@ object Config {
     var friends: Set<User> = HashSet()
     var album: Long = -1
     var places: Set<Place> = HashSet()
+    var markers: List<MarkerOptions> = makeMarkers()
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
@@ -89,8 +92,6 @@ object Config {
     }
 
     fun init() {
-//        UserController.friends(Consumer { friends += it })
-//        PlaceController.get(user.created + user.allowed, Consumer { places += it })
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
             override fun onProviderDisabled(p0: String?) {
             }
@@ -107,7 +108,23 @@ object Config {
             }
         })
         Log.d("Config", "Location manager initialized")
+    }
 
-//        VKPhoto.initAlbum()
+    fun makeMarkers() = places.map {
+        MarkerOptions()
+                .icon(IconFactory.getInstance(context).fromDrawable(context.getDrawable(R.drawable.ic_place_custom)))
+                .position(MapActivity.convert(it.location))
+                .title(it.name)
+    }
+
+    fun makeMarker(place: Place) = MarkerOptions()
+            .icon(IconFactory.getInstance(context).fromDrawable(context.getDrawable(R.drawable.ic_place_custom)))
+            .position(MapActivity.convert(place.location))
+            .title(place.name)!!
+
+    operator fun plus(place: Place): Config {
+        markers += makeMarker(place)
+        places += place
+        return this
     }
 }
