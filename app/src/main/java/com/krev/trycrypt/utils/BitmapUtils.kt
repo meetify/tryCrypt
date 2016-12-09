@@ -10,5 +10,5 @@ import com.krev.trycrypt.application.Config
 object BitmapUtils {
     fun getRoundedDrawable(bitmap: Bitmap) = RoundedBitmapDrawableFactory.create(Config.context.resources, bitmap).apply {
         cornerRadius = Math.max(bitmap.width, bitmap.height) / 2.0f
-    }
+    }!!
 }

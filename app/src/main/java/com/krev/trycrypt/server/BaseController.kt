@@ -9,6 +9,7 @@ import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.BaseEntity
 import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.Task
+import com.krev.trycrypt.utils.async.TaskKotlin
 import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.functional.Supplier
 import okhttp3.Request
@@ -18,12 +19,10 @@ import okhttp3.Response
 @Suppress("unused")
 abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
 
-    open fun get(ids: Collection<Id>, consumer: Consumer<List<T>>) {
-        Task(Supplier<List<T>> {
+    open fun get(ids: Collection<Id>, consumer: (List<T>) -> Unit = {}) {
+        TaskKotlin({
             Log.d("BaseController", "$ids")
             json(request(Method.GET, url("&ids=${json(ids)}")).body().string(), array.javaClass).asList()
-//            mapper.readValue(request(Method.GET, url() + "&ids=" + json(ids))
-//                    .body().string()) array.javaClass).asList()
         }, consumer).execute()
     }
 
@@ -33,9 +32,9 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
         }, consumer).execute()
     }
 
-    open fun put(t: T, consumer: Consumer<Response> = Consumer {}) {
+    open fun put(t: T, consumer: (Response) -> Unit = {}) {
         Log.d("BaseController", "going to put new place")
-        Task(Supplier<Response> {
+        TaskKotlin({
             request(Method.PUT, url(), body(t))
         }, consumer).execute()
     }
@@ -58,10 +57,10 @@ abstract class BaseController<T : BaseEntity>(protected val array: Array<T>) {
         Method.DELETE -> Request.Builder().delete(body)
     }.url(url).build()).execute()!!
 
-    protected fun className() = array[0].javaClass.simpleName.toLowerCase()
-
     protected enum class Method {
         GET, POST, PUT, DELETE
     }
+
+    protected fun className() = array[0].javaClass.simpleName.toLowerCase()
 }
 

@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "com.krev.trycrypt"
-        minSdkVersion 21
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -35,9 +36,8 @@ android {
 repositories {
     mavenCentral()
     jcenter()
-    maven {
-        url "https://jitpack.io/"
-    }
+    maven { url "https://jitpack.io/" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
@@ -60,4 +60,6 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.github.lzyzsd:CircleProgress:v1.2.0'
     compile 'com.victor:lib:1.0.4'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.rey5137:material:1.2.4.1-SNAPSHOT'
 }

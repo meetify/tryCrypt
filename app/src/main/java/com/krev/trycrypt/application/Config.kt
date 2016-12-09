@@ -122,7 +122,7 @@ object Config {
             .position(MapActivity.convert(place.location))
             .title(place.name)!!
 
-    operator fun plus(place: Place): Config {
+    fun add(place: Place): Config {
         markers += makeMarker(place)
         places += place
         return this

@@ -37,20 +37,24 @@ class MapActivity : AppCompatActivity() {
     private val mapView: MapView by lazy { findViewById(R.id.mapView) as MapView }
     private var lock = false
     private val rotate: RotateLoading by lazy { findViewById(R.id.rotateloading) as RotateLoading }
+    private val group: ViewGroup by lazy { layoutInflater.inflate(R.layout.activity_map, null) as ViewGroup }
     var camera = Config.camera
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MapboxAccountManager.start(this, getString(R.string.accessToken))
-        val group: ViewGroup = layoutInflater.inflate(R.layout.activity_map, null) as ViewGroup
-        val sweetSheet: SweetSheet? = SweetSheet(group)
+//        val group: ViewGroup = layoutInflater.inflate(R.layout.activity_map, null) as ViewGroup
+        val sweetSheet: SweetSheet = SweetSheet(group)
         val view: View = LayoutInflater.from(this).inflate(R.layout.activity_google_places, group, false)
         val customDelegate: CustomDelegate = CustomDelegate(true, CustomDelegate.AnimationType.DuangAnimation)
         val listView: ListView = view.findViewById(R.id.listViewGPlaces) as ListView
         customDelegate.setCustomView(view)
-        sweetSheet!!.setDelegate(customDelegate)
+        sweetSheet.setDelegate(customDelegate)
         setContentView(group)
         Config.init()
+
+//        val mDialog = Dialog(this).
+
 
         mapView.getMapAsync { map ->
             Config.markers = Config.makeMarkers()
@@ -85,7 +89,6 @@ class MapActivity : AppCompatActivity() {
                         rotate.stop()
                         lock = false
                         Log.d("GooglePlace", "consumer is well done")
-
                     }
                 }, MeetifyLocation(it.latitude, it.longitude))
             }
@@ -134,7 +137,6 @@ class MapActivity : AppCompatActivity() {
         super.onLowMemory()
         mapView.onLowMemory()
     }
-
 
     companion object {
         fun convert(location: GoogleLocation) = LatLng(location.lat, location.lng)

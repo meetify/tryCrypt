@@ -17,12 +17,16 @@ object UserController : BaseController<User>(Array(1, { User() })) {
         }, consumer).execute()
     }
 
-    fun allowed(consumer: Consumer<List<Place>>) {
+    fun allowed(consumer: (List<Place>) -> Unit) {
         PlaceController.get(user.allowed, consumer)
     }
 
-    fun created(consumer: Consumer<List<Place>>) {
+    fun created(consumer: (List<Place>) -> Unit) {
         PlaceController.get(user.created, consumer)
+    }
+
+    fun places(consumer: (List<Place>) -> Unit) {
+        PlaceController.get(user.created + user.allowed, consumer)
     }
 
     fun update(location: MeetifyLocation, consumer: Consumer<in Any> = Consumer<Any> {}) {

@@ -19,69 +19,70 @@
             android:id="@+id/myEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingLeft="30dp"
             android:paddingStart="30dp"
             android:text="@string/app_name"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
     </android.support.v7.widget.Toolbar>
 
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:labelFor="@+id/editTextUsername"
-        android:paddingTop="80dp"
-        android:text="@string/username"
-        android:textColor="#FFF" />
+    <!--<EditText-->
+    <!--android:id="@+id/editTextUsername"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:labelFor="@+id/editTextUsername"-->
+    <!--android:paddingTop="80dp"-->
+    <!--android:text="@string/username"-->
+    <!--android:textColor="#FFF" />-->
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextUsername"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:labelFor="@+id/editTextPassword"
-        android:text="@string/password" />
+    <!--<EditText-->
+    <!--android:id="@+id/editTextPassword"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/editTextUsername"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:labelFor="@+id/editTextPassword"-->
+    <!--android:text="@string/password" />-->
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
-        android:layout_toStartOf="@+id/buttonLoginVK"
-        android:text="@string/login" />
+    <!--<Button-->
+    <!--android:id="@+id/buttonLogin"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/editTextPassword"-->
+    <!--android:layout_toStartOf="@+id/buttonLoginVK"-->
+    <!--android:text="@string/login" />-->
 
-    <TextView
-        android:id="@+id/textViewRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonLogin"
-        android:layout_centerHorizontal="true"
-        android:text="@string/not_registered"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold" />
+    <!--<TextView-->
+    <!--android:id="@+id/textViewRegister"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/buttonLogin"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:text="@string/not_registered"-->
+    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+    <!--android:textStyle="bold" />-->
 
-    <Button
-        android:id="@+id/buttonLoginVK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/editTextPassword"
-        android:layout_below="@+id/editTextPassword"
-        android:text="@string/login_with_vk" />
+    <!--<Button-->
+    <!--android:id="@+id/buttonLoginVK"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignEnd="@+id/editTextPassword"-->
+    <!--android:layout_below="@+id/editTextPassword"-->
+    <!--android:text="@string/login_with_vk" />-->
 
 
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:id="@+id/donut_progress"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="135dp"
+        android:layout_marginBottom="180dp"
         custom:donut_progress="30" />
 </RelativeLayout>

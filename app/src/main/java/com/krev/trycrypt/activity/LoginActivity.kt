@@ -29,12 +29,14 @@ class LoginActivity : AppCompatActivity() {
     private fun autoLogin() {
         Log.d(TAG, "autologin start")
         VKUser.get({
-            Log.d(TAG, "autologin user got $it")
+            progress.progress = 60
             LoginController.login({
                 runOnUiThread { progress.progress = 100 }
                 Log.d(TAG, "autologin logged to vk $it")
                 Config.friends = it.friends
                 Config.places = it.created + it.allowed
+                Config.user.created += it.created.map { it.id }
+                Config.user.allowed += it.allowed.map { it.id }
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
                 finish()
             })
@@ -46,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        progress.progress = 30
         Log.d(TAG, "onCreate" + mapper.writeValueAsString(user))
 
         PhotoCache.filesDir = this.filesDir

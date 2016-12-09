@@ -25,4 +25,6 @@ class PlacesAdapter : CustomAdapter<Place>() {
 
     data class ViewHolder(var icon: ImageView? = null,
                           var name: TextView? = null)
-}
+    }
+
+

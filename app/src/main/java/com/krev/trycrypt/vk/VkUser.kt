@@ -4,6 +4,7 @@ import android.util.Log
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.JsonUtils
 import com.vk.sdk.api.VKError
 import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKResponse
@@ -24,6 +25,7 @@ object VKUser {
                 val friends = parseFriends(json.getJSONArray("friends").toString())
                 val album = json.getLong("album")
                 val user = parseUser(json.getJSONObject("user"), friends, album)
+                Log.d("VKUser", JsonUtils.json(user))
                 Config.modify(user)
                 Config.album = album
                 Log.d("VKUser", "consumer?")

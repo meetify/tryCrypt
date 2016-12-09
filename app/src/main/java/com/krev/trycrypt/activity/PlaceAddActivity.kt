@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -18,7 +19,6 @@ import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.JsonUtils.json
-import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.vk.VKPhoto
 
 
@@ -38,20 +38,23 @@ class PlaceAddActivity : AppCompatActivity() {
         setContentView(R.layout.activity_places_add)
         friends.adapter = FriendsCheckAdapter().add(Config.friends)
         button.setOnClickListener {
+            Log.d("PlaceAddActivity", "start adding place")
             VKPhoto.uploadPhoto({
-                PlaceController.put(Place(name.text.toString(),
-                        description.text.toString(),
-                        Config.user.id,
-                        it,
-                        location,
-                        (friends.adapter as FriendsCheckAdapter).checked), Consumer {
-                    Config + json(it.body().string(), Place::class.java)
-                })
+                Log.d("PlaceAddActivity", "photo done")
+                PlaceController.put(Place(name.text.toString(), description.text.toString(), Config.user.id,
+                        it, location, (friends.adapter as FriendsCheckAdapter).checked),
+                        {
+                            val place = json(it.body().string(), Place::class.java)
+                            Config.add(place)
+                            Config.user.created += place.id
+                        })
             }, bitmap)
             finish()
         }
-        val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(i, RESULT_LOAD_IMAGE)
+        imageView.setOnClickListener {
+            val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(i, RESULT_LOAD_IMAGE)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

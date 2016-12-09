@@ -1,7 +1,7 @@
 package com.krev.trycrypt.application
 
-import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.krev.trycrypt.application.Config.settings
 import com.vk.sdk.VKAccessToken
@@ -12,7 +12,7 @@ import com.vk.sdk.VKSdk
  * Created by Dima on 07.11.2016.
  */
 
-class MainApplication : Application() {
+class MainApplication : MultiDexApplication() {
     internal var vkAccessTokenTracker: VKAccessTokenTracker = object : VKAccessTokenTracker() {
         override fun onVKAccessTokenChanged(oldToken: VKAccessToken?, newToken: VKAccessToken?) {
             if (newToken == null) {

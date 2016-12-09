@@ -2,16 +2,14 @@ package com.krev.trycrypt.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.ListView
 import com.baoyz.widget.PullRefreshLayout
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.PlacesAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.functional.Consumer
-import java.util.*
 
 class PlacesActivity : AppCompatActivity() {
 
@@ -24,20 +22,15 @@ class PlacesActivity : AppCompatActivity() {
 
         val layout = findViewById(R.id.places_swipeRefreshLayout) as PullRefreshLayout
 
+        Log.d("PlacesActivity", "getting places")
         layout.setOnRefreshListener {
-            UserController.allowed(Consumer {
-                runOnUiThread { places.clear(it) }
-                UserController.created(Consumer {
-                    runOnUiThread {
-                        places.add(it)
-                        Config.places = HashSet<Place>() + places.items
-
-                        layout.setRefreshing(false)
-                    }
-                })
+            UserController.places({
+                runOnUiThread {
+                    Log.d("PlacesActivity", "got places $it")
+                    places.clear(it)
+                    layout.setRefreshing(false)
+                }
             })
-
-
         }
     }
 }
