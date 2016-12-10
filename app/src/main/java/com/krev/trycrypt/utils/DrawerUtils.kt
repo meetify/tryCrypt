@@ -67,5 +67,5 @@ object DrawerUtils {
 
     fun profile(): ProfileDrawerItem = ProfileDrawerItem()
             .withName(Config.user.name)
-            .withIcon(icon).apply { PhotoCache.create("user_${Config.user.id.id}", icon.bitmap) }
+            .withIcon(icon).apply { PhotoCache.create("user_${Config.user.id}", icon.bitmap) }
 }

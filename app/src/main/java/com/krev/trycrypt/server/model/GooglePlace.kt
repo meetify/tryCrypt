@@ -14,7 +14,6 @@ import java.util.*
  * @property status            contains metadata on the request.
  * @property htmlAttributions  contains a set of attributions about this listing which must be displayed to the user.
  * @property nextPageToken     contains a token which can be used to access some more places instead of default 20.
- * @author      Dmitry Baynak
  * @version     0.0.1
  * @since       0.0.1
  */
@@ -53,13 +52,11 @@ data class GooglePlace(
 
     /**
      * @property day    a number from 0–6, corresponding to the days of the week, starting on Sunday. For example, 2 means Tuesday.
-     * @property time   may contain a time of day in 24-hour hhmm format. Values are in the range 0000–2359. The time will be reported in the place’s time zone.
+     * @property time   may contain a time of day in 24-hour HHMM format. Values are in the range 0000–2359. The time will be reported in the place’s time zone.
      */
-    class DayTime(
+    data class DayTime(
             var day: Int = 0,
-            var time: Int = 0) : Serializable {
-        override fun toString() = "$day:$time"
-    }
+            var time: Int = 0) : Serializable
 
     /**
      * @property location contains the geocoded latitude,longitude value for this place.

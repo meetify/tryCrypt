@@ -34,7 +34,7 @@ class PlacesAdapter : CustomAdapter<Place>() {
                     (findViewById(R.id.place_name) as TextView)
                             .apply { text = item.name },
                     (findViewById(R.id.place_creator_icon) as ImageView)
-                            .apply { setImageDrawable(BitmapUtils.getRoundedDrawable((PhotoCache.get("user_${item.owner.id}"))!!)) },
+                            .apply { setImageDrawable(BitmapUtils.getRoundedDrawable((PhotoCache.get("user_${item.owner}"))!!)) },
                     (findViewById(R.id.place_creator_name) as TextView)
                             .apply { text = Config.findUser(item.owner).name })
         }

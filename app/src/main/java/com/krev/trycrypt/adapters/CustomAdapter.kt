@@ -8,7 +8,6 @@ import android.widget.BaseAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.entity.BaseEntity
 import com.krev.trycrypt.utils.async.ImageTask
-import com.krev.trycrypt.utils.functional.Consumer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -26,10 +25,10 @@ abstract class CustomAdapter<T : BaseEntity>(
     fun add(list: Collection<T>) = list.forEach {
         items.add(it)
         photos.put(it, Config.bitmap)
-        ImageTask(Consumer { bitmap ->
+        ImageTask({ bitmap ->
             photos.put(it, bitmap)
             notifyDataSetChanged()
-        }, "${it.javaClass.simpleName.toLowerCase()}_${it.id.id}").execute(photo(it))
+        }, "${it.javaClass.simpleName.toLowerCase()}_${it.id}").execute(photo(it))
     }.let { this }
 
     fun clear(list: Collection<T>) {

@@ -8,6 +8,8 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.support.annotation.DrawableRes
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,12 +18,11 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.server.model.Id
+import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.JsonUtils.json
 import com.krev.trycrypt.utils.async.ImageTask
-import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CameraPositionJson
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
@@ -31,7 +32,6 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import java.util.*
 import java.util.concurrent.TimeUnit
-
 
 /**
  * Created by Dima on 04.12.2016.
@@ -49,7 +49,7 @@ object Config {
     val token: VKAccessToken by lazy { VKAccessToken.currentToken()!! }
 
     val context: Context by lazy { MainApplication.context!! }
-    val settings: SharedPreferences by lazy { context.getSharedPreferences("MeetifyProps", 0) }
+    val settings: SharedPreferences by lazy { context.getSharedPreferences("MeetifySharedPreferences", 0) }
     val device: String by lazy {
         settings.getString("device", UUID.randomUUID().toString()).apply {
             settings.edit().putString("device", this).commit()
@@ -72,7 +72,7 @@ object Config {
                 Log.d("Config", "User $it")
                 if (photo.trim() != "" && LoginActivity.icon == null) {
                     Log.d("Config", "getting photo")
-                    ImageTask(Consumer { LoginActivity.icon = it }, "user_${id.id}").execute(photo)
+                    ImageTask({ LoginActivity.icon = it }, "user_$id").execute(photo)
                 }
             }
         }
@@ -83,11 +83,12 @@ object Config {
     var places: Set<Place> = HashSet()
     var markers: List<MarkerOptions> = makeMarkers()
     var activity: AppCompatActivity? = null
+    var location: MeetifyLocation = MeetifyLocation()
 
     fun modify(user: User) {
         Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
         if (user.photo != "" && LoginActivity.icon == null) {
-            ImageTask(Consumer { LoginActivity.icon = it }, "user_${user.id.id}").execute(user.photo)
+            ImageTask({ LoginActivity.icon = it }, "user_${user.id}").execute(user.photo)
         }
         Config.user.modify(user)
         val uString = json(Config.user)
@@ -107,21 +108,18 @@ object Config {
 
             override fun onLocationChanged(location: Location) {
                 Log.d("LocationManager", "Current location is ${location.latitude} ${location.longitude}")
-                UserController.update(MapActivity.convert(location))
+                Config.location = MapActivity.convert(location)
+                UserController.update(Config.location)
             }
         })
         Log.d("Config", "Location manager initialized")
     }
 
-    fun makeMarkers() = places.map {
-        MarkerOptions()
-                .icon(IconFactory.getInstance(context).fromDrawable(context.getDrawable(R.drawable.ic_place_custom)))
-                .position(MapActivity.convert(it.location))
-                .title(it.name)
-    }
+    fun makeMarkers() = places.map { makeMarker(it) }
 
     fun makeMarker(place: Place) = MarkerOptions()
-            .icon(IconFactory.getInstance(context).fromDrawable(context.getDrawable(R.drawable.ic_place_custom)))
+            .icon(IconFactory.getInstance(context)
+                    .fromDrawable(getDrawable(R.drawable.ic_place_custom)))
             .position(MapActivity.convert(place.location))
             .title(place.name)!!
 
@@ -131,6 +129,21 @@ object Config {
         return this
     }
 
-    fun findUser(id: Id): User = if (user.id == id) user
+    fun findUser(id: Long): User = if (user.id == id) user
     else friends.filter { it.id == id }[0]
+
+    private fun User.modify(user: User) {
+        id = user.id
+        vkAlbum = user.vkAlbum
+        time = user.time
+        allowed = user.allowed
+        created = user.created
+        friends = user.friends
+        photo = user.photo
+        name = user.name
+        location = user.location
+    }
+
+    fun getDrawable(@DrawableRes res: Int) = ContextCompat.getDrawable(context, res)!!
+
 }

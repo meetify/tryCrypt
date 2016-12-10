@@ -1,9 +1,7 @@
 package com.krev.trycrypt.server.model.entity
 
-import com.krev.trycrypt.server.model.Id
 import java.io.Serializable
 import java.util.*
-
 
 /**
  * This class is place, that contains information place.
@@ -18,11 +16,10 @@ import java.util.*
  * @property    allowed     collection with users, which can view info about this place.
  * @constructor defined place's properties.
  */
-
 class Place(var name: String = "",
             var description: String = "",
-            val owner: Id = Id(-1),
+            val owner: Long = -1,
             val photo: String = "",
             var location: MeetifyLocation = MeetifyLocation(),
-            var allowed: Set<Id> = HashSet<Id>(),
-            override var id: Id = Id(-1)) : BaseEntity(id), Serializable
+            var allowed: Set<Long> = HashSet<Long>(),
+            override var id: Long = -1) : BaseEntity(id), Serializable

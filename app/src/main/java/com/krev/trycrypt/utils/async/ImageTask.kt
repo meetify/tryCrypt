@@ -4,10 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import com.krev.trycrypt.utils.PhotoCache
-import com.krev.trycrypt.utils.functional.Consumer
 import java.net.URL
 
-class ImageTask(private val consumer: Consumer<Bitmap>?,
+class ImageTask(private val consumer: (Bitmap) -> Unit = {},
                 private val name: String,
                 private val update: Boolean = false) : AsyncTask<String, Void, Bitmap>() {
 
@@ -22,14 +21,13 @@ class ImageTask(private val consumer: Consumer<Bitmap>?,
             } catch(e: Exception) {
                 BitmapFactory.decodeStream(URL(urls[0]).openStream())
             }
-        }
-        else BitmapFactory.decodeStream(URL(urls[0]).openStream())
+        } else BitmapFactory.decodeStream(URL(urls[0]).openStream())
     }
 
     override fun onPostExecute(result: Bitmap) {
 //        Log.d("ImageTask", "onPostExecute")
         if (!check || update) PhotoCache.create(name, result)
-        consumer?.accept(result)
+        consumer(result)
     }
 
 

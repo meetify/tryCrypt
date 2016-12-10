@@ -1,4 +1,4 @@
-package com.meetify.server.model.entity
+package com.krev.trycrypt.server.model
 
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User

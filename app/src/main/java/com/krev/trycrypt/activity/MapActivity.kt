@@ -17,12 +17,10 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.GooglePlaceAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.PlaceController
-import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.utils.JsonUtils.json
-import com.krev.trycrypt.utils.functional.Consumer
 import com.krev.trycrypt.utils.mapbox.CustomMarkerOptions
 import com.mapbox.mapboxsdk.MapboxAccountManager
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -72,13 +70,13 @@ class MapActivity : AppCompatActivity() {
                     lock = true
                 })
                 rotate.start()
-                PlaceController.nearby(Consumer<GooglePlace> {
+                PlaceController.nearby({
                     Log.d("GooglePlace", "consumer is starting")
                     if (it.results.isEmpty()) {
                         runOnUiThread {
                             Toast.makeText(this@MapActivity, "There is no places near this", LENGTH_SHORT).show()
                         }
-                        return@Consumer
+                        return@nearby
                     }
                     val markers = it.results.map(::CustomMarkerOptions)
                     val adapter = GooglePlaceAdapter(it)
@@ -152,7 +150,7 @@ class MapActivity : AppCompatActivity() {
 
         fun convert(location: Location) = MeetifyLocation(location.latitude, location.longitude)
 
-        fun convert(location: MeetifyLocation): LatLng? = LatLng(location.lat, location.lon)
+        fun convert(location: MeetifyLocation): LatLng? = LatLng(location.latitude, location.longitude)
 
         var camera = Config.camera
     }

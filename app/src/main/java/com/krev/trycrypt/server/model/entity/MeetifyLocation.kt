@@ -4,11 +4,10 @@ import java.io.Serializable
 
 /**
  * This class is embedded location, that represents geographic coordinates of some object.
- * @author      Dmitry Baynak
  * @version     0.0.1
  * @since       0.0.1
- * @property    lat  latitude
- * @property    lon  longitude
+ * @property    latitude  latitude
+ * @property    longitude  longitude
  * @constructor takes 2 doubles.
  */
-data class MeetifyLocation(var lat: Double = 0.0, var lon: Double = 0.0) : Serializable
+data class MeetifyLocation(var latitude: Double = 0.0, var longitude: Double = 0.0) : Serializable

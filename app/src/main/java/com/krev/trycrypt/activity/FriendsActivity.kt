@@ -9,7 +9,6 @@ import com.krev.trycrypt.adapters.FriendsAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.utils.DrawerUtils
-import com.krev.trycrypt.utils.functional.Consumer
 
 class FriendsActivity : AppCompatActivity() {
 
@@ -24,7 +23,7 @@ class FriendsActivity : AppCompatActivity() {
         val layout = findViewById(R.id.friends_swipeRefreshLayout) as PullRefreshLayout
 
         layout.setOnRefreshListener {
-            UserController.friends(Consumer {
+            UserController.friends({
                 runOnUiThread {
                     friends.clear(it)
                     layout.setRefreshing(false)

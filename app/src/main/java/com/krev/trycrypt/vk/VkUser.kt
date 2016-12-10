@@ -2,7 +2,6 @@ package com.krev.trycrypt.vk
 
 import android.util.Log
 import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.User
 import com.krev.trycrypt.utils.JsonUtils
 import com.vk.sdk.api.VKError
@@ -44,14 +43,14 @@ object VKUser {
         Log.d("VKUser", "execute.userinfo")
     }
 
-    private fun parseFriends(friends: String): HashSet<Id> = HashSet<Id>().apply {
+    private fun parseFriends(friends: String): HashSet<Long> = HashSet<Long>().apply {
         friends.replace("[\\[\\]]".toRegex(), "")
                 .split(",".toRegex())
-                .forEach { add(Id(it.toLong())) }
+                .forEach { add(it.toLong()) }
     }
 
-    private fun parseUser(user: JSONObject, vkFriends: HashSet<Id>, album: Long) = User().apply {
-        id = Id(user.getLong("id"))
+    private fun parseUser(user: JSONObject, vkFriends: HashSet<Long>, album: Long) = User().apply {
+        id = user.getLong("id")
         name = "${user["first_name"]} ${user["last_name"]}"
         photo = "${user["photo_100"]}"
         friends = vkFriends

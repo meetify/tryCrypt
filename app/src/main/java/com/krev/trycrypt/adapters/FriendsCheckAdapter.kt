@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.server.model.Id
 import com.krev.trycrypt.server.model.entity.User
 import java.util.*
 
@@ -33,7 +32,7 @@ class FriendsCheckAdapter : CustomAdapter<User>() {
         }
     }
 
-    var checked = HashSet<Id>() + Config.friends.map(User::id)
+    var checked = HashSet<Long>() + Config.friends.map(User::id)
 
     data class ViewHolder(var icon: ImageView? = null,
                           var name: TextView? = null,
