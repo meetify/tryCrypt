@@ -31,6 +31,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE.txt'
     }
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
 }
 
 repositories {
@@ -42,24 +43,27 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar') {
-        transitive = true
-    }
-    compile('com.mikepenz:materialdrawer:5.7.0@aar') {
-        transitive = true
-    }
+
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar') { transitive = true }
+    compile('com.mikepenz:materialdrawer:5.7.0@aar') { transitive = true }
+
+    compile 'com.github.lzyzsd:CircleProgress:v1.2.0'
+    compile 'com.github.zzz40500:AndroidSweetSheet:1.1.0'
+    compile 'com.github.rey5137:material:1.2.4.1-SNAPSHOT'
+
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.1'
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2"
+
     compile 'com.vk:androidsdk:1.6.7'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.github.zzz40500:AndroidSweetSheet:1.1.0'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    compile 'com.github.lzyzsd:CircleProgress:v1.2.0'
     compile 'com.victor:lib:1.0.4'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.github.rey5137:material:1.2.4.1-SNAPSHOT'
 }

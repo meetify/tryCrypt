@@ -11,7 +11,7 @@ import com.krev.trycrypt.utils.BitmapUtils
  * Created by Dima on 28.10.2016.
  */
 class FriendsAdapter() : CustomAdapter<User>() {
-    override fun layout(): Int = R.layout.user
+    override fun layout(): Int = R.layout.listview_user
 
     override fun photo(item: User) = item.photo
 

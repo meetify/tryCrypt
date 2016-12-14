@@ -18,7 +18,9 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
+import com.krev.trycrypt.utils.BitmapUtils
 import com.krev.trycrypt.utils.JsonUtils.json
+import com.krev.trycrypt.utils.async.ImageTask
 import com.krev.trycrypt.vk.VKPhoto
 
 
@@ -36,19 +38,21 @@ class PlaceAddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Config.activity = this
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_places_add)
+        setContentView(R.layout.activity_place_add)
         friends.adapter = FriendsCheckAdapter().add(Config.friends)
         button.setOnClickListener {
             Log.d("PlaceAddActivity", "start adding place")
             VKPhoto.uploadPhoto({
                 Log.d("PlaceAddActivity", "photo done")
                 PlaceController.put(Place(name.text.toString(), description.text.toString(), Config.user.id,
-                        it, location, (friends.adapter as FriendsCheckAdapter).checked),
-                        {
-                            val place = json(it.body().string(), Place::class.java)
-                            Config.add(place)
-                            Config.user.created += place.id
-                        })
+                        it, location, (friends.adapter as FriendsCheckAdapter).checked), {
+                    val place = json(it.body().string(), Place::class.java)
+                    Config.add(place)
+                    Config.user.created += place.id
+                    ImageTask({
+                        Log.d("PlaceAddActivity", "got the photo")
+                    }, "place_${place.id}").execute(place.photo)
+                })
             }, bitmap)
             finish()
         }
@@ -66,8 +70,7 @@ class PlaceAddActivity : AppCompatActivity() {
                 it.moveToFirst()
                 val picturePath = it.getString(it.getColumnIndex(filePathColumn[0]))
                 bitmap = BitmapFactory.decodeFile(picturePath)
-                imageView.setImageBitmap(bitmap)
-
+                imageView.setImageDrawable(BitmapUtils.getRoundedDrawable(bitmap))
             }
         }
     }

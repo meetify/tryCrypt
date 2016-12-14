@@ -13,7 +13,7 @@ import java.util.*
  * Created by Dima on 07.12.2016.
  */
 class FriendsCheckAdapter : CustomAdapter<User>() {
-    override fun layout(): Int = R.layout.user_checkbox
+    override fun layout(): Int = R.layout.listview_user_checkbox
 
     override fun photo(item: User) = item.photo
 

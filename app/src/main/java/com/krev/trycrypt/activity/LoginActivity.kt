@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.TextView
 import com.github.lzyzsd.circleprogress.DonutProgress
 import com.krev.trycrypt.R
 import com.krev.trycrypt.application.Config
@@ -25,13 +26,22 @@ import com.vk.sdk.api.VKError
 class LoginActivity : AppCompatActivity() {
 
     val progress: DonutProgress by lazy { findViewById(R.id.donut_progress) as DonutProgress }
+    val login: TextView by lazy { findViewById(R.id.login_progress) as TextView }
+
 
     private fun autoLogin() {
-        Log.d(TAG, "autologin start")
+        login.text = "Fetching information about user from VK"
+        progress.progress = 30
         VKUser.get({
-            progress.progress = 60
+            runOnUiThread {
+                login.text = "Sending something to Meetify's server"
+                progress.progress = 60
+            }
             LoginController.login({
-                runOnUiThread { progress.progress = 100 }
+                runOnUiThread {
+                    login.text = "Well done, initiating new life!"
+                    progress.progress = 100
+                }
                 Log.d(TAG, "autologin logged to vk $it")
                 Config.friends = it.friends
                 Config.places = it.created + it.allowed
@@ -49,7 +59,9 @@ class LoginActivity : AppCompatActivity() {
         Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        progress.progress = 30
+
+        progress.progress = 0
+        login.text = "Trying to login VK"
         Log.d(TAG, "onCreate" + mapper.writeValueAsString(user))
 
         PhotoCache.filesDir = this.filesDir

@@ -17,7 +17,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
  */
 
 class PlacesAdapter : CustomAdapter<Place>() {
-    override fun layout(): Int = R.layout.place
+    override fun layout(): Int = R.layout.listview_place
 
     override fun photo(item: Place) = item.photo
 

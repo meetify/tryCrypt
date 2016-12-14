@@ -21,12 +21,12 @@ object LoginController : BaseController<Login>(Array(1, { Login() })) {
     fun login(consumer: (UserExtended) -> Unit = {}, user: User = Config.user, login: Login = createLogin()) {
         Log.d(TAG, "in login")
         TaskKotlin({
-            json(request(Method.POST, url(path = "/auto"), body(user, login)).body().string(), UserExtended::class.java)
+            json(request(Method.POST, url(), body(user, login)).body().string(), UserExtended::class.java)
         }, consumer).execute()
     }
 
-    fun body(vararg elems: Any): RequestBody {
-        val obj = StringBuilder("{").apply { elems.forEach { append("\"${it.javaClass.simpleName.toLowerCase()}\":${json(it)},") } }
+    fun body(vararg items: Any): RequestBody {
+        val obj = StringBuilder("{").apply { items.forEach { append("\"${it.javaClass.simpleName.toLowerCase()}\":${json(it)},") } }
         val string = obj.toString().trimEnd(',')
         println(string + "}")
         return RequestBody.create(Config.JSON, string + "}")

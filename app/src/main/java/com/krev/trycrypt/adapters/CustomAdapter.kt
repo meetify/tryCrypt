@@ -27,7 +27,7 @@ abstract class CustomAdapter<T : BaseEntity>(
         photos.put(it, Config.bitmap)
         ImageTask({ bitmap ->
             photos.put(it, bitmap)
-            notifyDataSetChanged()
+            Config.activity!!.runOnUiThread { notifyDataSetChanged() }
         }, "${it.javaClass.simpleName.toLowerCase()}_${it.id}").execute(photo(it))
     }.let { this }
 

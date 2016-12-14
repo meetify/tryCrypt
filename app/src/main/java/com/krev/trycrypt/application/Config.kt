@@ -57,7 +57,7 @@ object Config {
     }
     val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     val camera: CameraPosition by lazy {
-        json(settings.getString("camera", context.getString(R.string.cameraJson)), CameraPositionJson::class.java).map()
+        json(settings.getString("camera", context.getString(R.string.json_camera_example)), CameraPositionJson::class.java).map()
     }
     val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
     val layoutInflater: LayoutInflater by lazy {

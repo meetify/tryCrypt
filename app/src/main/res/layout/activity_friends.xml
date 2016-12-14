@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:title="@string/meetify"
+        android:title="@string/app_name"
         android:transitionName="actionBar" />
 
     <com.baoyz.widget.PullRefreshLayout

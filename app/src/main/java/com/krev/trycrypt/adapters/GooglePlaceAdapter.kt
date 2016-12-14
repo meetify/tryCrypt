@@ -43,7 +43,7 @@ class GooglePlaceAdapter private constructor(
     override fun getItemId(i: Int): Long = 0
 
     override fun getView(position: Int, contentView: View?, viewGroup: ViewGroup) = (contentView ?:
-            layoutInflater.inflate(R.layout.google_place, viewGroup, false)).apply {
+            layoutInflater.inflate(R.layout.listview_google_place, viewGroup, false)).apply {
         val place = indices[position]
         tag = ViewHolder(
                 (findViewById(R.id.place_icon) as ImageView)

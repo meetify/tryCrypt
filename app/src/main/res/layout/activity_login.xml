@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,12 +8,15 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:title="@string/meetify"
-        android:transitionName="actionBar">
+        android:title="@string/app_name"
+        android:transitionName="actionBar"
+        custom:layout_constraintLeft_toLeftOf="parent"
+        custom:layout_constraintTop_toTopOf="parent"
+        custom:layout_constraintRight_toRightOf="parent">
 
         <TextView
             android:id="@+id/myEditText"
@@ -25,64 +28,30 @@
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
     </android.support.v7.widget.Toolbar>
 
-    <!--<EditText-->
-    <!--android:id="@+id/editTextUsername"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:ems="10"-->
-    <!--android:inputType="textPersonName"-->
-    <!--android:labelFor="@+id/editTextUsername"-->
-    <!--android:paddingTop="80dp"-->
-    <!--android:text="@string/username"-->
-    <!--android:textColor="#FFF" />-->
-
-    <!--<EditText-->
-    <!--android:id="@+id/editTextPassword"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/editTextUsername"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:ems="10"-->
-    <!--android:inputType="textPassword"-->
-    <!--android:labelFor="@+id/editTextPassword"-->
-    <!--android:text="@string/password" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/buttonLogin"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/editTextPassword"-->
-    <!--android:layout_toStartOf="@+id/buttonLoginVK"-->
-    <!--android:text="@string/login" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewRegister"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@+id/buttonLogin"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:text="@string/not_registered"-->
-    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-    <!--android:textStyle="bold" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/buttonLoginVK"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignEnd="@+id/editTextPassword"-->
-    <!--android:layout_below="@+id/editTextPassword"-->
-    <!--android:text="@string/login_with_vk" />-->
-
-
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:id="@+id/donut_progress"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="250dp"
-        custom:donut_progress="30" />
-</RelativeLayout>
+        custom:donut_progress="30"
+        android:layout_marginTop="8dp"
+        custom:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginEnd="16dp"
+        custom:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        custom:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        custom:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_progress"
+        custom:layout_constraintRight_toRightOf="parent"
+        custom:layout_constraintTop_toBottomOf="@+id/donut_progress"
+        custom:layout_constraintLeft_toLeftOf="parent" />
+</android.support.constraint.ConstraintLayout>

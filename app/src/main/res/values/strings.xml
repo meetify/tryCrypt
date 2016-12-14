@@ -11,19 +11,17 @@
     <string name="accessToken">sk.eyJ1Ijoia3IzdiIsImEiOiJjaXIyOTg2ZmEwMDFienZrcW04dmxwa2FrIn0.oZ1hJ8ApK5hbQaBkvcgiZQ</string>
     <string name="street_style">mapbox://styles/kr3v/cir4v9b120014cgnb9z0yyjay</string>
     <string name="image_of_place">Image of place</string>
-    <string name="example_name_of_place">Example name of place</string>
-    <string name="example_name_of_user">Example name of user</string>
     <string name="mac">Address</string>
     <string name="types">Types</string>
     <string name="button">Button</string>
-    <string name="meetify">Meetify</string>
-    <string name="cameraJson">{\"bearing\":26.8502140045166,\"target\":{\"altitude\":0.0,\"latitude\":48.468741627458066,\"longitude\":35.05147779416143},\"tilt\":0.0,\"zoom\":14.937994003295898}</string>
-    <string name="is_user_online_or_offline">Is user online or offline</string>
-    <string name="type_place_description">Type place description</string>
-    <string name="type_place_name">Type place name</string>
-    <string name="select_friends_you_want_to_see_in_this_place">Select friends you want to see in this place</string>
+    <string name="json_camera_example">{\"bearing\":26.8502140045166,\"target\":{\"altitude\":0.0,\"latitude\":48.468741627458066,\"longitude\":35.05147779416143},\"tilt\":0.0,\"zoom\":14.937994003295898}</string>
+    <string name="user_isOnline">Is user online or offline</string>
+    <string name="place_add_description_tip">Type place description</string>
+    <string name="place_add_name_tip">Type place name</string>
+    <string name="place_add_friends_tip">Select friends you want to see in this place</string>
     <string name="photo_of_your_place">Photo of your place</string>
     <string name="add_place">Add place</string>
     <string name="wait">"You've already logged into vk, just wait."</string>
     <string name="com_vk_sdk_ApiVersion">5.60</string>
+    <string name="example">example</string>
 </resources>
