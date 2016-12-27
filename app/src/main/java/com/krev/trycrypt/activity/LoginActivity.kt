@@ -1,7 +1,6 @@
 package com.krev.trycrypt.activity
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -12,7 +11,8 @@ import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.application.Config.user
 import com.krev.trycrypt.server.LoginController
-import com.krev.trycrypt.utils.PhotoCache
+import com.krev.trycrypt.utils.AsyncUtils.asyncThread
+import com.krev.trycrypt.utils.DrawerUtils
 import com.krev.trycrypt.vk.VKUser
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
@@ -25,23 +25,30 @@ import com.vk.sdk.api.VKError
  */
 class LoginActivity : AppCompatActivity() {
 
-    val progress: DonutProgress by lazy { findViewById(R.id.donut_progress) as DonutProgress }
-    val login: TextView by lazy { findViewById(R.id.login_progress) as TextView }
+    private val donutProgress: DonutProgress by lazy { findViewById(R.id.donut_progress) as DonutProgress }
+    private val login: TextView by lazy { findViewById(R.id.login_progress) as TextView }
+    private val TAG = "LoginActivity"
 
+    private fun updateProgress(progress: Int) = runOnUiThread {
+        val progressText = getString(when (progress) {
+            0 -> R.string.login_progress_0
+            30 -> R.string.login_progress_30
+            60 -> R.string.login_progress_60
+            100 -> R.string.login_progress_100
+            else -> R.string.login_progress_unknown
+        })
+        Log.d(TAG, "Updating progress with $progress - $progressText")
+        login.text = progressText
+        donutProgress.progress = progress
+    }
 
     private fun autoLogin() {
-        login.text = "Fetching information about user from VK"
-        progress.progress = 30
-        VKUser.get({
-            runOnUiThread {
-                login.text = "Sending something to Meetify's server"
-                progress.progress = 60
-            }
-            LoginController.login({
-                runOnUiThread {
-                    login.text = "Well done, initiating new life!"
-                    progress.progress = 100
-                }
+        updateProgress(30)
+        VKUser.get().thenAccept {
+            asyncThread { DrawerUtils.profile }
+            updateProgress(60)
+            LoginController.login {
+                updateProgress(100)
                 Log.d(TAG, "autologin logged to vk $it")
                 Config.friends = it.friends
                 Config.places = it.created + it.allowed
@@ -49,10 +56,8 @@ class LoginActivity : AppCompatActivity() {
                 Config.user.allowed += it.allowed.map { it.id }
                 startActivity(Intent(this@LoginActivity, MapActivity::class.java))
                 finish()
-            })
-        }, {
-            progress.progress = (it * 100).toInt() / 75
-        })
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +65,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        progress.progress = 0
-        login.text = "Trying to login VK"
+        updateProgress(0)
         Log.d(TAG, "onCreate" + mapper.writeValueAsString(user))
 
-        PhotoCache.filesDir = this.filesDir
         Log.d(TAG, this.filesDir.absolutePath)
         if (VKSdk.isLoggedIn()) autoLogin()
         else VKSdk.login(this, "friends", "photos")
@@ -81,15 +84,5 @@ class LoginActivity : AppCompatActivity() {
         })) {
             super.onActivityResult(request, result, data)
         }
-    }
-
-    public override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
-    }
-
-    companion object {
-        private val TAG = "LoginActivity"
-        var icon: Bitmap? = null
     }
 }

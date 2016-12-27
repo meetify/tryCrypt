@@ -2,9 +2,6 @@ package com.krev.trycrypt.utils
 
 import com.krev.trycrypt.R.drawable
 
-/**
- * Created by Dima on 03.12.2016.
- */
 object TypeMapper {
     fun drawable(types: List<String>): Int {
         types.forEach {

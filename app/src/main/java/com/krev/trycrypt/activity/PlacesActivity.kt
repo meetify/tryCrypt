@@ -2,7 +2,6 @@ package com.krev.trycrypt.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.ListView
 import com.baoyz.widget.PullRefreshLayout
 import com.krev.trycrypt.R
@@ -23,11 +22,9 @@ class PlacesActivity : AppCompatActivity() {
 
         val layout = findViewById(R.id.places_swipeRefreshLayout) as PullRefreshLayout
 
-        Log.d("PlacesActivity", "getting places")
         layout.setOnRefreshListener {
             UserController.places({
                 runOnUiThread {
-                    Log.d("PlacesActivity", "got places $it")
                     places.clear(it)
                     layout.setRefreshing(false)
                 }

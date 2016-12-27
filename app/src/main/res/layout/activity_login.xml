@@ -14,15 +14,18 @@
         android:minHeight="?attr/actionBarSize"
         android:title="@string/app_name"
         android:transitionName="actionBar"
+        custom:layout_constraintHorizontal_bias="0.0"
         custom:layout_constraintLeft_toLeftOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"
-        custom:layout_constraintRight_toRightOf="parent">
+        custom:layout_constraintRight_toRightOf="parent"
+        custom:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/myEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingEnd="30dp"
             android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:paddingStart="30dp"
             android:text="@string/app_name"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
@@ -30,28 +33,28 @@
 
     <com.github.lzyzsd.circleprogress.DonutProgress
         android:id="@+id/donut_progress"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        custom:donut_progress="30"
-        android:layout_marginTop="8dp"
-        custom:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        custom:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        custom:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        custom:donut_progress="30"
         custom:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_width="160dp"
-        android:layout_height="160dp" />
+        custom:layout_constraintLeft_toLeftOf="parent"
+        custom:layout_constraintRight_toRightOf="parent"
+        custom:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
+        android:id="@+id/login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/login_progress"
+        custom:layout_constraintLeft_toLeftOf="parent"
         custom:layout_constraintRight_toRightOf="parent"
-        custom:layout_constraintTop_toBottomOf="@+id/donut_progress"
-        custom:layout_constraintLeft_toLeftOf="parent" />
+        custom:layout_constraintTop_toBottomOf="@+id/donut_progress" />
 </android.support.constraint.ConstraintLayout>

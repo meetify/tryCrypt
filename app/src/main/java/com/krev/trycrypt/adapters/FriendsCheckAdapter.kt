@@ -7,34 +7,38 @@ import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.utils.PhotoUtils
 import java.util.*
 
-/**
- * Created by Dima on 07.12.2016.
- */
 class FriendsCheckAdapter : CustomAdapter<User>() {
-    override fun layout(): Int = R.layout.listview_user_checkbox
+    override var layout: Int = R.layout.listview_user_checkbox
 
-    override fun photo(item: User) = item.photo
+    override fun photo(item: User, view: ImageView) = PhotoUtils.getAwait(item.photo, item.id, view)
 
-    override fun View.viewHolder(item: User): Any = ViewHolder().apply {
-        icon = (findViewById(R.id.user_check_icon) as ImageView).apply { setImageBitmap(photos[item]) }
-        name = (findViewById(R.id.user_check_name) as TextView).apply { text = item.name }
-        check = (findViewById(R.id.user_check_checkbox) as CheckBox).apply {
-            setOnClickListener {
-                if (isChecked) checked += item.id
+    override fun View.data(item: User) = apply {
+        (tag as ViewHolder).apply {
+            photo(item, icon)
+            name.text = item.name
+            check.setOnClickListener {
+                if (check.isChecked) checked += item.id
                 else checked -= item.id
             }
+            setOnClickListener {
+                check.isChecked = !check.isChecked
+                check.callOnClick()
+            }
         }
-        setOnClickListener {
-            check!!.isChecked = !check!!.isChecked
-            check!!.callOnClick()
-        }
+    }
+
+    override fun View.holder() = apply {
+        tag = ViewHolder((findViewById(R.id.user_check_icon) as ImageView),
+                (findViewById(R.id.user_check_name) as TextView),
+                (findViewById(R.id.user_check_checkbox) as CheckBox))
     }
 
     var checked = HashSet<Long>() + Config.friends.map(User::id)
 
-    data class ViewHolder(var icon: ImageView? = null,
-                          var name: TextView? = null,
-                          var check: CheckBox? = null)
+    data class ViewHolder(val icon: ImageView,
+                          val name: TextView,
+                          val check: CheckBox)
 }

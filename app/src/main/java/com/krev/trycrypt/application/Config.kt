@@ -13,16 +13,15 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.R
-import com.krev.trycrypt.activity.LoginActivity
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.JsonUtils.json
-import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.JsonUtils.read
+import com.krev.trycrypt.utils.JsonUtils.write
+import com.krev.trycrypt.utils.jackson.jacksonObjectMapper
 import com.krev.trycrypt.utils.mapbox.CameraPositionJson
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
@@ -33,16 +32,13 @@ import okhttp3.OkHttpClient
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by Dima on 04.12.2016.
- */
 object Config {
-    //    val address = "http://192.168.1.40:8080"
+    //    val address = "http://192.168.1.40:49323"
+//    val address = "http://192.168.42.2:49323"
     val address = "http://159.224.206.172:49323"
-    val client = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
+    val client = OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
             .build()!!
     val JSON = MediaType.parse("application/json; charset=utf-8")!!
     val mapper = jacksonObjectMapper()
@@ -56,9 +52,6 @@ object Config {
         }
     }
     val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
-    val camera: CameraPosition by lazy {
-        json(settings.getString("camera", context.getString(R.string.json_camera_example)), CameraPositionJson::class.java).map()
-    }
     val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
     val layoutInflater: LayoutInflater by lazy {
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -69,30 +62,22 @@ object Config {
                 if (it != "") {
                     modify(mapper.readValue(it, User::class.java))
                 }
-                Log.d("Config", "User $it")
-                if (photo.trim() != "" && LoginActivity.icon == null) {
-                    Log.d("Config", "getting photo")
-                    ImageTask({ LoginActivity.icon = it }, "user_$id").execute(photo)
-                }
             }
         }
     }
+    //    val icon: Bitmap by lazy { PhotoUtils.get(user.photo, user.id).get() }
+    var location: MeetifyLocation = MeetifyLocation()
 
+    var camera: CameraPosition = CameraPosition.Builder().build()
+    var activity: AppCompatActivity? = null
     var friends: Set<User> = HashSet()
     var album: Long = -1
     var places: Set<Place> = HashSet()
     var markers: List<MarkerOptions> = makeMarkers()
-    var activity: AppCompatActivity? = null
-    var location: MeetifyLocation = MeetifyLocation()
 
     fun modify(user: User) {
-        Log.d("Config", "modifying with ${user.photo} ${LoginActivity.icon}")
-        if (user.photo != "" && LoginActivity.icon == null) {
-            ImageTask({ LoginActivity.icon = it }, "user_${user.id}").execute(user.photo)
-        }
         Config.user.modify(user)
-        val uString = json(Config.user)
-        settings.edit().putString("user", uString).apply()
+        settings.edit().putString("user", write(Config.user)).apply()
     }
 
     fun init() {
@@ -112,7 +97,7 @@ object Config {
                 UserController.update(Config.location)
             }
         })
-        Log.d("Config", "Location manager initialized")
+        camera = read(settings.getString("camera", context.getString(R.string.json_camera_example)), CameraPositionJson::class.java).map()
     }
 
     fun makeMarkers() = places.map { makeMarker(it) }
@@ -123,14 +108,14 @@ object Config {
             .position(MapActivity.convert(place.location))
             .title(place.name)!!
 
-    fun add(place: Place): Config {
+    fun addPlace(place: Place) {
         markers += makeMarker(place)
         places += place
-        return this
     }
 
-    fun findUser(id: Long): User = if (user.id == id) user
-    else friends.filter { it.id == id }[0]
+    fun findUser(id: Long) = if (user.id == id) user else friends.first { it.id == id }
+
+    fun getDrawable(@DrawableRes res: Int) = ContextCompat.getDrawable(context, res)!!
 
     private fun User.modify(user: User) {
         id = user.id
@@ -144,6 +129,5 @@ object Config {
         location = user.location
     }
 
-    fun getDrawable(@DrawableRes res: Int) = ContextCompat.getDrawable(context, res)!!
-
 }
+

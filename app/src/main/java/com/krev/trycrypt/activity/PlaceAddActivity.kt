@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -15,12 +14,12 @@ import android.widget.ListView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapters.FriendsCheckAdapter
 import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.server.BaseController.Method
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.utils.BitmapUtils
-import com.krev.trycrypt.utils.JsonUtils.json
-import com.krev.trycrypt.utils.async.ImageTask
+import com.krev.trycrypt.utils.JsonUtils.read
 import com.krev.trycrypt.vk.VKPhoto
 
 
@@ -31,7 +30,7 @@ class PlaceAddActivity : AppCompatActivity() {
     val name: EditText by lazy { findViewById(R.id.place_add_name) as EditText }
     val button: Button by lazy { findViewById(R.id.place_add_button) as Button }
     val description: EditText by lazy { findViewById(R.id.place_add_description) as EditText }
-    val location: MeetifyLocation by lazy { json(intent.getStringExtra("location"), MeetifyLocation::class.java) }
+    val location: MeetifyLocation by lazy { read(intent.getStringExtra("location"), MeetifyLocation::class.java) }
     val RESULT_LOAD_IMAGE = 0
     var bitmap: Bitmap = Config.bitmap
 
@@ -39,28 +38,28 @@ class PlaceAddActivity : AppCompatActivity() {
         Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_add)
+
         friends.adapter = FriendsCheckAdapter().add(Config.friends)
         button.setOnClickListener {
-            Log.d("PlaceAddActivity", "start adding place")
             VKPhoto.uploadPhoto({
-                Log.d("PlaceAddActivity", "photo done")
-                PlaceController.put(Place(name.text.toString(), description.text.toString(), Config.user.id,
-                        it, location, (friends.adapter as FriendsCheckAdapter).checked), {
-                    val place = json(it.body().string(), Place::class.java)
-                    Config.add(place)
+                PlaceController.request(Method.PUT, place(it)).thenApply {
+                    val place = read(it.body().string(), Place::class.java)
+                    Config.addPlace(place)
                     Config.user.created += place.id
-                    ImageTask({
-                        Log.d("PlaceAddActivity", "got the photo")
-                    }, "place_${place.id}").execute(place.photo)
-                })
+//                    PhotoUtils.put("place", place.id, place.photo)
+                }
             }, bitmap)
             finish()
         }
+
         imageView.setOnClickListener {
-            val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(i, RESULT_LOAD_IMAGE)
         }
     }
+
+    fun place(photo: String) = Place(name.text.toString(), description.text.toString(),
+            Config.user.id, photo, location, (friends.adapter as FriendsCheckAdapter).checked)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

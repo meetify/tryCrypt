@@ -7,16 +7,14 @@ import com.krev.trycrypt.utils.JsonUtils
 import com.vk.sdk.api.VKError
 import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKResponse
+import java8.util.concurrent.CompletableFuture
 import org.json.JSONObject
 import java.util.*
 
-/**
- * Created by Dima on 07.12.2016.
- */
 object VKUser {
 
-    fun get(consumer: (User) -> Unit = {}, progress: (Double) -> Unit = {}) {
-        val listener = object : VKRequest.VKRequestListener() {
+    fun get() = CompletableFuture<User>().apply {
+        VKRequest("execute.userinfo").executeWithListener(object : VKRequest.VKRequestListener() {
             override fun onComplete(response: VKResponse?) {
                 Log.d("VKUser", "well done ${response!!.json}")
                 val json = response.json.getJSONObject("response")
@@ -24,24 +22,20 @@ object VKUser {
                 val friends = parseFriends(json.getJSONArray("friends").toString())
                 val album = json.getLong("album")
                 val user = parseUser(json.getJSONObject("user"), friends, album)
-                Log.d("VKUser", JsonUtils.json(user))
+                Log.d("VKUser", JsonUtils.write(user))
                 Config.modify(user)
                 Config.album = album
                 Log.d("VKUser", "consumer?")
-                consumer(user)
+                complete(user)
             }
 
             override fun onError(error: VKError?) {
-                Log.d("VKUser", "well done $error")
+                Log.d("VKUser", "one $error")
             }
-
-            override fun onProgress(progressType: VKRequest.VKProgressType?, bytesLoaded: Long, bytesTotal: Long) {
-                progress(bytesLoaded.toDouble() / bytesTotal.toDouble())
-            }
-        }
-        VKRequest("execute.userinfo").executeWithListener(listener)
+        })
         Log.d("VKUser", "execute.userinfo")
     }
+
 
     private fun parseFriends(friends: String): HashSet<Long> = HashSet<Long>().apply {
         friends.replace("[\\[\\]]".toRegex(), "")

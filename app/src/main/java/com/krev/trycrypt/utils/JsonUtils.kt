@@ -2,11 +2,12 @@ package com.krev.trycrypt.utils
 
 import com.krev.trycrypt.application.Config
 
-/**
- * Created by Dima on 06.12.2016.
- */
 object JsonUtils {
-    fun json(a: Any): String = Config.mapper.writeValueAsString(a)
+    fun write(a: Any) = Config.mapper.writeValueAsString(a)!!
 
-    fun <T> json(a: String, clazz: Class<T>): T = Config.mapper.readValue(a, clazz)
+    fun <T : Any> writeArray(items: Array<T>) = StringBuilder("{").apply {
+        items.forEach { append("\"${it.javaClass.simpleName.toLowerCase()}\":${write(it)},") }
+    }.toString().trimEnd(',') + "}"
+
+    fun <T> read(a: String, clazz: Class<T>): T = Config.mapper.readValue(a, clazz)
 }

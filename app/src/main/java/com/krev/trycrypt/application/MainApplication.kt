@@ -8,10 +8,6 @@ import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKAccessTokenTracker
 import com.vk.sdk.VKSdk
 
-/**
- * Created by Dima on 07.11.2016.
- */
-
 class MainApplication : MultiDexApplication() {
     internal var vkAccessTokenTracker: VKAccessTokenTracker = object : VKAccessTokenTracker() {
         override fun onVKAccessTokenChanged(oldToken: VKAccessToken?, newToken: VKAccessToken?) {
@@ -35,10 +31,5 @@ class MainApplication : MultiDexApplication() {
 
     companion object {
         var context: Context? = null
-    }
-
-    override fun onTerminate() {
-        super.onTerminate()
-        Log.d("MainApplication", "onTerminate")
     }
 }
