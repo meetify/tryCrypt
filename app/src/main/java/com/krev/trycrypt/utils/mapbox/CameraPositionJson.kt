@@ -10,7 +10,7 @@ class CameraPositionJson(val bearing: Double = 0.0,
                          val target: TargetJson = TargetJson(),
                          val tilt: Double = 0.0,
                          val zoom: Double = 15.0) {
-    fun map() = CameraPosition.Builder()
+    fun build() = CameraPosition.Builder()
             .bearing(bearing).tilt(tilt).zoom(zoom)
             .target(LatLng(target.latitude, target.longitude, target.altitude)).build()!!
 }

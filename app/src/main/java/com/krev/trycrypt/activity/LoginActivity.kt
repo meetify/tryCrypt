@@ -1,6 +1,8 @@
 package com.krev.trycrypt.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -18,6 +20,7 @@ import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
+import java8.util.concurrent.CompletableFuture
 
 /**
  * try
@@ -28,6 +31,13 @@ class LoginActivity : AppCompatActivity() {
     private val donutProgress: DonutProgress by lazy { findViewById(R.id.donut_progress) as DonutProgress }
     private val login: TextView by lazy { findViewById(R.id.login_progress) as TextView }
     private val TAG = "LoginActivity"
+
+    private val permission = Manifest.permission.ACCESS_FINE_LOCATION
+    private val location = 255
+
+    private var step = 0
+
+    private data class Holder(val a1: String, val a2: Int)
 
     private fun updateProgress(progress: Int) = runOnUiThread {
         val progressText = getString(when (progress) {
@@ -42,30 +52,57 @@ class LoginActivity : AppCompatActivity() {
         donutProgress.progress = progress
     }
 
-    private fun autoLogin() {
-        updateProgress(30)
-        VKUser.get().thenAccept {
-            asyncThread { DrawerUtils.profile }
-            updateProgress(60)
-            LoginController.login {
-                updateProgress(100)
-                Log.d(TAG, "autologin logged to vk $it")
+    private fun nextProgress() {
+        val (text, progress) = when (step) {
+            0 -> Holder(getString(R.string.login_progress_0), 0)
+            1 -> Holder(getString(R.string.login_progress_30), 30)
+            2 -> Holder(getString(R.string.login_progress_60), 60)
+            3 -> Holder(getString(R.string.login_progress_100), 100)
+            else -> Holder(getString(R.string.login_progress_unknown), 666)
+        }
+        step++
+        Log.d(TAG, "Updating progress with $progress - $text")
+        runOnUiThread {
+            login.text = text
+            donutProgress.progress = progress
+        }
+    }
+
+    private fun autoLogin() = CompletableFuture<Nothing>().completeAsync { null }
+            .thenApplyAsync { nextProgress() }
+            .thenComposeAsync { VKUser.get() }
+            .thenApplyAsync { nextProgress(); it.apply { asyncThread { DrawerUtils.profile } } }
+            .thenComposeAsync { LoginController.login() }
+            .thenApplyAsync {
+                nextProgress()
                 Config.friends = it.friends
                 Config.places = it.created + it.allowed
                 Config.user.created += it.created.map { it.id }
                 Config.user.allowed += it.allowed.map { it.id }
-                startActivity(Intent(this@LoginActivity, MapActivity::class.java))
-                finish()
+                if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "checkSelfPermission $permission failed")
+                    requestPermissions(arrayOf(permission), location)
+                } else {
+                    finish()
+                }
             }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            location -> finish()
         }
+    }
+
+    override fun finish() {
+        startActivity(Intent(this, MapActivity::class.java))
+        super.finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Config.activity = this
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        updateProgress(0)
+        nextProgress()
         Log.d(TAG, "onCreate" + mapper.writeValueAsString(user))
 
         Log.d(TAG, this.filesDir.absolutePath)

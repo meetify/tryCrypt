@@ -8,12 +8,13 @@ import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
 import com.krev.trycrypt.utils.PhotoUtils
 
-class GooglePlaceAdapter(place: GooglePlace) : CustomAdapter<Result>(place.results.toMutableList()) {
+class GooglePlaceAdapter(place: GooglePlace)
+    : CustomAdapter<Result>(place.results.sortedByDescending { it.rating }.toMutableList()) {
 
     override val layout: Int = R.layout.listview_google_place
 
     override fun photo(item: Result, view: ImageView) =
-            PhotoUtils.getAwait(item.photos[0].photoReference, item.id, view)
+            PhotoUtils.get(item.photos[0].photoReference, item.id, view, this::notifyDataSetChanged)
 
     override fun View.holder() = apply {
         tag = ViewHolder(
@@ -27,8 +28,8 @@ class GooglePlaceAdapter(place: GooglePlace) : CustomAdapter<Result>(place.resul
         (tag as ViewHolder).apply {
             photo(item, icon)
             name.text = item.name
-            address.text = item.vicinity
-            rating.text = if (item.rating > 1.0) item.rating.toString() else ""
+            rating.text = item.vicinity
+            address.text = if (item.rating > 1.0) item.rating.toString() else ""
         }
     }
 

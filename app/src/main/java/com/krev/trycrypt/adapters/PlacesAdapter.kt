@@ -14,7 +14,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 class PlacesAdapter : CustomAdapter<Place>() {
     override var layout: Int = R.layout.listview_place
 
-    override fun photo(item: Place, view: ImageView) = PhotoUtils.getAwait(item.photo, item.id, view)
+    override fun photo(item: Place, view: ImageView) = PhotoUtils.get(item.photo, item.id, view, this::notifyDataSetChanged)
 
     override fun View.holder() = this.apply {
         tag = ViewHolder(
@@ -33,7 +33,7 @@ class PlacesAdapter : CustomAdapter<Place>() {
         (tag as ViewHolder).apply {
             photo(item, icon)
             name.text = item.name
-            Config.findUser(item.owner).apply { PhotoUtils.getAwait(item.photo, item.id, creatorIcon) }
+            Config.findUser(item.owner).let { PhotoUtils.get(it.photo, it.id, creatorIcon) }
             creatorName.text = Config.findUser(item.owner).name
         }
     }

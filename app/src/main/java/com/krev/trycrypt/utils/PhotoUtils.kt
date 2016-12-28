@@ -9,7 +9,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
 object PhotoUtils {
-    fun getAwait(url: String, key: Any, imageView: ImageView) = Picasso
+    fun get(url: String, key: Any, imageView: ImageView, consumer: () -> Unit = {}) = Picasso
             .with(Config.context)
             .load(url)
             .stableKey(key.toString())
@@ -23,6 +23,7 @@ object PhotoUtils {
 
                 override fun onBitmapLoaded(p0: Bitmap?, p1: Picasso.LoadedFrom?) {
                     p0?.let { imageView.setImageDrawable(BitmapUtils.getRoundedDrawable(it)) }
+                    consumer()
                 }
             })
 

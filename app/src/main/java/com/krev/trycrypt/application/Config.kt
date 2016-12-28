@@ -4,18 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
-import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
@@ -33,12 +27,13 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object Config {
-    //    val address = "http://192.168.1.40:49323"
-//    val address = "http://192.168.42.2:49323"
+    //val address = "http://192.168.1.40:49323"
+    //val address = "http://192.168.42.2:49323"
     val address = "http://159.224.206.172:49323"
-    val client = OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+    val client = OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .build()!!
     val JSON = MediaType.parse("application/json; charset=utf-8")!!
     val mapper = jacksonObjectMapper()
@@ -51,7 +46,7 @@ object Config {
             settings.edit().putString("device", this).commit()
         }
     }
-    val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+    //val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
     val layoutInflater: LayoutInflater by lazy {
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -65,9 +60,8 @@ object Config {
             }
         }
     }
-    //    val icon: Bitmap by lazy { PhotoUtils.get(user.photo, user.id).get() }
-    var location: MeetifyLocation = MeetifyLocation()
 
+    var location: MeetifyLocation = MeetifyLocation()
     var camera: CameraPosition = CameraPosition.Builder().build()
     var activity: AppCompatActivity? = null
     var friends: Set<User> = HashSet()
@@ -81,23 +75,9 @@ object Config {
     }
 
     fun init() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 50F, object : LocationListener {
-            override fun onProviderDisabled(p0: String?) {
-            }
-
-            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-            }
-
-            override fun onProviderEnabled(p0: String?) {
-            }
-
-            override fun onLocationChanged(location: Location) {
-                Log.d("LocationManager", "Current location is ${location.latitude} ${location.longitude}")
-                Config.location = MapActivity.convert(location)
-                UserController.update(Config.location)
-            }
-        })
-        camera = read(settings.getString("camera", context.getString(R.string.json_camera_example)), CameraPositionJson::class.java).map()
+        camera = settings.getString("camera", context.getString(R.string.json_camera_example)).let {
+            read(it, CameraPositionJson::class.java).build()
+        }
     }
 
     fun makeMarkers() = places.map { makeMarker(it) }

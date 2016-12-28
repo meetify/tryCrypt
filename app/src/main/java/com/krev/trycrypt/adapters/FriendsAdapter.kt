@@ -10,7 +10,7 @@ import com.krev.trycrypt.utils.PhotoUtils
 class FriendsAdapter : CustomAdapter<User>() {
     override val layout: Int = R.layout.listview_user
 
-    override fun photo(item: User, view: ImageView) = PhotoUtils.getAwait(item.photo, item.id, view)
+    override fun photo(item: User, view: ImageView) = PhotoUtils.get(item.photo, item.id, view, this::notifyDataSetChanged)
 
     override fun View.holder() = apply {
         tag = ViewHolder((findViewById(R.id.user_icon) as ImageView),

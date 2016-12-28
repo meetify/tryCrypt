@@ -1,5 +1,6 @@
 package com.krev.trycrypt.server
 
+import android.util.Log
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.device
 import com.krev.trycrypt.application.Config.token
@@ -13,12 +14,13 @@ import okhttp3.RequestBody
 
 object LoginController : BaseController<Login>(Array(1, { Login() })) {
 
-    fun login(consumer: (UserExtended) -> Unit = {}) = asyncThread {
+    fun login() = asyncThread {
+        Log.d("LoginController", "logging in")
         request(Method.POST, url(), body(Config.user, createLogin())).body().string()
-    }.thenApplyAsync { read(it, UserExtended::class.java) }.thenAcceptAsync(consumer)!!
+    }.thenApplyAsync { read(it, UserExtended::class.java) }!!
 
     private fun <V : BaseEntity> body(vararg items: V): RequestBody
             = RequestBody.create(Config.JSON, writeArray(items))
 
-    private fun createLogin(): Login = Login(device, token.userId.toLong(), token.accessToken)
+    fun createLogin(): Login = Login(device, token.userId.toLong(), token.accessToken)
 }

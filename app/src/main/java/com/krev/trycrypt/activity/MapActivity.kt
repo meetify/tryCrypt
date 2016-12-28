@@ -15,6 +15,7 @@ import com.krev.trycrypt.adapters.GooglePlaceAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.camera
 import com.krev.trycrypt.server.PlaceController
+import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.utils.DrawerUtils
@@ -38,6 +39,7 @@ class MapActivity : AppCompatActivity() {
 
     private var lock = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Config.activity = this
         super.onCreate(savedInstanceState)
@@ -49,13 +51,18 @@ class MapActivity : AppCompatActivity() {
         mapView.getMapAsync { map ->
             mapViewAsync(map)
             findViewById(R.id.button_location).setOnClickListener {
-                val position = CameraPosition.Builder().target(convert(Config.location)).zoom(16.0).build()
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
+                        .target(convert(Config.location)).zoom(16.0).build()))
             }
         }
 
         mapView.onCreate(savedInstanceState)
         DrawerUtils.getDrawer(this)
+//        bundle = savedInstanceState
+
+    }
+
+    private fun init(savedInstanceState: Bundle?) {
 
     }
 
@@ -104,6 +111,13 @@ class MapActivity : AppCompatActivity() {
         map.setOnMapLongClickListener {
             startActivity(Intent(this@MapActivity, PlaceAddActivity::class.java)
                     .putExtra("location", write(convert(it))))
+        }
+
+        map.setOnMyLocationChangeListener {
+            it?.let {
+                Config.location = convert(it)
+                UserController.update(Config.location)
+            }
         }
     }
 

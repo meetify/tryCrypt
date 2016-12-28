@@ -21,10 +21,7 @@ object AsyncUtils {
             }
 
             override fun resumeWithException(exception: Throwable) {
-//                exception.printStackTrace()
-                Log.e("AsyncUtils", exception.stackTrace.toString())
                 throw exception
-//                completeExceptionally(exception)
             }
         })
     }
@@ -37,7 +34,8 @@ object AsyncUtils {
                 }
 
                 override fun resumeWithException(exception: Throwable) {
-                    Log.d("AsyncUtils", "Exception: ${exception.message}")
+                    Log.e("AsyncUtils", "Exception: ${exception.message}")
+                    exception.printStackTrace()
                     completeExceptionally(exception)
                 }
             })

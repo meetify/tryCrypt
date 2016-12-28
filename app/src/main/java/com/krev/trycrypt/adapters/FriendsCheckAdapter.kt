@@ -13,7 +13,7 @@ import java.util.*
 class FriendsCheckAdapter : CustomAdapter<User>() {
     override var layout: Int = R.layout.listview_user_checkbox
 
-    override fun photo(item: User, view: ImageView) = PhotoUtils.getAwait(item.photo, item.id, view)
+    override fun photo(item: User, view: ImageView) = PhotoUtils.get(item.photo, item.id, view, this::notifyDataSetChanged)
 
     override fun View.data(item: User) = apply {
         (tag as ViewHolder).apply {
