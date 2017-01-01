@@ -3,7 +3,7 @@ package com.krev.trycrypt.vk
 import android.util.Log
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.JsonUtils
+import com.krev.trycrypt.util.JsonUtils
 import com.vk.sdk.api.VKError
 import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKResponse

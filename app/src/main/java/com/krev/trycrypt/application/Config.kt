@@ -4,19 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.JsonUtils.read
-import com.krev.trycrypt.utils.JsonUtils.write
-import com.krev.trycrypt.utils.jackson.jacksonObjectMapper
-import com.krev.trycrypt.utils.mapbox.CameraPositionJson
+import com.krev.trycrypt.util.JsonUtils.read
+import com.krev.trycrypt.util.JsonUtils.write
+import com.krev.trycrypt.util.mapbox.CameraPositionJson
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -27,9 +25,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object Config {
+    //val address = "http://159.224.206.172:49323"
     //val address = "http://192.168.1.40:49323"
     //val address = "http://192.168.42.2:49323"
-    val address = "http://159.224.206.172:49323"
+    val address = "http://192.168.1.103:49323"
+
     val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
@@ -46,7 +46,6 @@ object Config {
             settings.edit().putString("device", this).commit()
         }
     }
-    //val locationManager by lazy { context.getSystemService(Context.LOCATION_SERVICE) as LocationManager }
     val bitmap: Bitmap by lazy { BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher) }
     val layoutInflater: LayoutInflater by lazy {
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -83,8 +82,7 @@ object Config {
     fun makeMarkers() = places.map { makeMarker(it) }
 
     fun makeMarker(place: Place) = MarkerOptions()
-            .icon(IconFactory.getInstance(context)
-                    .fromDrawable(getDrawable(R.drawable.ic_place_custom)))
+            .icon(IconFactory.getInstance(context).fromResource(R.drawable.ic_place_custom))
             .position(MapActivity.convert(place.location))
             .title(place.name)!!
 
@@ -94,8 +92,6 @@ object Config {
     }
 
     fun findUser(id: Long) = if (user.id == id) user else friends.first { it.id == id }
-
-    fun getDrawable(@DrawableRes res: Int) = ContextCompat.getDrawable(context, res)!!
 
     private fun User.modify(user: User) {
         id = user.id
@@ -108,6 +104,4 @@ object Config {
         name = user.name
         location = user.location
     }
-
 }
-

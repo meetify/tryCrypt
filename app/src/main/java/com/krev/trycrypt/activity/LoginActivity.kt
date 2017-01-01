@@ -3,18 +3,20 @@ package com.krev.trycrypt.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import com.github.lzyzsd.circleprogress.DonutProgress
 import com.krev.trycrypt.R
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.application.Config.mapper
 import com.krev.trycrypt.application.Config.user
 import com.krev.trycrypt.server.LoginController
-import com.krev.trycrypt.utils.AsyncUtils.asyncThread
-import com.krev.trycrypt.utils.DrawerUtils
+import com.krev.trycrypt.util.AsyncUtils.asyncThread
+import com.krev.trycrypt.util.DrawerUtils
 import com.krev.trycrypt.vk.VKUser
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
@@ -38,19 +40,6 @@ class LoginActivity : AppCompatActivity() {
     private var step = 0
 
     private data class Holder(val a1: String, val a2: Int)
-
-    private fun updateProgress(progress: Int) = runOnUiThread {
-        val progressText = getString(when (progress) {
-            0 -> R.string.login_progress_0
-            30 -> R.string.login_progress_30
-            60 -> R.string.login_progress_60
-            100 -> R.string.login_progress_100
-            else -> R.string.login_progress_unknown
-        })
-        Log.d(TAG, "Updating progress with $progress - $progressText")
-        login.text = progressText
-        donutProgress.progress = progress
-    }
 
     private fun nextProgress() {
         val (text, progress) = when (step) {
@@ -78,8 +67,9 @@ class LoginActivity : AppCompatActivity() {
                 Config.friends = it.friends
                 Config.places = it.created + it.allowed
                 Config.user.created += it.created.map { it.id }
-                Config.user.allowed += it.allowed.map { it.id }
-                if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                Config.user.allowed += it.allowed.map { it.id.to(false) }.toMap()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                        checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "checkSelfPermission $permission failed")
                     requestPermissions(arrayOf(permission), location)
                 } else {
@@ -117,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onError(error: VKError) {
+                Toast.makeText(this@LoginActivity, "VKError $error", Toast.LENGTH_SHORT).show()
             }
         })) {
             super.onActivityResult(request, result, data)

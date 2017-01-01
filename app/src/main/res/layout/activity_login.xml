@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:background="?android:colorPrimary"
+        android:minHeight="?android:actionBarSize"
         android:title="@string/app_name"
         android:transitionName="actionBar"
         custom:layout_constraintHorizontal_bias="0.0"
@@ -28,7 +28,7 @@
             android:paddingRight="30dp"
             android:paddingStart="30dp"
             android:text="@string/app_name"
-            android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Title" />
+            android:textAppearance="@android:style/TextAppearance.Material.Widget.ActionBar.Title" />
     </android.support.v7.widget.Toolbar>
 
     <com.github.lzyzsd.circleprogress.DonutProgress

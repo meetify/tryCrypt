@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils
+package com.krev.trycrypt.util
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

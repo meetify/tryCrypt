@@ -1,6 +1,7 @@
 package com.krev.trycrypt.server.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
 import java.util.*
 
@@ -8,16 +9,16 @@ import java.util.*
 data class GooglePlace(
         var results: List<Result> = ArrayList(),
         var status: String = "",
-        var htmlAttributions: List<String> = ArrayList(),
-        var nextPageToken: String = "") : Serializable {
+        @JsonProperty("html_attributions") var htmlAttributions: List<String> = ArrayList(),
+        @JsonProperty("next_page_token") var nextPageToken: String = "") : Serializable {
 
     data class AddressComponent(
-            var longName: String = "",
-            var shortName: String = "",
+            @JsonProperty("long_name") var longName: String = "",
+            @JsonProperty("short_name") var shortName: String = "",
             var types: List<String>? = ArrayList()) : Serializable
 
     data class AlternativeId(
-            var placeId: String = "",
+            @JsonProperty("place_id") var placeId: String = "",
             var scope: String = "") : Serializable
 
     data class Aspect(
@@ -33,8 +34,8 @@ data class GooglePlace(
             var viewport: Viewport = Viewport()) : Serializable
 
     data class OpeningHours(
-            var openNow: Boolean = false,
-            var weekdayText: List<String> = ArrayList(),
+            @JsonProperty("open_now") var openNow: Boolean = false,
+            @JsonProperty("weekday_text") var weekdayText: List<String> = ArrayList(),
             var periods: List<Period> = ArrayList()) : Serializable
 
     data class GoogleLocation(
@@ -48,16 +49,16 @@ data class GooglePlace(
     data class Photo(
             var width: Double? = 0.0,
             var height: Double = 0.0,
-            var htmlAttributions: List<String> = ArrayList(),
-            var photoReference: String = "") : Serializable
+            @JsonProperty("html_attributions") var htmlAttributions: List<String> = ArrayList(),
+            @JsonProperty("photo_reference") var photoReference: String = "") : Serializable
 
     data class Result(
             var geometry: Geometry = Geometry(),
-            var openingHours: OpeningHours = OpeningHours(),
-            var formattedAddress: String = "",
-            var formattedPhoneNumber: String = "",
-            var internationalPhoneNumber: String = "",
-            var placeId: String = "",
+            @JsonProperty("opening_hours") var openingHours: OpeningHours = OpeningHours(),
+            @JsonProperty("formatted_address") var formattedAddress: String = "",
+            @JsonProperty("formatted_phone_number") var formattedPhoneNumber: String = "",
+            @JsonProperty("international_phone_number") var internationalPhoneNumber: String = "",
+            @JsonProperty("place_id") var placeId: String = "",
             var icon: String = "",
             var id: String = "",
             var name: String = "",
@@ -67,19 +68,19 @@ data class GooglePlace(
             var website: String = "",
             var url: String = "",
             var rating: Double = 0.0,
-            var permanentlyClosed: Boolean = false,
-            var utcOffset: Int = 0,
-            var priceLevel: Int = 0,
+            @JsonProperty("permanently_closed") var permanentlyClosed: Boolean = false,
+            @JsonProperty("utc_offset") var utcOffset: Int = 0,
+            @JsonProperty("price_level") var priceLevel: Int = 0,
             var types: List<String> = ArrayList(),
             var photos: List<Photo> = ArrayList(),
-            var alternativeIds: List<AlternativeId> = ArrayList(),
-            var addressComponents: List<AddressComponent> = ArrayList(),
+            @JsonProperty("alt_ids") var alternativeIds: List<AlternativeId> = ArrayList(),
+            @JsonProperty("address_components") var addressComponents: List<AddressComponent> = ArrayList(),
             var reviews: List<Review> = ArrayList()) : Serializable
 
     data class Review(
             var aspects: List<Aspect> = ArrayList(),
-            var authorName: String = "",
-            var authorUrl: String = "",
+            @JsonProperty("author_name") var authorName: String = "",
+            @JsonProperty("author_url") var authorUrl: String = "",
             var language: String = "",
             var rating: Double = 0.0,
             var text: String = "",

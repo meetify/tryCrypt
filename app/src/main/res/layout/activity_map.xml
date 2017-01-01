@@ -22,8 +22,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
+            android:background="?android:colorPrimary"
+            android:minHeight="?android:actionBarSize"
             android:transitionName="actionBar">
 
             <!--<TextView-->
@@ -62,18 +62,18 @@
             mapbox:tilt="0"
             mapbox:zoom="13" />
 
-        <Button
-            android:id="@+id/button_location"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:background="#FFF"
-            android:drawableLeft="@drawable/ic_place_custom"
-            android:drawableStart="@drawable/ic_place_custom" />
+        <!--<Button-->
+        <!--android:id="@+id/button_location"-->
+        <!--android:layout_width="25dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginEnd="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:background="#FFF"-->
+        <!--android:drawableLeft="@drawable/ic_place_custom"-->
+        <!--android:drawableStart="@drawable/ic_place_custom" />-->
     </RelativeLayout>
 </com.flipboard.bottomsheet.BottomSheetLayout>

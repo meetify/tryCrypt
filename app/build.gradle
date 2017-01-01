@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.krev.trycrypt"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -44,6 +44,7 @@ repositories {
     jcenter()
     maven { url "https://jitpack.io/" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://dl.bintray.com/jaysonminard/kohesive" }
 }
 
 dependencies {
@@ -61,8 +62,6 @@ dependencies {
     compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar') { transitive = true }
     compile('com.mikepenz:materialdrawer:5.7.0@aar') { transitive = true }
     compile 'com.github.lzyzsd:CircleProgress:v1.2.0'
-    compile 'com.github.zzz40500:AndroidSweetSheet:1.1.0'
-    compile 'com.github.rey5137:material:1.2.4.1-SNAPSHOT'
 
     compile 'io.reactivex:rxjava:1.2.4'
     compile 'io.reactivex:rxandroid:1.2.1'
@@ -76,7 +75,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.5'
 
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     compile 'net.sourceforge.streamsupport:streamsupport:1.5.2'
     compile 'net.sourceforge.streamsupport:streamsupport-cfuture:1.5.2'
@@ -85,6 +84,7 @@ dependencies {
     compile 'net.sourceforge.streamsupport:streamsupport-literal:1.5.2'
 
     compile 'com.flipboard:bottomsheet-core:1.5.3'
-
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.5-SPECIAL-KOTLIN-1.1-M04'
+
 }

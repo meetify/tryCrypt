@@ -1,11 +1,11 @@
-package com.krev.trycrypt.adapters
+package com.krev.trycrypt.adapter
 
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.server.model.entity.User
-import com.krev.trycrypt.utils.PhotoUtils
+import com.krev.trycrypt.util.PhotoUtils
 
 class FriendsAdapter : CustomAdapter<User>() {
     override val layout: Int = R.layout.listview_user

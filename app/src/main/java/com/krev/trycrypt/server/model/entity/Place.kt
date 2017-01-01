@@ -8,5 +8,5 @@ class Place(var name: String = "",
             val owner: Long = -1,
             val photo: String = "",
             var location: MeetifyLocation = MeetifyLocation(),
-            var allowed: Set<Long> = HashSet<Long>(),
+            var allowed: MutableMap<Long, Boolean> = HashMap<Long, Boolean>(),
             override var id: Long = -1) : BaseEntity(id), Serializable

@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils
+package com.krev.trycrypt.util
 
 import com.krev.trycrypt.R.drawable
 

@@ -1,9 +1,11 @@
 package com.krev.trycrypt.application
 
 import android.content.Context
+import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.krev.trycrypt.application.Config.settings
+import com.krev.trycrypt.service.UnvisitedService
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKAccessTokenTracker
 import com.vk.sdk.VKSdk
@@ -27,6 +29,8 @@ class MainApplication : MultiDexApplication() {
         settings.all.forEach {
             Log.d("MainApplication", it.key + " | " + it.value)
         }
+
+        startService(Intent(this, UnvisitedService::class.java))
     }
 
     companion object {

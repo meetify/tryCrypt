@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils.mapbox
+package com.krev.trycrypt.util.mapbox
 
 /**
  * Created by Dima on 07.12.2016.

@@ -5,10 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.ListView
 import com.baoyz.widget.PullRefreshLayout
 import com.krev.trycrypt.R
-import com.krev.trycrypt.adapters.FriendsAdapter
+import com.krev.trycrypt.adapter.FriendsAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.utils.DrawerUtils
+import com.krev.trycrypt.util.DrawerUtils
 
 class FriendsActivity : AppCompatActivity() {
 

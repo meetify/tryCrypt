@@ -1,4 +1,4 @@
-package com.krev.trycrypt.adapters
+package com.krev.trycrypt.adapter
 
 import android.annotation.SuppressLint
 import android.view.View

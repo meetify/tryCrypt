@@ -1,4 +1,4 @@
-package com.krev.trycrypt.adapters
+package com.krev.trycrypt.adapter
 
 import android.view.View
 import android.widget.ImageView
@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.server.model.GooglePlace
 import com.krev.trycrypt.server.model.GooglePlace.Result
-import com.krev.trycrypt.utils.PhotoUtils
+import com.krev.trycrypt.util.PhotoUtils
 
 class GooglePlaceAdapter(place: GooglePlace)
     : CustomAdapter<Result>(place.results.sortedByDescending { it.rating }.toMutableList()) {

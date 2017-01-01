@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils.mapbox
+package com.krev.trycrypt.util.mapbox
 
 import android.graphics.Bitmap
 import android.os.Parcel
@@ -6,7 +6,7 @@ import android.os.Parcelable
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.GooglePlace
-import com.krev.trycrypt.utils.TypeMapper
+import com.krev.trycrypt.util.TypeMapper
 import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.geometry.LatLng

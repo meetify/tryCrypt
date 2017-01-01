@@ -24,4 +24,8 @@
     <string name="login_progress_60">"Sending something to Meetify's server"</string>
     <string name="login_progress_100">Well done, initiating new life!</string>
     <string name="login_progress_unknown">Something went wrong.</string>
+    <string name="notification">new places for you!</string>
+    <string name="drawer_places_tip">Your own and your friends places</string>
+    <string name="drawer_map_tip">Watch your own city map and some places to visit</string>
+    <string name="drawer_friends_tip">Your friends from VK</string>
 </resources>

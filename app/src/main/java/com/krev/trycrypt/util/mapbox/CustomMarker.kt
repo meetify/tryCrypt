@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils.mapbox
+package com.krev.trycrypt.util.mapbox
 
 import com.krev.trycrypt.server.model.GooglePlace
 import com.mapbox.mapboxsdk.annotations.Marker

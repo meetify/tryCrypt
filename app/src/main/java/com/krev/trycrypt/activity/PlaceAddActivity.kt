@@ -12,14 +12,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.adapters.FriendsCheckAdapter
+import com.krev.trycrypt.adapter.FriendsCheckAdapter
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.BaseController.Method
 import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
 import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.utils.BitmapUtils
-import com.krev.trycrypt.utils.JsonUtils.read
+import com.krev.trycrypt.util.BitmapUtils
+import com.krev.trycrypt.util.JsonUtils.read
 import com.krev.trycrypt.vk.VKPhoto
 
 
@@ -43,7 +43,7 @@ class PlaceAddActivity : AppCompatActivity() {
         button.setOnClickListener {
             VKPhoto.uploadPhoto({
                 PlaceController.request(Method.PUT, place(it)).thenApply {
-                    val place = read(it.body().string(), Place::class.java)
+                    val place = read(it, Place::class.java)
                     Config.addPlace(place)
                     Config.user.created += place.id
 //                    PhotoUtils.put("place", place.id, place.photo)
@@ -63,6 +63,7 @@ class PlaceAddActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        //todo: files permission
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             contentResolver.query(data.data, filePathColumn, null, null, null).use {

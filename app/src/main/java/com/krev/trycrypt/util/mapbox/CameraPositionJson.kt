@@ -1,4 +1,4 @@
-package com.krev.trycrypt.utils.mapbox
+package com.krev.trycrypt.util.mapbox
 
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng

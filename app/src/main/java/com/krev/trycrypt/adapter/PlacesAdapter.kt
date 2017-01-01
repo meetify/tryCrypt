@@ -1,4 +1,4 @@
-package com.krev.trycrypt.adapters
+package com.krev.trycrypt.adapter
 
 import android.content.Intent
 import android.view.View
@@ -8,7 +8,7 @@ import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
 import com.krev.trycrypt.application.Config
 import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.utils.PhotoUtils
+import com.krev.trycrypt.util.PhotoUtils
 import com.mapbox.mapboxsdk.camera.CameraPosition
 
 class PlacesAdapter : CustomAdapter<Place>() {
