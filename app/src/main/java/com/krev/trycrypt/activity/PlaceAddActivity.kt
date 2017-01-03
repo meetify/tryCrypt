@@ -1,12 +1,18 @@
 package com.krev.trycrypt.activity
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.Intent.ACTION_PICK
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -25,6 +31,8 @@ import com.krev.trycrypt.vk.VKPhoto
 
 class PlaceAddActivity : AppCompatActivity() {
 
+    private val TAG = PlaceAddActivity::class.java.toString()
+
     val imageView: ImageView by lazy { findViewById(R.id.place_add_icon) as ImageView }
     val friends: ListView by lazy { findViewById(R.id.place_add_friends) as ListView }
     val name: EditText by lazy { findViewById(R.id.place_add_name) as EditText }
@@ -33,6 +41,9 @@ class PlaceAddActivity : AppCompatActivity() {
     val location: MeetifyLocation by lazy { read(intent.getStringExtra("location"), MeetifyLocation::class.java) }
     val RESULT_LOAD_IMAGE = 0
     var bitmap: Bitmap = Config.bitmap
+
+    private val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+    private val storage = 256
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Config.activity = this
@@ -53,13 +64,22 @@ class PlaceAddActivity : AppCompatActivity() {
         }
 
         imageView.setOnClickListener {
-            val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(i, RESULT_LOAD_IMAGE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "checkSelfPermission $permission failed")
+                requestPermissions(arrayOf(permission), storage)
+            } else photoFromGallery()
         }
     }
 
     fun place(photo: String) = Place(name.text.toString(), description.text.toString(),
             Config.user.id, photo, location, (friends.adapter as FriendsCheckAdapter).checked)
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            storage -> photoFromGallery()
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -74,4 +94,7 @@ class PlaceAddActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun photoFromGallery() =
+            startActivityForResult(Intent(ACTION_PICK, EXTERNAL_CONTENT_URI), RESULT_LOAD_IMAGE)
 }

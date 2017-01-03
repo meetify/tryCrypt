@@ -3,6 +3,7 @@ package com.krev.trycrypt.util
 import android.util.Log
 import java8.util.concurrent.CompletableFuture
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.startCoroutine
 import kotlin.coroutines.suspendCoroutine
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")

@@ -24,9 +24,15 @@ class UnvisitedService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand")
+        synchronized(Companion, {
+            if (launchedCount >= 1) {
+                Log.d(TAG, "onStartCommand.launchedCount >= 1 => exiting")
+                return super.onStartCommand(intent, flags, startId)
+            }
+        })
+        launchedCount++
         asyncThread {
             while (true) {
-                Log.d(TAG, "onStartCommand.asyncThread")
                 if (isFinished) {
                     return@asyncThread
                 }
@@ -43,7 +49,7 @@ class UnvisitedService : Service() {
                             .setContentText("${it.count()} ${getString(R.string.notification)}")
                     mNotificationManager.notify(mId, mBuilder.build())
                 }
-                TimeUnit.SECONDS.sleep(30)
+                TimeUnit.SECONDS.sleep(sleep)
             }
         }
         return super.onStartCommand(intent, flags, startId)
@@ -51,6 +57,12 @@ class UnvisitedService : Service() {
 
     override fun onDestroy() {
         isFinished = true
+        launchedCount--
         super.onDestroy()
+    }
+
+    companion object {
+        private var launchedCount = 0
+        var sleep = 30L
     }
 }

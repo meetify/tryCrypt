@@ -23,12 +23,14 @@ class FriendsActivity : AppCompatActivity() {
         val layout = findViewById(R.id.friends_swipeRefreshLayout) as PullRefreshLayout
 
         layout.setOnRefreshListener {
-            UserController.friends({
+            UserController.friends().thenApplyAsync {
                 runOnUiThread {
-                    friends.clear(it)
+                    val given = it.toHashSet()
+                    friends.clear(given)
+                    Config.friends = given
                     layout.setRefreshing(false)
                 }
-            })
+            }
         }
     }
 }

@@ -38,7 +38,13 @@
         <service
             android:name=".service.UnvisitedService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <service
+            android:name=".service.UpdateService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="true" />
     </application>
 
 </manifest>

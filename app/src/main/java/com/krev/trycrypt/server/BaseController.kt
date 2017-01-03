@@ -21,14 +21,8 @@ abstract class BaseController<T : BaseEntity>(val array: Array<T>) {
 
     open fun request(method: Method, item: T) = asyncThread { request(method, url(), body(item)) }
 
-    protected fun body(vararg a: Any): RequestBody {
-        val s = if (a.count() == 1) write(a[0]) else writeArray(a)
-//        val z = s.trim('\"').filterNot { it == '\\' }
-//        Log.d("BaseController", "body: >$s<")
-//        Log.d("BaseController", "body: >$z<")
-//        Log.d("BaseController", "body: ${Arrays.toString(a)} && ${a.count()}")
-        return RequestBody.create(JSON, s)
-    }
+    protected fun body(vararg a: Any): RequestBody =
+            RequestBody.create(JSON, if (a.count() == 1) write(a[0]) else writeArray(a))
 
     protected fun url(params: String = "", path: String = "") =
             "$address/${array[0].javaClass.simpleName.toLowerCase()}$path?device=$device$params"

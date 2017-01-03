@@ -25,10 +25,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object Config {
-    //val address = "http://159.224.206.172:49323"
+    val address = "http://159.224.206.172:49323"
     //val address = "http://192.168.1.40:49323"
     //val address = "http://192.168.42.2:49323"
-    val address = "http://192.168.1.103:49323"
+    //val address = "http://192.168.1.103:49323"
 
     val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -39,7 +39,7 @@ object Config {
     val mapper = jacksonObjectMapper()
     val token: VKAccessToken by lazy { VKAccessToken.currentToken()!! }
 
-    val context: Context by lazy { MainApplication.context!! }
+    val context: Context by lazy { MainApplication.context }
     val settings: SharedPreferences by lazy { context.getSharedPreferences("MeetifySharedPreferences", 0) }
     val device: String by lazy {
         settings.getString("device", UUID.randomUUID().toString()).apply {
@@ -63,9 +63,17 @@ object Config {
     var location: MeetifyLocation = MeetifyLocation()
     var camera: CameraPosition = CameraPosition.Builder().build()
     var activity: AppCompatActivity? = null
-    var friends: Set<User> = HashSet()
     var album: Long = -1
-    var places: Set<Place> = HashSet()
+    var friends: Set<User> = HashSet()
+
+    private var _places: Set<Place> = HashSet()
+    var places: Set<Place>
+        get() = _places
+        set(value) {
+            _places = value
+            MapActivity.placesUpdate(value)
+        }
+
     var markers: List<MarkerOptions> = makeMarkers()
 
     fun modify(user: User) {

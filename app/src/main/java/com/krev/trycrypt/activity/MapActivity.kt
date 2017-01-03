@@ -19,6 +19,7 @@ import com.krev.trycrypt.server.PlaceController
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.server.model.GooglePlace.GoogleLocation
 import com.krev.trycrypt.server.model.entity.MeetifyLocation
+import com.krev.trycrypt.server.model.entity.Place
 import com.krev.trycrypt.util.DrawerUtils
 import com.krev.trycrypt.util.JsonUtils.write
 import com.krev.trycrypt.util.mapbox.CustomMarkerOptions
@@ -38,7 +39,6 @@ class MapActivity : AppCompatActivity() {
     private val view by lazy { LayoutInflater.from(this).inflate(R.layout.activity_google_places, bottomSheet, false) }
     private val listView by lazy { view.findViewById(R.id.listViewGPlaces) as ListView }
     private var lock = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Config.activity = this
@@ -62,6 +62,8 @@ class MapActivity : AppCompatActivity() {
                 startActivity(Intent(this@MapActivity, PlaceAddActivity::class.java)
                         .putExtra("location", write(convert(it))))
             }
+
+            placesUpdate = { map.addMarkers(Config.makeMarkers()) }
 
             map.setOnMyLocationChangeListener {
                 it?.let {
@@ -145,5 +147,7 @@ class MapActivity : AppCompatActivity() {
         fun convert(location: LatLng) = MeetifyLocation(location.latitude, location.longitude)
 
         fun convert(location: Location) = MeetifyLocation(location.latitude, location.longitude)
+
+        var placesUpdate = { _: Collection<Place> -> }
     }
 }

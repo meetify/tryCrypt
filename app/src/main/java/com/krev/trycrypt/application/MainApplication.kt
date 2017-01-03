@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.krev.trycrypt.application.Config.settings
 import com.krev.trycrypt.service.UnvisitedService
+import com.krev.trycrypt.service.UpdateService
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKAccessTokenTracker
 import com.vk.sdk.VKSdk
@@ -21,7 +22,7 @@ class MainApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        MainApplication.context = applicationContext
+        _context = applicationContext
 
         vkAccessTokenTracker.startTracking()
         VKSdk.initialize(this)
@@ -31,9 +32,12 @@ class MainApplication : MultiDexApplication() {
         }
 
         startService(Intent(this, UnvisitedService::class.java))
+        startService(Intent(this, UpdateService::class.java))
     }
 
     companion object {
-        var context: Context? = null
+        private var _context: Context? = null
+        val context: Context
+            get() = _context!!
     }
 }
