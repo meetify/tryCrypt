@@ -11,9 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.github.lzyzsd.circleprogress.DonutProgress
 import com.krev.trycrypt.R
-import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.application.Config.mapper
-import com.krev.trycrypt.application.Config.user
+import com.krev.trycrypt.model.Config
+import com.krev.trycrypt.model.Config.mapper
+import com.krev.trycrypt.model.Config.user
 import com.krev.trycrypt.server.LoginController
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.DrawerUtils

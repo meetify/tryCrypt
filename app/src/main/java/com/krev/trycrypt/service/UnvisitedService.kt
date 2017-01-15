@@ -3,10 +3,15 @@ package com.krev.trycrypt.service
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import com.krev.trycrypt.R
+import com.krev.trycrypt.activity.SettingsActivity
+import com.krev.trycrypt.model.Config
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.DrawerUtils
@@ -19,6 +24,7 @@ class UnvisitedService : Service() {
     private var isFinished = false
     private val mNotificationManager: NotificationManager
             by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+
 
     override fun onBind(intent: Intent) = null
 
@@ -62,7 +68,7 @@ class UnvisitedService : Service() {
     }
 
     companion object {
-        private var launchedCount = 0
+        private var launchedCount = if(PreferenceManager.getDefaultSharedPreferences(Config.context).getBoolean(SettingsActivity.KEY_NOTIFICATIONS,true)) 0 else 1
         var sleep = 30L
     }
 }

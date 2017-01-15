@@ -39,12 +39,13 @@
             android:name=".service.UnvisitedService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.UpdateService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="true" />
+
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

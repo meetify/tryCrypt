@@ -1,7 +1,7 @@
-package com.krev.trycrypt.server.model
+package com.krev.trycrypt.model
 
-import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.model.entity.Place
+import com.krev.trycrypt.model.entity.User
 import java.util.*
 
 data class UserExtended(var friends: Set<User> = HashSet(),

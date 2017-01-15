@@ -1,10 +1,10 @@
 package com.krev.trycrypt.server
 
-import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.application.Config.device
-import com.krev.trycrypt.application.Config.token
-import com.krev.trycrypt.server.model.UserExtended
-import com.krev.trycrypt.server.model.entity.Login
+import com.krev.trycrypt.model.Config
+import com.krev.trycrypt.model.Config.device
+import com.krev.trycrypt.model.Config.token
+import com.krev.trycrypt.model.UserExtended
+import com.krev.trycrypt.model.entity.Login
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.JsonUtils.read
 

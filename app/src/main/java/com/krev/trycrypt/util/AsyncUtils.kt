@@ -14,31 +14,30 @@ object AsyncUtils {
         }
     }
 
-    fun <T> async(block: suspend () -> T) = CompletableFuture<T>().apply {
+    fun <T> async(block: suspend () -> T, givenCount: Int = 0): CompletableFuture<T>
+            = CompletableFuture<T>().apply {
+        var count = givenCount
         block.startCoroutine(object : Continuation<T> {
             override fun resume(value: T) {
                 complete(value)
             }
 
             override fun resumeWithException(exception: Throwable) {
-                throw exception
+                Log.e("AsyncUtils", "Exception: ${exception.message}")
+                exception.printStackTrace()
+                completeExceptionally(exception)
+                count++
+                if (count > 1) return
+                async(block, count)
             }
         })
     }
 
     fun <T> asyncThread(block: suspend () -> T) = CompletableFuture<T>().apply {
         Thread {
-            block.startCoroutine(object : Continuation<T> {
-                override fun resume(value: T) {
-                    complete(value)
-                }
-
-                override fun resumeWithException(exception: Throwable) {
-                    Log.e("AsyncUtils", "Exception: ${exception.message}")
-                    exception.printStackTrace()
-                    completeExceptionally(exception)
-                }
-            })
+            async(block).thenApplyAsync {
+                complete(it)
+            }
         }.start()
     }
 }

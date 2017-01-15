@@ -1,11 +1,11 @@
 package com.krev.trycrypt.server
 
 import android.util.Log
-import com.krev.trycrypt.application.Config.JSON
-import com.krev.trycrypt.application.Config.address
-import com.krev.trycrypt.application.Config.client
-import com.krev.trycrypt.application.Config.device
-import com.krev.trycrypt.server.model.entity.BaseEntity
+import com.krev.trycrypt.model.Config.JSON
+import com.krev.trycrypt.model.Config.address
+import com.krev.trycrypt.model.Config.client
+import com.krev.trycrypt.model.Config.device
+import com.krev.trycrypt.model.entity.BaseEntity
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.JsonUtils.read
 import com.krev.trycrypt.util.JsonUtils.write

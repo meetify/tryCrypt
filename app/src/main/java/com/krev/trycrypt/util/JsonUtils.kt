@@ -1,7 +1,7 @@
 package com.krev.trycrypt.util
 
 import android.util.Log
-import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.model.Config
 
 object JsonUtils {
     fun write(a: Any) = Config.mapper.writeValueAsString(a)!!

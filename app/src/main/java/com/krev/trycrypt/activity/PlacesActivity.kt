@@ -7,7 +7,7 @@ import android.widget.ListView
 import com.baoyz.widget.PullRefreshLayout
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapter.PlacesAdapter
-import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.model.Config
 import com.krev.trycrypt.server.UserController
 import com.krev.trycrypt.util.DrawerUtils
 

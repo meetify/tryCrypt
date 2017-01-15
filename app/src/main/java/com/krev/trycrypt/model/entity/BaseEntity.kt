@@ -1,4 +1,4 @@
-package com.krev.trycrypt.server.model.entity
+package com.krev.trycrypt.model.entity
 
 abstract class BaseEntity(open var id: Long = 0) {
 

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import com.krev.trycrypt.application.Config.layoutInflater
+import com.krev.trycrypt.model.Config.layoutInflater
 import java.util.*
 
 abstract class CustomAdapter<T>(open val items: MutableList<T> = ArrayList()) : BaseAdapter() {

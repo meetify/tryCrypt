@@ -6,8 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
-import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.server.model.entity.Place
+import com.krev.trycrypt.model.Config
+import com.krev.trycrypt.model.entity.Place
 import com.krev.trycrypt.util.PhotoUtils
 import com.mapbox.mapboxsdk.camera.CameraPosition
 

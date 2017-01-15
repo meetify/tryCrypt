@@ -1,6 +1,7 @@
 package com.krev.trycrypt.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_PICK
@@ -19,11 +20,11 @@ import android.widget.ImageView
 import android.widget.ListView
 import com.krev.trycrypt.R
 import com.krev.trycrypt.adapter.FriendsCheckAdapter
-import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.model.Config
 import com.krev.trycrypt.server.BaseController.Method
 import com.krev.trycrypt.server.PlaceController
-import com.krev.trycrypt.server.model.entity.MeetifyLocation
-import com.krev.trycrypt.server.model.entity.Place
+import com.krev.trycrypt.model.entity.MeetifyLocation
+import com.krev.trycrypt.model.entity.Place
 import com.krev.trycrypt.util.BitmapUtils
 import com.krev.trycrypt.util.JsonUtils.read
 import com.krev.trycrypt.vk.VKPhoto
@@ -53,7 +54,7 @@ class PlaceAddActivity : AppCompatActivity() {
         friends.adapter = FriendsCheckAdapter().add(Config.friends)
         button.setOnClickListener {
             VKPhoto.uploadPhoto({
-                PlaceController.request(Method.PUT, place(it)).thenApply {
+                PlaceController.request(Method.PUT, place(it)).thenApplyAsync {
                     val place = read(it, Place::class.java)
                     Config.addPlace(place)
                     Config.user.created += place.id
@@ -63,23 +64,18 @@ class PlaceAddActivity : AppCompatActivity() {
             finish()
         }
 
+        @SuppressLint("NewApi")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "checkSelfPermission $permission failed")
+            requestPermissions(arrayOf(permission), storage)
+        }
         imageView.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "checkSelfPermission $permission failed")
-                requestPermissions(arrayOf(permission), storage)
-            } else photoFromGallery()
+            photoFromGallery()
         }
     }
 
     fun place(photo: String) = Place(name.text.toString(), description.text.toString(),
             Config.user.id, photo, location, (friends.adapter as FriendsCheckAdapter).checked)
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            storage -> photoFromGallery()
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

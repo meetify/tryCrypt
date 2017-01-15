@@ -2,7 +2,7 @@ package com.krev.trycrypt.vk
 
 import android.graphics.Bitmap
 import android.util.Log
-import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.model.Config
 import com.vk.sdk.api.VKApi
 import com.vk.sdk.api.VKError
 import com.vk.sdk.api.VKRequest
@@ -10,11 +10,7 @@ import com.vk.sdk.api.VKResponse
 import com.vk.sdk.api.photo.VKImageParameters
 import com.vk.sdk.api.photo.VKUploadImage
 
-/**
- * Created by Dima on 07.12.2016.
- */
 object VKPhoto {
-
     fun uploadPhoto(function: (String) -> Unit = {}, bitmap: Bitmap) {
         val listener = object : VKRequest.VKRequestListener() {
             override fun onComplete(response: VKResponse?) {

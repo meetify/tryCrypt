@@ -4,16 +4,15 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.server.model.GooglePlace
-import com.krev.trycrypt.server.model.GooglePlace.Result
+import com.krev.trycrypt.model.GooglePlace
 import com.krev.trycrypt.util.PhotoUtils
 
-class GooglePlaceAdapter(place: GooglePlace)
-    : CustomAdapter<Result>(place.results.sortedByDescending { it.rating }.toMutableList()) {
+class GooglePlaceAdapter(place: GooglePlace, val onViewClickListener: (GooglePlace.Result) -> Unit)
+    : CustomAdapter<GooglePlace.Result>(place.results.sortedByDescending { it.rating }.toMutableList()) {
 
     override val layout: Int = R.layout.listview_google_place
 
-    override fun photo(item: Result, view: ImageView) =
+    override fun photo(item: GooglePlace.Result, view: ImageView) =
             PhotoUtils.get(item.photos[0].photoReference, item.id, view, this::notifyDataSetChanged)
 
     override fun View.holder() = apply {
@@ -24,7 +23,8 @@ class GooglePlaceAdapter(place: GooglePlace)
                 (findViewById(R.id.place_types) as TextView))
     }
 
-    override fun View.data(item: Result) = apply {
+    override fun View.data(item: GooglePlace.Result) = apply {
+        setOnClickListener { onViewClickListener(item) }
         (tag as ViewHolder).apply {
             photo(item, icon)
             name.text = item.name
