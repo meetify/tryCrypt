@@ -3,28 +3,21 @@ package com.krev.trycrypt.util.mapbox
 import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
+import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
-import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.server.model.GooglePlace
+import com.krev.trycrypt.model.Config
+import com.krev.trycrypt.model.GooglePlace
+import com.krev.trycrypt.model.Viewable
+import com.krev.trycrypt.model.entity.Place
 import com.krev.trycrypt.util.TypeMapper
 import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 
-/**
- * Created by Dima on 06.12.2016.
- */
-class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOptions>() {
-    constructor(place: GooglePlace.Result) : this() {
-        position = MapActivity.convert(place.geometry.location)
-        title = place.name
-        marker.place = place
-        icon = IconFactory.getInstance(Config.context).fromDrawable(
-                Config.context.getDrawable(TypeMapper.drawable(place.types)))
-    }
+class CustomMarkerOptions internal constructor(val tag: Viewable) : BaseMarkerOptions<CustomMarker, CustomMarkerOptions>() {
 
-    constructor(input: Parcel) : this() {
-        marker = CustomMarker()
+    constructor(input: Parcel) : this(Place()) {
+        marker = CustomMarker(this)
         position(input.readParcelable<Parcelable>(LatLng::class.java.classLoader) as LatLng)
         snippet(input.readString())
         title(input.readString())
@@ -35,6 +28,20 @@ class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOption
             val icon = IconFactory.recreate(iconId, iconBitmap)
             icon(icon)
         }
+    }
+
+    companion object Builder {
+        fun from(place: GooglePlace.Result) = CustomMarkerOptions(place).apply {
+            position = MapActivity.convert(place.geometry.location)
+            title = place.name
+            icon = IconFactory.getInstance(Config.context).fromResource(TypeMapper.drawable(place.types))
+        }
+
+        fun from(place: Place) = CustomMarkerOptions(place).apply({
+            title = place.name
+            position = MapActivity.convert(place.location)
+            icon = IconFactory.getInstance(Config.context).fromResource(R.drawable.ic_place_custom)
+        })
     }
 
     val CREATOR: Parcelable.Creator<CustomMarkerOptions> = object : Parcelable.Creator<CustomMarkerOptions> {
@@ -74,5 +81,4 @@ class CustomMarkerOptions() : BaseMarkerOptions<CustomMarker, CustomMarkerOption
             out.writeParcelable(icon.bitmap, flags)
         }
     }
-
 }

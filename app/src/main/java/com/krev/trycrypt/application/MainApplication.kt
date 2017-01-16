@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import android.util.Log
-import com.krev.trycrypt.application.Config.settings
+import com.krev.trycrypt.model.Config.settings
 import com.krev.trycrypt.service.UnvisitedService
 import com.krev.trycrypt.service.UpdateService
 import com.vk.sdk.VKAccessToken

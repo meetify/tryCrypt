@@ -3,16 +3,15 @@ package com.krev.trycrypt.service
 import android.app.Service
 import android.content.Intent
 import android.util.Log
-import com.krev.trycrypt.application.Config
+import com.krev.trycrypt.model.Config
 import com.krev.trycrypt.server.UserController
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.JsonUtils.write
 import java.util.concurrent.TimeUnit
 
 class UpdateService : Service() {
     private val TAG = this.javaClass.toString()
-    private var isFinished = false
 
     override fun onBind(intent: Intent) = null
 
@@ -41,5 +40,9 @@ class UpdateService : Service() {
     override fun onDestroy() {
         isFinished = true
         super.onDestroy()
+    }
+
+    companion object {
+        var isFinished = false
     }
 }

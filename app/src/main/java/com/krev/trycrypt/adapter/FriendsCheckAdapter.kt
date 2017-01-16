@@ -5,8 +5,8 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.application.Config
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.model.Config
+import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.util.PhotoUtils
 import java.util.*
 

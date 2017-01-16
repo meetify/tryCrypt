@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.krev.trycrypt.R
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.util.PhotoUtils
 
 class FriendsAdapter : CustomAdapter<User>() {

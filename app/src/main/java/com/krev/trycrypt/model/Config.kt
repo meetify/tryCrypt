@@ -1,4 +1,4 @@
-package com.krev.trycrypt.application
+package com.krev.trycrypt.model
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,14 +9,15 @@ import android.view.LayoutInflater
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.krev.trycrypt.R
 import com.krev.trycrypt.activity.MapActivity
-import com.krev.trycrypt.server.model.entity.MeetifyLocation
-import com.krev.trycrypt.server.model.entity.Place
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.application.MainApplication
+import com.krev.trycrypt.model.entity.MeetifyLocation
+import com.krev.trycrypt.model.entity.Place
+import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.util.JsonUtils.read
 import com.krev.trycrypt.util.JsonUtils.write
 import com.krev.trycrypt.util.mapbox.CameraPositionJson
-import com.mapbox.mapboxsdk.annotations.IconFactory
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.krev.trycrypt.util.mapbox.CustomMarkerOptions
+import com.krev.trycrypt.util.mapbox.CustomMarkerOptions.Builder.from
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.vk.sdk.VKAccessToken
 import okhttp3.MediaType
@@ -29,6 +30,7 @@ object Config {
     //val address = "http://192.168.1.40:49323"
     //val address = "http://192.168.42.2:49323"
     //val address = "http://192.168.1.103:49323"
+    //val address = "http://192.168.179.130:49323"
 
     val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -74,7 +76,7 @@ object Config {
             MapActivity.placesUpdate(value)
         }
 
-    var markers: List<MarkerOptions> = makeMarkers()
+    var markers: List<CustomMarkerOptions> = makeMarkers()
 
     fun modify(user: User) {
         Config.user.modify(user)
@@ -87,15 +89,10 @@ object Config {
         }
     }
 
-    fun makeMarkers() = places.map { makeMarker(it) }
-
-    fun makeMarker(place: Place) = MarkerOptions()
-            .icon(IconFactory.getInstance(context).fromResource(R.drawable.ic_place_custom))
-            .position(MapActivity.convert(place.location))
-            .title(place.name)!!
+    fun makeMarkers() = places.map(CustomMarkerOptions.Builder::from)
 
     fun addPlace(place: Place) {
-        markers += makeMarker(place)
+        markers += CustomMarkerOptions.Builder.from(place)
         places += place
     }
 

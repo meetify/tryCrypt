@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.flipboard.bottomsheet.BottomSheetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottomsheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:mapbox="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadeScrollbars="true"
@@ -15,37 +15,60 @@
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         android:weightSum="1"
-        mapbox:layout_collapseMode="parallax"
+        app:layout_collapseMode="parallax"
         tools:context="com.krev.trycrypt.activity.MapActivity">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:background="?android:colorPrimary"
             android:minHeight="?android:actionBarSize"
             android:transitionName="actionBar">
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginStart="15dp"-->
-            <!--android:text="@string/app_name" />-->
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <com.victor.loading.rotate.RotateLoading
-                android:id="@+id/rotateloading"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_above="@+id/mapView"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="right"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:gravity="right"
-                app:loading_color="#ffffff"
-                app:loading_width="5dp" />
+                <EditText
+                    android:id="@+id/map_toolbar_search_editText"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="32dp"
+                    android:hint="@string/map_find_tip"
+                    android:maxLines="1"
+                    android:textColorHint="#FFF"
+                    android:inputType="textAutoComplete"
+                    app:layout_constraintBottom_toBottomOf="@+id/map_toolbar_rotateLoading"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/map_toolbar_search_icon"
+                    app:layout_constraintTop_toTopOf="@+id/map_toolbar_rotateLoading" />
+
+                <com.victor.loading.rotate.RotateLoading
+                    android:id="@+id/map_toolbar_rotateLoading"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:loading_color="#ffffff"
+                    app:loading_width="5dp" />
+
+                <ImageView
+                    android:id="@+id/map_toolbar_search_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="0dp"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="@string/map_search_icon_toolbar"
+                    app:layout_constraintBottom_toBottomOf="@+id/map_toolbar_rotateLoading"
+                    app:layout_constraintRight_toLeftOf="@+id/map_toolbar_rotateLoading"
+                    app:layout_constraintTop_toTopOf="@+id/map_toolbar_rotateLoading"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@android:drawable/ic_menu_search" />
+            </android.support.constraint.ConstraintLayout>
+
         </android.support.v7.widget.Toolbar>
 
         <com.mapbox.mapboxsdk.maps.MapView
@@ -53,7 +76,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@id/toolbar"
             mapbox:center_latitude="48.514308545"
@@ -62,18 +84,5 @@
             mapbox:tilt="0"
             mapbox:zoom="13" />
 
-        <!--<Button-->
-        <!--android:id="@+id/button_location"-->
-        <!--android:layout_width="25dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginBottom="30dp"-->
-        <!--android:layout_marginEnd="30dp"-->
-        <!--android:layout_marginRight="30dp"-->
-        <!--android:background="#FFF"-->
-        <!--android:drawableLeft="@drawable/ic_place_custom"-->
-        <!--android:drawableStart="@drawable/ic_place_custom" />-->
     </RelativeLayout>
 </com.flipboard.bottomsheet.BottomSheetLayout>

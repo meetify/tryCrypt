@@ -1,4 +1,4 @@
-package com.krev.trycrypt.server.model.entity
+package com.krev.trycrypt.model.entity
 
 import java.io.Serializable
 

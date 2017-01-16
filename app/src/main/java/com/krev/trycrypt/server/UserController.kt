@@ -1,9 +1,9 @@
 package com.krev.trycrypt.server
 
-import com.krev.trycrypt.application.Config.user
-import com.krev.trycrypt.server.model.UserExtended
-import com.krev.trycrypt.server.model.entity.MeetifyLocation
-import com.krev.trycrypt.server.model.entity.User
+import com.krev.trycrypt.model.Config.user
+import com.krev.trycrypt.model.UserExtended
+import com.krev.trycrypt.model.entity.MeetifyLocation
+import com.krev.trycrypt.model.entity.User
 import com.krev.trycrypt.util.AsyncUtils.asyncThread
 import com.krev.trycrypt.util.JsonUtils.read
 
