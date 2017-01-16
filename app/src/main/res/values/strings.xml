@@ -46,4 +46,6 @@
     <string name="listview_reply_comment_tip">MultiAutoCompleteTextView</string>
     <string name="_1024">1024</string>
     <string name="place_add_time_tip">Click here to choose time</string>
+    <string name="place_info_save_tip">Save</string>
+    <string name="dialog_place_complete_tip">Complete</string>
 </resources>

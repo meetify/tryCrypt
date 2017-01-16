@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
 
         Log.d(TAG, this.filesDir.absolutePath)
         if (VKSdk.isLoggedIn()) autoLogin()
-        else VKSdk.login(this, "friends", "photos")
+        else VKSdk.login(this, "friends", "photos", "groups", "wall")
     }
 
     override fun onActivityResult(request: Int, result: Int, data: Intent?) {

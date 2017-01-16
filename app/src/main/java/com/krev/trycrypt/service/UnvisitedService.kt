@@ -21,7 +21,6 @@ class UnvisitedService : Service() {
 
     private val TAG = this.javaClass.toString()
     private val mId = 123
-    private var isFinished = false
     private val mNotificationManager: NotificationManager
             by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
@@ -68,6 +67,7 @@ class UnvisitedService : Service() {
     }
 
     companion object {
+        var isFinished = false
         private var launchedCount = if(PreferenceManager.getDefaultSharedPreferences(Config.context).getBoolean(SettingsActivity.KEY_NOTIFICATIONS,true)) 0 else 1
         var sleep = 30L
     }

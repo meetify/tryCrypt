@@ -190,11 +190,12 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    inline fun longTask(fn: () -> Any) {
-        synchronized(rotate, { if (rotate.isStart) return })
+    fun longTask(fn: () -> Any?) = runOnUiThread {
+        synchronized(rotate, { if (rotate.isStart) return@runOnUiThread })
         rotate.start()
         fn()
     }
+
 
     companion object {
         fun convert(location: GoogleLocation) = LatLng(location.lat, location.lng)

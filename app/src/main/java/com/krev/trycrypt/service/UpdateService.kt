@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit
 
 class UpdateService : Service() {
     private val TAG = this.javaClass.toString()
-    private var isFinished = false
 
     override fun onBind(intent: Intent) = null
 
@@ -41,5 +40,9 @@ class UpdateService : Service() {
     override fun onDestroy() {
         isFinished = true
         super.onDestroy()
+    }
+
+    companion object {
+        var isFinished = false
     }
 }

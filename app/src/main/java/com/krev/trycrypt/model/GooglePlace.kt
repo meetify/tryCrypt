@@ -143,6 +143,12 @@ data class GooglePlace(
             val allowed = view.findViewById(R.id.place_info_friends_text) as TextView
             val time = view.findViewById(R.id.place_info_time_text) as TextView
             val name = view.findViewById(R.id.place_info_name_text) as TextView
+
+            location.isFocusable = false
+            creator.isFocusable = false
+            allowed.isFocusable = false
+            time.isFocusable = false
+            name.isFocusable = false
             val allowedImage = view.findViewById(R.id.place_info_friends_image) as ImageView
             val timeImage = view.findViewById(R.id.place_info_time_image) as ImageView
             val creatorImage = view.findViewById(R.id.place_info_creator_image) as ImageView
@@ -152,9 +158,10 @@ data class GooglePlace(
             listView.adapter = adapter
 
             val stringBuilder = StringBuilder()
-            PlaceController.details(placeId).thenApplyAsync {
-                runOnUiThread {
-                    longTask {
+            longTask {
+                PlaceController.details(placeId).thenApplyAsync {
+                    runOnUiThread {
+
                         @Suppress("NAME_SHADOWING")
                         val place = it.result
                         val (image, text) = when {
@@ -168,8 +175,6 @@ data class GooglePlace(
                         creatorImage.setImageResource(image)
                         location.text = place.vicinity
 
-
-//                image.setImageResource()
                         allowedImage.setImageResource(TypeMapper.drawable(place.types))
                         if (place.rating > 1.0) {
                             time.text = place.rating.toString()
